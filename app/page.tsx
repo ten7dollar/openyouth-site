@@ -40,8 +40,8 @@ export default function HomePage() {
 
         {/* コンテンツ */}
         <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 lg:flex-row lg:items-center lg:py-20">
-          <div className="flex-1 space-y-4 text-center lg:text-left">
-            <p className="inline-flex items-center justify-center rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-[0.22em] text-sky-200">
+          <div className="flex-1 space-y-4">
+            <p className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-[0.22em] text-sky-200">
               OPENGYOUTH MISSION
             </p>
 
@@ -50,7 +50,7 @@ export default function HomePage() {
               <span className="block text-sky-300">最適な未来を。</span>
             </h1>
 
-            <p className="mx-auto max-w-xl text-sm text-slate-100 sm:text-base">
+            <p className="max-w-xl text-sm text-slate-100 sm:text-base">
               テクノロジーと教育で、キャリア選択の不確実性をなくす。
               初期研修医マッチングプラットフォーム「レジマッチ」をはじめ、
               AI開発・AI教育・Web制作事業を展開しています。
@@ -61,7 +61,7 @@ export default function HomePage() {
             </p>
 
             {/* CTA：スマホは縦並び＆全幅、PCは横並び */}
-            <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:justify-center lg:justify-start">
+            <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:flex-wrap">
               <Link
                 href="/aboutus"
                 className="inline-flex w-full items-center justify-center rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-100 sm:w-auto"
