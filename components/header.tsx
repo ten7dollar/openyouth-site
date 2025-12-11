@@ -6,7 +6,7 @@ import clsx from "clsx";
 import Image from "next/image";
 
 const navItems = [
-  { href: "/about", label: "About Us" },
+  { href: "/aboutus", label: "About Us" },
   { href: "/services", label: "Services" },
   { href: "/news", label: "News" },
   { href: "/company", label: "Company" },
