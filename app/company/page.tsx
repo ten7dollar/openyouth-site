@@ -29,7 +29,7 @@ export default function CompanyPage() {
 
             <div className="grid grid-cols-3 gap-4 py-3 sm:grid-cols-4">
               <dt className="col-span-1 text-slate-500">設立</dt>
-              <dd className="col-span-2 sm:col-span-3">2025年12月10日</dd>
+              <dd className="col-span-2 sm:col-span-3">2025年12月26日</dd>
             </div>
 
             <div className="grid grid-cols-3 gap-4 py-3 sm:grid-cols-4">
@@ -46,7 +46,7 @@ export default function CompanyPage() {
 
             <div className="grid grid-cols-3 gap-4 py-3 sm:grid-cols-4">
               <dt className="col-span-1 text-slate-500">資本金</dt>
-              <dd className="col-span-2 sm:col-span-3">100万円</dd>
+              <dd className="col-span-2 sm:col-span-3">50万円</dd>
             </div>
 
             <div className="grid grid-cols-3 gap-4 py-3 sm:grid-cols-4">
