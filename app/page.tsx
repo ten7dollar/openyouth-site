@@ -2,22 +2,30 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const HOME_NEWS = [
-  {
-    date: "2025.01.15",
-    title: "総額1億円の資金調達を実施しました。",
-  },
-  {
-    date: "2024.12.20",
-    title: "「AI Academy」受講生1,000名突破記念キャンペーンを開始",
-  },
-  {
-    date: "2024.11.10",
-    title: "TechCrunch Japanに代表インタビューが掲載されました",
-  },
-];
+/**
+ * 🔔 HOME_NEWS の使い方
+ *
+ * - News ページ（app/news/page.tsx）の NEWS_ITEMS と同じ内容を、
+ *   「トップに載せたい最新◯件」だけここにコピーする想定です。
+ * - いまは公開前のダミーを消すために空配列にしています。
+ * - 実際にお知らせを追加したら、この配列に
+ *   { date, title } を追加すればトップの「Latest News」に反映されます。
+ *
+ * 例:
+ * const HOME_NEWS: HomeNewsItem[] = [
+ *   { date: "2026.01.01", title: "◯◯◯◯◯◯をリリースしました。" },
+ * ];
+ */
+type HomeNewsItem = {
+  date: string; // YYYY.MM.DD 表記
+  title: string;
+};
+
+const HOME_NEWS: HomeNewsItem[] = []; // ← 今はダミーを消すため空にしておく
 
 export default function HomePage() {
+  const hasHomeNews = HOME_NEWS.length > 0;
+
   return (
     <div>
       {/* ================================
@@ -239,19 +247,34 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="mt-4 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white text-sm shadow-sm">
-            {HOME_NEWS.map((item) => (
-              <div
-                key={item.title}
-                className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-6 sm:px-6"
-              >
-                <time className="text-xs font-medium text-slate-500 sm:w-32">
-                  {item.date}
-                </time>
-                <p className="flex-1 text-sm text-slate-800">{item.title}</p>
-              </div>
-            ))}
-          </div>
+          {hasHomeNews ? (
+            <div className="mt-4 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white text-sm shadow-sm">
+              {HOME_NEWS.map((item) => (
+                <div
+                  key={`${item.date}-${item.title}`}
+                  className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-6 sm:px-6"
+                >
+                  <time className="text-xs font-medium text-slate-500 sm:w-32">
+                    {item.date}
+                  </time>
+                  <p className="flex-1 text-sm text-slate-800">
+                    {item.title}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-4 rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-6 text-center text-xs text-slate-500 sm:px-6">
+              <p>現在、トップページに表示中のお知らせはありません。</p>
+              <p className="mt-1">
+                新しい News を追加したい場合は、
+                <code className="mx-1 rounded bg-slate-100 px-1 py-0.5">
+                  HOME_NEWS
+                </code>
+                配列に最新のお知らせを追加してください。
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
