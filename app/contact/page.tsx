@@ -11,11 +11,15 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // ★ イベントからフォーム要素を退避しておく（これを使って reset する）
+    const form = e.currentTarget;
+
     setIsSubmitting(true);
     setStatusMessage(null);
     setStatusType(null);
 
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(form);
     const payload = {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
@@ -42,7 +46,9 @@ export default function ContactPage() {
       setStatusMessage(
         "お問い合わせを受け付けました。確認のうえ、折り返しご連絡いたします。",
       );
-      e.currentTarget.reset();
+
+      // ★ e.currentTarget ではなく、退避しておいた form を使う
+      form.reset();
     } catch (error: any) {
       console.error(error);
       setStatusType("error");
