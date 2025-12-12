@@ -1,24 +1,58 @@
-// app/contact/page.tsx
 "use client";
 
 import { FormEvent, useState } from "react";
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [statusType, setStatusType] = useState<"success" | "error" | null>(
+    null,
+  );
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setStatusMessage(null);
+    setStatusType(null);
 
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
+    const payload = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      company: (formData.get("company") as string) || "",
+      message: formData.get("message") as string,
+    };
 
-    // 今はダミー処理。実際に送信したくなったらここで Formspree や API Route と連携する。
-    console.log("Contact form submitted:", data);
-    alert("お問い合わせを受け付けました。確認のうえ、折り返しご連絡いたします。");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-    setIsSubmitting(false);
-    e.currentTarget.reset();
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error || "送信に失敗しました。");
+      }
+
+      setStatusType("success");
+      setStatusMessage(
+        "お問い合わせを受け付けました。確認のうえ、折り返しご連絡いたします。",
+      );
+      e.currentTarget.reset();
+    } catch (error: any) {
+      console.error(error);
+      setStatusType("error");
+      setStatusMessage(
+        error?.message ||
+          "送信中にエラーが発生しました。お手数ですが、時間をおいて再度お試しください。",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -127,6 +161,18 @@ export default function ContactPage() {
               <p className="pt-1 text-[11px] text-slate-500">
                 送信いただいた個人情報は、プライバシーポリシーに基づき適切に取り扱います。
               </p>
+
+              {statusMessage && (
+                <div
+                  className={`mt-3 rounded-xl px-3 py-2 text-xs ${
+                    statusType === "success"
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "bg-rose-50 text-rose-700"
+                  }`}
+                >
+                  {statusMessage}
+                </div>
+              )}
             </form>
           </div>
         </div>

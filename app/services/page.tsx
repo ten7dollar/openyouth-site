@@ -149,7 +149,7 @@ export default function ServicesPage() {
                     詳細を見る
                   </Link>
                   <p className="text-xs text-slate-500">
-                    ※ レジマッチのプロダクトサイト / LP へのリンクを後ほど設定できます。
+                    ※ レジマッチのプロダクトサイトへ遷移します
                   </p>
                 </div>
               </div>

@@ -1,3 +1,5 @@
+// app/news/page.tsx
+
 type NewsItem = {
   date: string; // YYYY.MM.DD 表記
   category: "Press Release" | "Event" | "Media" | "Recruit";
@@ -5,38 +7,27 @@ type NewsItem = {
   description: string;
 };
 
-const NEWS_ITEMS: NewsItem[] = [
-  {
-    date: "2025.01.15",
-    category: "Press Release",
-    title: "総額1億円の資金調達を実施しました。",
-    description:
-      "株式会社OpenYouthは、さらなる事業拡大に向け、第三者割当増資を実施いたしました。",
-  },
-  {
-    date: "2024.12.20",
-    category: "Event",
-    title: "「AI Academy」受講生1,000名突破記念キャンペーンを開始",
-    description:
-      "皆様への感謝を込めて、期間限定の特別割引キャンペーンを実施します。",
-  },
-  {
-    date: "2024.11.10",
-    category: "Media",
-    title: "TechCrunch Japanに代表・深谷のインタビューが掲載されました",
-    description:
-      "「若者のキャリア選択を変える」をテーマに、創業の背景や今後の展望について語っています。",
-  },
-  {
-    date: "2024.10.01",
-    category: "Recruit",
-    title: "2026年度新卒採用のエントリー受付を開始しました",
-    description:
-      "エンジニア、ビジネス職ともに、挑戦にあふれる環境で働きたい方のご応募をお待ちしています。",
-  },
-];
+/**
+ * 🔔 NEWS_ITEMS の使い方
+ *
+ * 実際のお知らせを追加するときは、この配列にオブジェクトを足せばOKです。
+ *
+ * 例:
+ * const NEWS_ITEMS: NewsItem[] = [
+ *   {
+ *     date: "2025.01.15",
+ *     category: "Press Release",
+ *     title: "◯◯◯◯◯◯をリリースしました",
+ *     description: "本文をここに書く...",
+ *   },
+ *   ...
+ * ];
+ */
+const NEWS_ITEMS: NewsItem[] = []; // ← 今はダミーなしで公開するため空にしておく
 
 export default function NewsPage() {
+  const hasNews = NEWS_ITEMS.length > 0;
+
   return (
     <div className="bg-slate-50 pb-16">
       {/* ヘッダー */}
@@ -51,37 +42,54 @@ export default function NewsPage() {
         </div>
       </section>
 
-      {/* 一覧 */}
+      {/* 一覧 or プレースホルダー */}
       <section className="mt-6">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="divide-y divide-slate-200 rounded-3xl border border-slate-200 bg-white shadow-sm">
-            {NEWS_ITEMS.map((item, idx) => (
-              <article
-                key={`${item.date}-${idx}`}
-                className="flex flex-col gap-3 px-4 py-4 text-sm text-slate-800 sm:flex-row sm:items-center sm:gap-6 sm:px-6 sm:py-5"
-              >
-                {/* 左：日付 & カテゴリ */}
-                <div className="flex flex-col items-start gap-2 sm:w-44 sm:items-start">
-                  <time className="text-xs font-medium text-slate-500">
-                    {item.date}
-                  </time>
-                  <span className={categoryClass(item.category)}>
-                    {item.category}
-                  </span>
-                </div>
+          {hasNews ? (
+            <div className="divide-y divide-slate-200 rounded-3xl border border-slate-200 bg-white shadow-sm">
+              {NEWS_ITEMS.map((item, idx) => (
+                <article
+                  key={`${item.date}-${idx}`}
+                  className="flex flex-col gap-3 px-4 py-4 text-sm text-slate-800 sm:flex-row sm:items-center sm:gap-6 sm:px-6 sm:py-5"
+                >
+                  {/* 左：日付 & カテゴリ */}
+                  <div className="flex flex-col items-start gap-2 sm:w-44 sm:items-start">
+                    <time className="text-xs font-medium text-slate-500">
+                      {item.date}
+                    </time>
+                    <span className={categoryClass(item.category)}>
+                      {item.category}
+                    </span>
+                  </div>
 
-                {/* 右：タイトル＆本文 */}
-                <div className="flex-1">
-                  <h2 className="text-sm font-semibold text-slate-900 sm:text-base">
-                    {item.title}
-                  </h2>
-                  <p className="mt-1 text-xs text-slate-600 sm:text-sm">
-                    {item.description}
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
+                  {/* 右：タイトル＆本文 */}
+                  <div className="flex-1">
+                    <h2 className="text-sm font-semibold text-slate-900 sm:text-base">
+                      {item.title}
+                    </h2>
+                    <p className="mt-1 text-xs text-slate-600 sm:text-sm">
+                      {item.description}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center text-sm text-slate-500 shadow-sm sm:px-8">
+              <p>現在公開中のお知らせはありません。</p>
+              <p className="mt-2">
+                新しいプレスリリースやイベント情報などは、
+                順次こちらに掲載予定です。
+              </p>
+              <p className="mt-4 text-xs text-slate-400">
+                ※ お知らせを追加する場合は、このページ上部の
+                <code className="mx-1 rounded bg-slate-100 px-1 py-0.5">
+                  NEWS_ITEMS
+                </code>
+                配列にデータを追加してください。
+              </p>
+            </div>
+          )}
         </div>
       </section>
     </div>
