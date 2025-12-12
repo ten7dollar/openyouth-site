@@ -107,7 +107,7 @@ export default function AboutPage() {
             </div>
             <div className="space-y-1">
               <dt className="text-xs font-semibold text-slate-500">資本金</dt>
-              <dd>100万円</dd>
+              <dd>50万円</dd>
             </div>
             <div className="space-y-1 sm:col-span-2">
               <dt className="text-xs font-semibold text-slate-500">所在地</dt>
