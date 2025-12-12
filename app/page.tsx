@@ -266,13 +266,6 @@ export default function HomePage() {
           ) : (
             <div className="mt-4 rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-6 text-center text-xs text-slate-500 sm:px-6">
               <p>現在、トップページに表示中のお知らせはありません。</p>
-              <p className="mt-1">
-                新しい News を追加したい場合は、
-                <code className="mx-1 rounded bg-slate-100 px-1 py-0.5">
-                  HOME_NEWS
-                </code>
-                配列に最新のお知らせを追加してください。
-              </p>
             </div>
           )}
         </div>
