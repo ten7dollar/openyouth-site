@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     }
 
     const fromAddress =
-      process.env.SMTP_FROM_EMAIL || "noreply@openyouth.resend.dev";
+      process.env.SMTP_FROM_EMAIL || "onboarding@resend.dev";
 
     const subject = `【OpenYouth HP】お問い合わせ: ${name}`;
     const plainText = `
