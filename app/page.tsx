@@ -206,7 +206,7 @@ export default function HomePage() {
             />
             <ServiceCard
               name="AI Academy"
-              description="累計1,000名以上が受講した、実務で使えるAI講座コンテンツ。"
+              description="AI経験0でも実務で使えるようになるAI講座コンテンツ。"
             />
             <ServiceCard
               name="Make Face"
