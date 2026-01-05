@@ -80,21 +80,25 @@ export default function ServicesPage() {
 
           {/* カテゴリタブ（見た目だけ・フィルタ機能は後で必要なら追加） */}
           <div className="mt-6 flex flex-wrap gap-2 text-xs sm:text-sm">
-            {["すべて", "医療・ヘルスケア", "AI・DX", "教育・リスキリング", "クリエイティブ"].map(
-              (label, index) => (
-                <button
-                  key={label}
-                  type="button"
-                  className={
-                    index === 0
-                      ? "rounded-full bg-slate-900 px-4 py-1.5 font-medium text-white"
-                      : "rounded-full border border-slate-200 bg-white px-4 py-1.5 text-slate-600"
-                  }
-                >
-                  {label}
-                </button>
-              )
-            )}
+            {[
+              "すべて",
+              "医療・ヘルスケア",
+              "AI・DX",
+              "教育・リスキリング",
+              "クリエイティブ",
+            ].map((label, index) => (
+              <button
+                key={label}
+                type="button"
+                className={
+                  index === 0
+                    ? "rounded-full bg-slate-900 px-4 py-1.5 font-medium text-white"
+                    : "rounded-full border border-slate-200 bg-white px-4 py-1.5 text-slate-600"
+                }
+              >
+                {label}
+              </button>
+            ))}
           </div>
         </div>
       </section>
@@ -106,10 +110,6 @@ export default function ServicesPage() {
             <div className="grid gap-0 md:grid-cols-2">
               {/* 画像エリア：ResiMatch のビジュアルをここに */}
               <div className="relative h-56 w-full overflow-hidden bg-slate-200 md:h-full">
-                {/* 
-                  ここに RegiMatch のメイン画像を入れてください。
-                  /public/images/services/regimatch.jpg を置いた場合：
-                */}
                 <Image
                   src={SERVICE_IMAGES.regimatch}
                   alt="ResiMatch service visual"
@@ -143,13 +143,13 @@ export default function ServicesPage() {
 
                 <div className="mt-6 flex flex-wrap items-center gap-3">
                   <Link
-                    href="#"
+                    href="https://www.resi-match.com/lp1"
                     className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
                   >
                     詳細を見る
                   </Link>
                   <p className="text-xs text-slate-500">
-                    ※ レジマッチのプロダクトサイトへ遷移します
+                    ※ レジマッチのプロダクトサイト（LP）へ遷移します
                   </p>
                 </div>
               </div>
@@ -240,7 +240,7 @@ function ServiceCard({
       </div>
       <div className="flex flex-1 flex-col justify-between p-5">
         <div className="space-y-2">
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items中心 justify-between gap-2">
             <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
               {label}
             </span>
