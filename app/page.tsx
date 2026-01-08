@@ -50,7 +50,7 @@ export default function HomePage() {
         <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 lg:flex-row lg:items-center lg:py-20">
           <div className="flex-1 space-y-4">
             <p className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-[0.22em] text-sky-200">
-              OPENGYOUTH MISSION
+              Openyouth MISSION
             </p>
 
             <h1 className="text-balance text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
