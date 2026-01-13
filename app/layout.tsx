@@ -6,6 +6,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://openyouth.co.jp"), // ★ここをco.jpに
   title: "株式会社OpenYouth | Official Website",
   description:
     "株式会社OpenYouthは、初期研修医マッチングプラットフォーム「レジマッチ」をはじめ、AI開発・教育・Web制作を通じて、挑戦するすべての若者に最適な未来を提供します。",
