@@ -6,10 +6,21 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://openyouth.co.jp"), // ★ここをco.jpに
+  // すべての絶対URL（canonical / OG など）の基準となるドメイン
+  metadataBase: new URL("https://openyouth.co.jp"),
   title: "株式会社OpenYouth | Official Website",
   description:
     "株式会社OpenYouthは、初期研修医マッチングプラットフォーム「レジマッチ」をはじめ、AI開発・教育・Web制作を通じて、挑戦するすべての若者に最適な未来を提供します。",
+  // favicon / ブラウザタブ / 検索結果用アイコン
+  icons: {
+    icon: "/favicon.ico",       // public/favicon.ico を参照
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
+  // 各ページの canonical を co.jp に統一
+  alternates: {
+    canonical: "/",             // 各page.tsxごとに自動的に /〜 が付く
+  },
 };
 
 export default function RootLayout({
