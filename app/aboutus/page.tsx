@@ -99,7 +99,7 @@ export default function AboutPage() {
             </div>
             <div className="space-y-1">
               <dt className="text-xs font-semibold text-slate-500">設立</dt>
-              <dd>2025年12月10日</dd>
+              <dd>2023年12月10日</dd>
             </div>
             <div className="space-y-1">
               <dt className="text-xs font-semibold text-slate-500">代表者</dt>
