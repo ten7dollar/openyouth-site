@@ -55,7 +55,7 @@ export default function CompanyPage() {
                 <p>・医療プラットフォーム事業（初期研修医マッチング「レジマッチ」）</p>
                 <p>・AIソリューション事業（企業向けAI受託開発「Make AI」）</p>
                 <p>・IT人材教育事業（ToC向けAI講座「AI Academy」）</p>
-                <p>・クリエイティブ・マーケティング事業（Web制作「Make Face」）</p>
+                <p>・RPO事業（RPO×AI開発支援「Stock HR」）</p>
               </dd>
             </div>
           </dl>
