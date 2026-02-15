@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const SERVICE_IMAGES = {
   regimatch: "/images/services/resimatch.jpg",
-  stockhr: "/services/stockhr.jpg",
+  stockhr: "/images/services/stockhr.jpg",
   makeAi: "/images/services/make-ai.jpg",
   aiAcademy: "/images/services/ai-academy.jpg",
 };
