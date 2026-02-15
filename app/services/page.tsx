@@ -3,9 +3,9 @@ import Link from "next/link";
 
 const SERVICE_IMAGES = {
   regimatch: "/images/services/resimatch.jpg",
+  stockhr: "/services/stockhr.jpg",
   makeAi: "/images/services/make-ai.jpg",
   aiAcademy: "/images/services/ai-academy.jpg",
-  makeFace: "/images/services/make-face.jpg",
 };
 
 const CASE_STUDIES = [
@@ -75,17 +75,16 @@ export default function ServicesPage() {
             Services
           </h1>
           <p className="mt-3 text-sm text-slate-600 sm:text-base">
-            医療・AI・教育・クリエイティブの4領域で事業を展開しています。
+            医療・HR・AI・教育領域で事業を展開しています。
           </p>
 
-          {/* カテゴリタブ（見た目だけ・フィルタ機能は後で必要なら追加） */}
           <div className="mt-6 flex flex-wrap gap-2 text-xs sm:text-sm">
             {[
               "すべて",
               "医療・ヘルスケア",
+              "HR・採用",
               "AI・DX",
               "教育・リスキリング",
-              "クリエイティブ",
             ].map((label, index) => (
               <button
                 key={label}
@@ -103,62 +102,34 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* ResiMatch Hero Service */}
+      {/* ================= ResiMatch ================= */}
       <section className="mt-6">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
-            <div className="grid gap-0 md:grid-cols-2">
-              {/* 画像エリア：ResiMatch のビジュアルをここに */}
-              <div className="relative h-56 w-full overflow-hidden bg-slate-200 md:h-full">
-                <Image
-                  src={SERVICE_IMAGES.regimatch}
-                  alt="ResiMatch service visual"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
+          <HeroService
+            image={SERVICE_IMAGES.regimatch}
+            badge="Medical Platform"
+            title="ResiMatch"
+            subtitle="初期研修医マッチングプラットフォーム"
+            description="医学生と病院のミスマッチを解消するためのマッチングプラットフォームです。年収・働き方・教育体制などの情報を可視化し、オンライン説明会やOB・OG訪問なども含めた、一連のコミュニケーションを最適化します。"
+            link="https://www.resi-match.com/lp1"
+            note="※ レジマッチのプロダクトサイト（LP）へ遷移します"
+          />
 
-              {/* テキストエリア */}
-              <div className="flex flex-col justify-between p-6 sm:p-8">
-                <div className="space-y-4">
-                  <span className="inline-flex items-center rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
-                    Medical Platform
-                  </span>
-                  <div>
-                    <h2 className="text-xl font-semibold text-slate-900 sm:text-2xl">
-                      ResiMatch
-                    </h2>
-                    <p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-slate-500">
-                      初期研修医マッチングプラットフォーム
-                    </p>
-                  </div>
-
-                  <p className="text-sm text-slate-700 sm:text-[15px]">
-                    医学生と病院のミスマッチを解消するためのマッチングプラットフォームです。
-                    年収・働き方・教育体制などの情報を可視化し、オンライン説明会や OB・OG 訪問なども含めた、
-                    一連のコミュニケーションを最適化します。
-                  </p>
-                </div>
-
-                <div className="mt-6 flex flex-wrap items-center gap-3">
-                  <Link
-                    href="https://www.resi-match.com/lp1"
-                    className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
-                  >
-                    詳細を見る
-                  </Link>
-                  <p className="text-xs text-slate-500">
-                    ※ レジマッチのプロダクトサイト（LP）へ遷移します
-                  </p>
-                </div>
-              </div>
-            </div>
+          {/* ================= Stock-HR ================= */}
+          <div className="mt-10">
+            <HeroService
+              image={SERVICE_IMAGES.stockhr}
+              badge="Next-Generation RPO"
+              title="Stock-HR"
+              subtitle="次世代型 採用代行（RPO）サービス"
+              description="戦略設計からスカウト実行、データ分析・改善までを一気通貫で支援する次世代型RPOサービス。単なる“採用代行”ではなく、再現性のある採用プロセスを構築し、企業に採用資産を蓄積します。スタートアップから成長企業まで幅広く対応可能です。"
+              link="https://stock-hr.com/"
+              note="※ Stock-HRの公式LPへ遷移します"
+            />
           </div>
 
-          {/* サブサービスカード群 */}
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {/* Make AI */}
+          {/* サブサービス */}
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
             <ServiceCard
               label="MAKE AI"
               title="生成AI導入・DX支援"
@@ -166,7 +137,6 @@ export default function ServicesPage() {
               imageSrc={SERVICE_IMAGES.makeAi}
               tag="AI / DX"
             />
-            {/* AI Academy */}
             <ServiceCard
               label="AI ACADEMY"
               title="AI人材育成・研修"
@@ -174,19 +144,11 @@ export default function ServicesPage() {
               imageSrc={SERVICE_IMAGES.aiAcademy}
               tag="Education"
             />
-            {/* Make Face */}
-            <ServiceCard
-              label="MAKE FACE"
-              title="Web制作・マーケティング支援"
-              description="事業の世界観と提供価値を伝えるWebサイト・LP制作を支援。情報設計・デザイン・実装・改善提案まで一気通貫で伴走します。"
-              imageSrc={SERVICE_IMAGES.makeFace}
-              tag="Creative"
-            />
           </div>
         </div>
       </section>
 
-      {/* 導入実績・事例 */}
+      {/* Case Studies */}
       <section className="mt-14">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-semibold text-slate-500">
@@ -211,36 +173,70 @@ export default function ServicesPage() {
    Components
 ========================= */
 
-type ServiceCardProps = {
-  label: string;
-  title: string;
-  description: string;
-  imageSrc: string;
-  tag: string;
-};
-
-function ServiceCard({
-  label,
+function HeroService({
+  image,
+  badge,
   title,
+  subtitle,
   description,
-  imageSrc,
-  tag,
-}: ServiceCardProps) {
+  link,
+  note,
+}: any) {
+  return (
+    <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
+      <div className="grid gap-0 md:grid-cols-2">
+        <div className="relative h-56 w-full overflow-hidden bg-slate-200 md:h-full">
+          <Image src={image} alt={title} fill className="object-cover" />
+        </div>
+
+        <div className="flex flex-col justify-between p-6 sm:p-8">
+          <div className="space-y-4">
+            <span className="inline-flex items-center rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
+              {badge}
+            </span>
+            <div>
+              <h2 className="text-xl font-semibold text-slate-900 sm:text-2xl">
+                {title}
+              </h2>
+              <p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-slate-500">
+                {subtitle}
+              </p>
+            </div>
+            <p className="text-sm text-slate-700 sm:text-[15px]">
+              {description}
+            </p>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <Link
+              href={link}
+              target="_blank"
+              className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
+            >
+              詳細を見る
+            </Link>
+            <p className="text-xs text-slate-500">{note}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ServiceCard({ label, title, description, imageSrc, tag }: any) {
   return (
     <div className="flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
       <div className="relative h-40 w-full bg-slate-200">
-        {/* サービスごとの画像をここに */}
         <Image
           src={imageSrc}
           alt={title}
           fill
           className="object-cover"
-          sizes="(min-width: 1024px) 33vw, 100vw"
         />
       </div>
       <div className="flex flex-1 flex-col justify-between p-5">
         <div className="space-y-2">
-          <div className="flex items中心 justify-between gap-2">
+          <div className="flex items-center justify-between gap-2">
             <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
               {label}
             </span>
@@ -251,28 +247,10 @@ function ServiceCard({
           <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
           <p className="text-xs text-slate-600">{description}</p>
         </div>
-
-        <div className="mt-4">
-          <button
-            type="button"
-            className="text-xs font-semibold text-sky-600 hover:text-sky-700"
-          >
-            View More →
-          </button>
-        </div>
       </div>
     </div>
   );
 }
-
-type CaseStudyProps = {
-  id: string;
-  label: string;
-  client: string;
-  highlight: string;
-  description: string;
-  tags: string[];
-};
 
 function CaseStudyCard({
   label,
@@ -280,7 +258,7 @@ function CaseStudyCard({
   highlight,
   description,
   tags,
-}: CaseStudyProps) {
+}: any) {
   return (
     <div className="flex h-full flex-col justify-between rounded-3xl border border-slate-200 bg-white p-5 text-sm shadow-sm">
       <div className="space-y-2">
@@ -297,7 +275,7 @@ function CaseStudyCard({
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        {tags.map((tag) => (
+        {tags.map((tag: string) => (
           <span
             key={tag}
             className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-slate-500"
