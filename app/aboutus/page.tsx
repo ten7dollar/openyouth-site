@@ -119,7 +119,7 @@ export default function AboutPage() {
                 <p>・医療系マッチングプラットフォーム「レジマッチ」の運営</p>
                 <p>・AI受託開発事業「Make AI」</p>
                 <p>・AI教育事業「AI Academy」</p>
-                <p>・Web制作事業「Make Face」</p>
+                <p>・RPO事業「Stock HR」</p>
               </dd>
             </div>
           </dl>
