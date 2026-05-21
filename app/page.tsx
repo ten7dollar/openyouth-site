@@ -1301,7 +1301,7 @@ function FounderTeaser() {
                 className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-slate-400)]"
                 style={{ fontFamily: "var(--font-display-en)" }}
               >
-                Koki Fukatani · Founder &amp; CEO
+                Koki Fukaya · Founder &amp; CEO
               </p>
             </div>
             <Link

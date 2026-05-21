@@ -331,7 +331,7 @@ export default function AboutPage() {
                   className="mt-1 text-[10px] uppercase tracking-[0.32em] text-[var(--color-slate-400)]"
                   style={{ fontFamily: "var(--font-display-en)" }}
                 >
-                  Koki Fukatani
+                  Koki Fukaya
                 </p>
               </div>
             </div>
@@ -377,7 +377,7 @@ export default function AboutPage() {
                 className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-slate-400)]"
                 style={{ fontFamily: "var(--font-display-en)" }}
               >
-                Koki Fukatani · Founder &amp; CEO
+                Koki Fukaya · Founder &amp; CEO
               </p>
             </div>
           </div>
