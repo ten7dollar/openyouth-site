@@ -334,9 +334,9 @@ function HexTile({ tile }: { tile: HexTileData }) {
 
 function ServiceHoneycomb() {
   return (
-    <div className="relative">
+    <div className="relative mx-auto w-full max-w-[460px] lg:max-w-none">
       {/* Compact label row */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
         <p
           className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-slate-500)]"
           style={{ fontFamily: "var(--font-display-en)" }}
@@ -353,16 +353,16 @@ function ServiceHoneycomb() {
       </div>
 
       {/* Honeycomb body */}
-      <div className="relative mt-6">
+      <div className="relative mt-6 pb-2">
         {/* Row 1: 3 hexes filling the full width */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
           {HEX_TILES.slice(0, 3).map((t, i) => (
             <HexTile key={`r1-${i}`} tile={t} />
           ))}
         </div>
         {/* Row 2: 2 hexes, offset by half a hex (~16.66%), pulled up to interlock */}
         <div
-          className="-mt-[11.5%] grid grid-cols-2 gap-3"
+          className="-mt-[11.5%] grid grid-cols-2 gap-2 sm:gap-3"
           style={{ paddingLeft: "16.66%", paddingRight: "16.66%" }}
         >
           {HEX_TILES.slice(3, 5).map((t, i) => (
@@ -372,7 +372,7 @@ function ServiceHoneycomb() {
       </div>
 
       {/* And more tag cloud */}
-      <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2">
+      <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2">
         <p
           className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.32em] text-[var(--color-accent)]"
           style={{ fontFamily: "var(--font-display-en)" }}
@@ -903,7 +903,7 @@ function ServicesSection() {
                 <div className={i === 0 ? "grid items-stretch lg:grid-cols-12" : ""}>
                   {/* Featured image (only for first card) */}
                   {i === 0 && (
-                    <div className="relative aspect-[16/10] overflow-hidden bg-[var(--color-navy-800)] lg:col-span-5 lg:aspect-auto">
+                    <div className="relative aspect-[4/3] overflow-hidden bg-[var(--color-navy-800)] sm:aspect-[16/10] lg:col-span-5 lg:aspect-auto">
                       <Image
                         src="/images/services/stockhr.jpg"
                         alt="Stock-HR"
@@ -913,11 +913,11 @@ function ServicesSection() {
                       />
                       <div aria-hidden className="absolute inset-0 bg-gradient-to-tr from-[var(--color-navy-900)]/85 via-[var(--color-navy-800)]/55 to-transparent" />
                       <div aria-hidden className="absolute inset-0 bg-grid-navy opacity-30" />
-                      <div className="absolute left-6 top-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white backdrop-blur" style={{ fontFamily: "var(--font-display-en)" }}>
+                      <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white backdrop-blur sm:left-6 sm:top-6" style={{ fontFamily: "var(--font-display-en)" }}>
                         <span className="inline-block h-1.5 w-1.5 rounded-full bg-white dot-pulse" />
                         Featured Product
                       </div>
-                      <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
+                      <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-6 sm:left-6 sm:right-6">
                         <div>
                           <p
                             className="text-[10px] uppercase tracking-[0.32em] text-white/70"
@@ -926,20 +926,20 @@ function ServicesSection() {
                             stock-hr.com ↗
                           </p>
                           <p
-                            className="mt-2 text-[clamp(28px,3.4vw,44px)] font-bold leading-none text-white"
+                            className="mt-2 text-[clamp(22px,5vw,44px)] font-bold leading-none text-white"
                             style={{ fontFamily: "var(--font-display-en)", letterSpacing: "-0.02em" }}
                           >
                             Stock-HR
                           </p>
                         </div>
-                        <s.Icon className="h-12 w-12 text-white/85" />
+                        <s.Icon className="h-10 w-10 shrink-0 text-white/85 sm:h-12 sm:w-12" />
                       </div>
                     </div>
                   )}
 
                   {/* Beta product image (resimatch) */}
                   {i === 3 && (
-                    <div className="relative aspect-[16/9] overflow-hidden bg-[var(--color-slate-100)]">
+                    <div className="relative aspect-[4/3] overflow-hidden bg-[var(--color-slate-100)] sm:aspect-[16/9]">
                       <Image
                         src="/images/services/resimatch.jpg"
                         alt=""
@@ -949,15 +949,15 @@ function ServicesSection() {
                       />
                       <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-900)]/75 via-[var(--color-navy-900)]/30 to-transparent" />
                       <div
-                        className="absolute left-6 top-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white"
+                        className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white sm:left-6 sm:top-6"
                         style={{ fontFamily: "var(--font-display-en)" }}
                       >
                         <span className="inline-block h-1.5 w-1.5 rounded-full bg-white dot-pulse" />
                         β版 Testing
                       </div>
-                      <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4">
-                        <div className="flex items-center gap-3 rounded-2xl bg-white/95 px-4 py-2.5 shadow-[0_8px_24px_-12px_rgba(15,35,71,0.45)] backdrop-blur">
-                          <div className="relative h-9 w-9 shrink-0">
+                      <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-5 sm:left-5 sm:right-5">
+                        <div className="flex items-center gap-2.5 rounded-2xl bg-white/95 px-3 py-2 shadow-[0_8px_24px_-12px_rgba(15,35,71,0.45)] backdrop-blur sm:gap-3 sm:px-4 sm:py-2.5">
+                          <div className="relative h-8 w-8 shrink-0 sm:h-9 sm:w-9">
                             <Image
                               src="/images/services/resimatch-logo.png"
                               alt="レジマッチ ロゴ"
@@ -968,7 +968,7 @@ function ServicesSection() {
                           </div>
                           <div className="leading-tight">
                             <p
-                              className="text-[15px] font-bold text-[var(--color-slate-900)]"
+                              className="text-[14px] font-bold text-[var(--color-slate-900)] sm:text-[15px]"
                               style={{ fontFamily: "var(--font-display-jp)" }}
                             >
                               レジマッチ
