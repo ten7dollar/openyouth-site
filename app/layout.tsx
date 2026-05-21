@@ -1,25 +1,60 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import Script from "next/script";
+import {
+  Bricolage_Grotesque,
+  Zen_Kaku_Gothic_New,
+  Murecho,
+} from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { RevealObserver } from "@/components/reveal-observer";
+
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-display-en",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const zenKaku = Zen_Kaku_Gothic_New({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-display-jp",
+  weight: ["400", "500", "700", "900"],
+  // Note: Zen Kaku Gothic New ships in steps of 100; for `font-semibold` (600)
+  // the browser synthesizes between 500 and 700, which works fine. We keep the
+  // declared weights as the available files to avoid asking for one Google Fonts
+  // does not serve.
+});
+
+const murecho = Murecho({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-body-jp",
+  weight: ["300", "400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
-  // すべての絶対URL（canonical / OG など）の基準となるドメイン
   metadataBase: new URL("https://openyouth.co.jp"),
-  title: "株式会社OpenYouth | Official Website",
+  title: "株式会社OpenYouth",
   description:
-    "株式会社OpenYouthは、初期研修医マッチングプラットフォーム「レジマッチ」をはじめ、AI開発・教育・Web制作を通じて、挑戦するすべての若者に最適な未来を提供します。",
-  // favicon / ブラウザタブ / 検索結果用アイコン
+    "株式会社OpenYouthは、テクノロジーと現場の知見で、若者が挑戦するための選択肢を増やしていく会社です。スカウト運用AI Stock-HRをはじめ、採用支援・営業支援・新規事業の立ち上げに伴走します。",
   icons: {
-    icon: "/favicon.ico",       // public/favicon.ico を参照
+    icon: "/favicon.ico",
     shortcut: "/favicon.ico",
     apple: "/favicon.ico",
   },
-  // 各ページの canonical を co.jp に統一
   alternates: {
-    canonical: "/",             // 各page.tsxごとに自動的に /〜 が付く
+    canonical: "/",
+  },
+  openGraph: {
+    title: "株式会社OpenYouth",
+    description:
+      "若者が挑戦するための選択肢を、テクノロジーと現場知でひとつずつ増やしていく会社です。",
+    type: "website",
+    locale: "ja_JP",
   },
 };
 
@@ -29,9 +64,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ja">
-      <body className="min-h-screen bg-slate-50 text-slate-900">
-        {/* Google Tag Manager (OpenYouth コーポレート用) */}
+    <html
+      lang="ja"
+      className={`${bricolage.variable} ${zenKaku.variable} ${murecho.variable}`}
+    >
+      <body className="min-h-screen bg-[var(--color-slate-0)] text-[var(--color-slate-900)]">
         <Script id="gtm-openyouth" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -41,8 +78,6 @@ export default function RootLayout({
             })(window,document,'script','dataLayer','GTM-M8BHFBCS');
           `}
         </Script>
-
-        {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-M8BHFBCS"
@@ -52,6 +87,7 @@ export default function RootLayout({
           />
         </noscript>
 
+        <RevealObserver />
         <Header />
         <main className="min-h-[calc(100vh-120px)]">{children}</main>
         <Footer />
