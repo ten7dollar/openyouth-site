@@ -131,7 +131,7 @@ export default function AboutPage() {
           <GrowthSpray className="h-full w-full" />
         </div>
 
-        <div className="relative mx-auto grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+        <div className="relative mx-auto grid grid-cols-1 max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
           <div className="lg:col-span-4" data-reveal>
             <p
               className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
@@ -213,7 +213,7 @@ export default function AboutPage() {
       {/* ============== Values ============== */}
       <section className="relative bg-[var(--color-slate-50)] py-24 sm:py-32">
         <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
-          <div className="grid gap-10 lg:grid-cols-12" data-reveal>
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12" data-reveal>
             <div className="lg:col-span-4">
               <p
                 className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
@@ -234,7 +234,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <ul className="mt-14 grid gap-6 lg:grid-cols-3" data-reveal-stagger>
+          <ul className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3" data-reveal-stagger>
             {VALUES.map((v) => (
               <li
                 key={v.no}
@@ -290,7 +290,7 @@ export default function AboutPage() {
           <QuoteBracket className="h-full w-full" />
         </div>
 
-        <div className="relative mx-auto grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+        <div className="relative mx-auto grid grid-cols-1 max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
           <div className="lg:col-span-4" data-reveal>
             <p
               className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
@@ -386,7 +386,7 @@ export default function AboutPage() {
 
       {/* ============== Timeline ============== */}
       <section className="relative bg-[var(--color-slate-50)] py-24 sm:py-32">
-        <div className="mx-auto grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+        <div className="mx-auto grid grid-cols-1 max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
           <div className="lg:col-span-4" data-reveal>
             <p
               className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
@@ -448,7 +448,7 @@ export default function AboutPage() {
 
       {/* ============== Corporate Profile ============== */}
       <section id="colophon" className="relative bg-[var(--color-slate-0)] py-24 sm:py-32">
-        <div className="mx-auto grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+        <div className="mx-auto grid grid-cols-1 max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
           <div className="lg:col-span-4" data-reveal>
             <p
               className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"

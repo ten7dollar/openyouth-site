@@ -65,14 +65,17 @@
   h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
   }
-  /* Japanese typography: keep punctuation from getting stranded.
-     - word-break: keep-all → don't break inside CJK character runs
-     - line-break: strict → strict kinsoku rules for jp punctuation
-     - overflow-wrap: anywhere → still allow long latin words to wrap */
-  h1, h2, h3, h4, h5, h6, p, blockquote, li, dd, dt {
+  /* Headings only: keep-all prevents punctuation from being stranded (kinsoku).
+     Body text must NOT use keep-all — long CJK runs without punctuation would
+     refuse to wrap and overflow the viewport. */
+  h1, h2, h3, h4, h5, h6 {
     word-break: keep-all;
     overflow-wrap: anywhere;
     line-break: strict;
+  }
+  p, blockquote, li, dd, dt {
+    overflow-wrap: anywhere;
+    word-break: normal;
   }
   ::selection {
     background: var(--color-navy-600);

@@ -129,7 +129,7 @@ export default function PrivacyPolicyPage() {
       />
 
       <section className="relative bg-[var(--color-slate-0)] py-16 sm:py-24">
-        <div className="mx-auto grid max-w-[1320px] gap-12 px-5 sm:px-8 lg:grid-cols-12 lg:px-12">
+        <div className="mx-auto grid grid-cols-1 max-w-[1320px] gap-12 px-5 sm:px-8 lg:grid-cols-12 lg:px-12">
           <aside className="lg:col-span-3" data-reveal>
             <div className="lg:sticky lg:top-28">
               <p

@@ -459,7 +459,7 @@ function Hero() {
             <span className="heading-tail text-gradient-navy">可能性の選択肢を。</span>
           </h1>
 
-          <p className="heading-jp mt-9 max-w-[60ch] text-pretty text-[15.5px] leading-[1.95] text-[var(--color-slate-600)] sm:text-[16px]">
+          <p className="mt-9 max-w-[60ch] text-pretty text-[15.5px] leading-[1.95] text-[var(--color-slate-600)] sm:text-[16px]">
             テクノロジーと現場の知見で、若者の挑戦の選択肢を増やしていく会社です。組織AI活用プロダクト <strong className="font-bold text-[var(--color-slate-900)]">Stock-HR</strong> を中核に、採用・営業・医療キャリアなど複数の領域で実装中。
           </p>
 

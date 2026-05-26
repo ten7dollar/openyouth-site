@@ -496,7 +496,7 @@ export default function ServicesPage() {
             data-reveal
           >
             <div aria-hidden className="absolute inset-0 bg-grid-navy opacity-50" />
-            <div className="relative grid gap-10 lg:grid-cols-12">
+            <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-12">
               <div className="lg:col-span-7">
                 <p
                   className="text-[11px] uppercase tracking-[0.32em] text-white/55"
@@ -586,7 +586,7 @@ function BusinessSection({
 
       <div
         className={
-          "relative mx-auto grid max-w-[1320px] gap-14 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-12 lg:gap-10 lg:px-12 " +
+          "relative mx-auto grid grid-cols-1 max-w-[1320px] gap-14 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-12 lg:gap-10 lg:px-12 " +
           (isNavy ? "" : "border-t border-[var(--color-slate-200)]")
         }
       >
