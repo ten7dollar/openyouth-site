@@ -418,7 +418,7 @@ function Hero() {
         </div>
       </div>
 
-      <div className="relative mx-auto grid grid-cols-1 max-w-[1320px] gap-12 px-5 pb-28 pt-20 sm:px-8 sm:pb-32 sm:pt-24 lg:grid-cols-12 lg:gap-10 lg:px-12 lg:pb-36 lg:pt-28">
+      <div className="relative mx-auto flex flex-col lg:grid max-w-[1320px] gap-12 px-5 pb-28 pt-20 sm:px-8 sm:pb-32 sm:pt-24 lg:grid-cols-12 lg:gap-10 lg:px-12 lg:pb-36 lg:pt-28">
         {/* Index bar */}
         <div
           className="col-span-12 flex items-center justify-between border-t border-[var(--color-slate-200)] pt-4"
@@ -585,7 +585,7 @@ function VisionSection() {
         <GrowthSpray className="h-full w-full" />
       </div>
 
-      <div className="relative mx-auto grid grid-cols-1 max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+      <div className="relative mx-auto flex flex-col lg:grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
         <div className="lg:col-span-4" data-reveal>
           <p
             className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
@@ -685,7 +685,7 @@ function WhySection() {
         <BlueprintRings className="h-full w-full" />
       </div>
 
-      <div className="relative mx-auto grid grid-cols-1 max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+      <div className="relative mx-auto flex flex-col lg:grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
         <div className="lg:col-span-5" data-reveal>
           <p
             className="text-[11px] uppercase tracking-[0.32em] text-white/55"
@@ -806,7 +806,7 @@ function ValuesSection() {
           </p>
         </div>
 
-        <ul className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3" data-reveal-stagger>
+        <ul className="mt-14 flex flex-col lg:grid gap-6 lg:grid-cols-3" data-reveal-stagger>
           {VALUES.map((v) => (
             <li
               key={v.no}
@@ -864,7 +864,7 @@ function ServicesSection() {
   return (
     <section className="relative bg-[var(--color-slate-0)] py-28 sm:py-36">
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12" data-reveal>
+        <div className="flex flex-col lg:grid gap-10 lg:grid-cols-12" data-reveal>
           <div className="lg:col-span-4">
             <p
               className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
@@ -1141,7 +1141,7 @@ function StockHRSpot() {
         <PulseNetwork className="h-full w-full" />
       </div>
 
-      <div className="relative mx-auto grid grid-cols-1 max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+      <div className="relative mx-auto flex flex-col lg:grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
         <div className="lg:col-span-7" data-reveal-stagger>
           <p
             className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.32em] text-white/70"
@@ -1255,7 +1255,7 @@ function StockHRSpot() {
 function FounderTeaser() {
   return (
     <section className="relative bg-[var(--color-slate-0)] py-28 sm:py-36">
-      <div className="mx-auto grid grid-cols-1 max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+      <div className="mx-auto flex flex-col lg:grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
         <div className="lg:col-span-5" data-reveal>
           <p
             className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
@@ -1439,7 +1439,7 @@ function ContactCTA() {
             <BlueprintRings className="h-full w-full" />
           </div>
 
-          <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-12">
+          <div className="relative flex flex-col lg:grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-7">
               <p
                 className="text-[11px] uppercase tracking-[0.32em] text-white/55"

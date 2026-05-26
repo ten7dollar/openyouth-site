@@ -118,7 +118,7 @@ export default function RecruitmentPage() {
       {/* ============== Values ============== */}
       <section className="relative bg-[var(--color-slate-0)] py-24 sm:py-32">
         <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12" data-reveal>
+          <div className="flex flex-col lg:grid gap-10 lg:grid-cols-12" data-reveal>
             <div className="lg:col-span-4">
               <p
                 className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
@@ -139,7 +139,7 @@ export default function RecruitmentPage() {
               </p>
             </div>
 
-            <ul className="grid grid-cols-1 gap-6 lg:col-span-8 lg:grid-cols-3" data-reveal-stagger>
+            <ul className="flex flex-col lg:grid gap-6 lg:col-span-8 lg:grid-cols-3" data-reveal-stagger>
               {VALUES.map((v) => (
                 <li
                   key={v.no}
@@ -271,7 +271,7 @@ export default function RecruitmentPage() {
 
       {/* ============== Environment ============== */}
       <section className="relative bg-[var(--color-slate-0)] py-24 sm:py-32">
-        <div className="mx-auto grid grid-cols-1 max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+        <div className="mx-auto flex flex-col lg:grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
           <div className="lg:col-span-4" data-reveal>
             <p
               className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
@@ -338,7 +338,7 @@ export default function RecruitmentPage() {
             data-reveal
           >
             <div aria-hidden className="absolute inset-0 bg-grid-navy opacity-50" />
-            <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-12">
+            <div className="relative flex flex-col lg:grid gap-10 lg:grid-cols-12">
               <div className="lg:col-span-7">
                 <p
                   className="text-[11px] uppercase tracking-[0.32em] text-white/55"

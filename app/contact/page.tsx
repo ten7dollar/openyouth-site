@@ -38,7 +38,7 @@ export default function ContactPage() {
 
       {/* ============== Form ============== */}
       <section className="relative bg-[var(--color-slate-0)] py-20 sm:py-28">
-        <div className="mx-auto grid grid-cols-1 max-w-[1320px] gap-12 px-5 sm:px-8 lg:grid-cols-12 lg:px-12">
+        <div className="mx-auto flex flex-col lg:grid max-w-[1320px] gap-12 px-5 sm:px-8 lg:grid-cols-12 lg:px-12">
           {/* Sidebar info */}
           <aside className="lg:col-span-4" data-reveal>
             <div className="rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-50)] p-7">

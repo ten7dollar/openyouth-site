@@ -52,7 +52,7 @@ export function PageMasthead({
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-12 py-14 sm:py-20 lg:grid-cols-12 lg:gap-10 lg:py-24">
+        <div className="flex flex-col lg:grid gap-12 py-14 sm:py-20 lg:grid-cols-12 lg:gap-10 lg:py-24">
           <div className="lg:col-span-8" data-reveal-stagger>
             <h1
               className="text-[clamp(38px,6vw,80px)] font-bold leading-[1.05] tracking-[-0.018em] text-[var(--color-slate-900)]"
