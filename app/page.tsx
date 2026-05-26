@@ -441,7 +441,7 @@ function Hero() {
         </div>
 
         {/* Main copy */}
-        <div className="col-span-12 lg:col-span-7 xl:col-span-7" data-reveal-stagger>
+        <div className="col-span-12 min-w-0 lg:col-span-7 xl:col-span-7" data-reveal-stagger>
           <p
             className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.42em] text-[var(--color-navy-700)]"
             style={{ fontFamily: "var(--font-display-en)" }}
@@ -495,7 +495,7 @@ function Hero() {
         </div>
 
         {/* Right rail — Service Lines (honeycomb) */}
-        <aside className="col-span-12 lg:col-span-5 xl:col-span-5" data-reveal>
+        <aside className="col-span-12 min-w-0 lg:col-span-5 xl:col-span-5" data-reveal>
           <ServiceHoneycomb />
         </aside>
       </div>
