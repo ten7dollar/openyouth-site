@@ -278,6 +278,13 @@ function HexTile({ tile }: { tile: HexTileData }) {
     ? "bg-gradient-to-br from-[var(--color-navy-400)] via-[var(--color-navy-500)] to-[var(--color-navy-700)]"
     : "bg-[var(--color-slate-100)]";
 
+  // Outer ring: tone the ring to the background so Beta doesn't pop too hard
+  const ring = isActive
+    ? "bg-[var(--color-navy-900)]"
+    : isBeta
+    ? "bg-[var(--color-navy-700)]"
+    : "bg-[var(--color-slate-300)]";
+
   const Tag = tile.external ? "a" : Link;
   const tagProps = tile.external
     ? { href: tile.href, target: "_blank", rel: "noreferrer" }
@@ -290,7 +297,7 @@ function HexTile({ tile }: { tile: HexTileData }) {
     >
       {/* Outer ring */}
       <div
-        className="absolute inset-0 bg-[var(--color-navy-900)]"
+        className={"absolute inset-0 " + ring}
         style={{ clipPath: HEX_CLIP }}
       />
       <div
