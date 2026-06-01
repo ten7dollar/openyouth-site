@@ -904,35 +904,30 @@ function ServicesSection() {
                   {/* Featured image (only for first card) */}
                   {i === 0 && (
                     <div className="relative aspect-[4/3] overflow-hidden bg-[var(--color-navy-800)] sm:aspect-[16/10] lg:col-span-5 lg:aspect-auto">
+                      <div aria-hidden className="absolute inset-0 bg-grid-navy opacity-30" />
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute -right-20 -top-20 h-[380px] w-[380px] rounded-full bg-[var(--color-accent)]/20 blur-[100px]"
+                      />
                       <Image
-                        src="/images/services/stockhr.jpg"
+                        src="/images/services/stockhr-mac.png"
                         alt="Stock-HR"
                         fill
                         sizes="(min-width: 1024px) 40vw, 100vw"
-                        className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                        className="object-contain object-center p-6 transition-transform duration-700 group-hover:scale-[1.04] sm:p-8"
                       />
-                      <div aria-hidden className="absolute inset-0 bg-gradient-to-tr from-[var(--color-navy-900)]/85 via-[var(--color-navy-800)]/55 to-transparent" />
-                      <div aria-hidden className="absolute inset-0 bg-grid-navy opacity-30" />
                       <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white backdrop-blur sm:left-6 sm:top-6" style={{ fontFamily: "var(--font-display-en)" }}>
                         <span className="inline-block h-1.5 w-1.5 rounded-full bg-white dot-pulse" />
                         Featured Product
                       </div>
                       <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-6 sm:left-6 sm:right-6">
-                        <div>
-                          <p
-                            className="text-[10px] uppercase tracking-[0.32em] text-white/70"
-                            style={{ fontFamily: "var(--font-display-en)" }}
-                          >
-                            stock-hr.com ↗
-                          </p>
-                          <p
-                            className="mt-2 text-[clamp(22px,5vw,44px)] font-bold leading-none text-white"
-                            style={{ fontFamily: "var(--font-display-en)", letterSpacing: "-0.02em" }}
-                          >
-                            Stock-HR
-                          </p>
-                        </div>
-                        <s.Icon className="h-10 w-10 shrink-0 text-white/85 sm:h-12 sm:w-12" />
+                        <p
+                          className="text-[10px] uppercase tracking-[0.32em] text-white/70"
+                          style={{ fontFamily: "var(--font-display-en)" }}
+                        >
+                          stock-hr.com ↗
+                        </p>
+                        <s.Icon className="h-9 w-9 shrink-0 text-white/85 sm:h-10 sm:w-10" />
                       </div>
                     </div>
                   )}
@@ -1212,36 +1207,35 @@ function StockHRSpot() {
           </div>
         </div>
 
-        {/* Right visual — placeholder for forthcoming product imagery */}
+        {/* Right visual — product dashboard */}
         <div className="relative lg:col-span-5" data-reveal>
-          <div className="relative overflow-hidden rounded-3xl border border-dashed border-white/25 bg-white/[0.04] backdrop-blur-sm">
-            <div className="aspect-[4/5] w-full">
-              <div className="flex h-full w-full flex-col items-center justify-center gap-3 px-8 text-center">
-                <span className="grid h-12 w-12 place-items-center rounded-2xl border border-white/25 text-white/55">
-                  <IconStockHR className="h-6 w-6" />
-                </span>
-                <p
-                  className="text-[10px] uppercase tracking-[0.32em] text-white/45"
-                  style={{ fontFamily: "var(--font-display-en)" }}
-                >
-                  Product Imagery
-                </p>
-                <p
-                  className="text-[14px] font-bold text-white/80"
-                  style={{ fontFamily: "var(--font-display-jp)" }}
-                >
-                  画像を準備中です
-                </p>
-                <p className="max-w-[28ch] text-pretty text-[12px] leading-[1.85] text-white/55">
-                  Stock-HRのプロダクト画像をこのエリアに配置予定です。
-                </p>
-              </div>
+          <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-white/[0.06] to-white/[0.02] backdrop-blur-sm">
+            <div className="relative aspect-[4/5] w-full">
+              <Image
+                src="/images/services/stockhr-dashboard.png"
+                alt="Stock-HR ダッシュボード — 今月のスカウト運用"
+                fill
+                sizes="(min-width: 1024px) 40vw, 100vw"
+                className="object-contain object-center p-5 transition-transform duration-700 hover:scale-[1.03]"
+              />
+              {/* Soft inner glow behind the device */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[var(--color-accent)]/20 to-transparent blur-2xl"
+              />
             </div>
-            {/* Subtle corner ticks */}
+            {/* Corner ticks */}
             <span aria-hidden className="absolute left-3 top-3 h-3 w-3 border-l border-t border-white/30" />
             <span aria-hidden className="absolute right-3 top-3 h-3 w-3 border-r border-t border-white/30" />
             <span aria-hidden className="absolute left-3 bottom-3 h-3 w-3 border-l border-b border-white/30" />
             <span aria-hidden className="absolute right-3 bottom-3 h-3 w-3 border-r border-b border-white/30" />
+            {/* Caption */}
+            <p
+              className="absolute left-5 top-5 text-[10px] uppercase tracking-[0.32em] text-white/55"
+              style={{ fontFamily: "var(--font-display-en)" }}
+            >
+              Stock-HR · Dashboard
+            </p>
           </div>
         </div>
       </div>
