@@ -305,14 +305,14 @@ export default function AboutPage() {
               代表からのメッセージ
             </h2>
 
-            <div className="mt-10 overflow-hidden rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] p-1.5 lift">
+            <div className="mt-10 overflow-hidden rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] p-1.5 lift lg:max-w-[300px]">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-[var(--color-slate-100)]">
                 <Image
                   src="/images/company/ceo.jpg"
                   alt="代表取締役 深谷洸樹"
                   fill
                   className="object-cover"
-                  sizes="(min-width: 1024px) 320px, 80vw"
+                  sizes="(min-width: 1024px) 300px, 80vw"
                 />
                 {/* Tag overlay */}
                 <div className="absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full bg-[var(--color-slate-0)]/85 px-3 py-1 text-[11px] text-[var(--color-slate-700)] backdrop-blur">
