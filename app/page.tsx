@@ -114,8 +114,8 @@ const SERVICES: Service[] = [
     problem:
       "美容室・理容室の採用は、媒体に高い初期費用と不透明な運用費を払い続ける構造になりがち。小さなサロンほど、自分たちの採用ページを持つ余力がありません。",
     approach:
-      "申し込みから簡単なヒアリングだけで、AIがそのお店専用の採用ページを生成し、公開まで完結。初期費用0円・月額制で、どんな規模のサロンも自社の採用ページを持てる形にしました。",
-    highlights: ["初期費用0円", "AIでページ生成", "月額1万円〜"],
+      "採用の現場を知り尽くしたプロが、お店ごとの魅力を引き出して高品質なデザインの採用ページに仕上げます。初期費用0円・月額制で、どんな規模のサロンも自社の採用ページを持てる形にしました。",
+    highlights: ["初期費用0円", "プロが制作", "月額1万円〜"],
     status: "New",
     href: "https://saloriku.com",
     external: true,
@@ -900,6 +900,8 @@ function ValuesSection() {
    Services Section (4 lines)
 ============================================================ */
 function ServicesSection() {
+  const feature = [SERVICES[0], SERVICES[4]]; // Stock-HR・サロリク（プロダクト2本）
+  const rest = [SERVICES[1], SERVICES[2], SERVICES[3]]; // 採用支援・営業支援・レジマッチ
   return (
     <section className="relative bg-[var(--color-slate-0)] py-28 sm:py-36">
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
@@ -924,229 +926,179 @@ function ServicesSection() {
           </p>
         </div>
 
+        {/* 上段：プロダクト2本（画像付き） */}
         <ul className="mt-12 grid gap-4 sm:grid-cols-2" data-reveal-stagger>
-          {SERVICES.map((s, i) => (
-            <li
-              key={s.slug}
-              className={
-                "relative overflow-hidden rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] lift " +
-                (i === 0 ? "sm:col-span-2" : "")
-              }
-            >
-              <Link
-                href={s.href}
-                target={s.external ? "_blank" : undefined}
-                rel={s.external ? "noreferrer" : undefined}
-                className="group block h-full"
-              >
-                <div className={i === 0 ? "grid items-stretch lg:grid-cols-12" : ""}>
-                  {/* Featured image (only for first card) */}
-                  {i === 0 && (
-                    <div className="relative aspect-[4/3] overflow-hidden bg-[var(--color-navy-800)] sm:aspect-[16/10] lg:col-span-5 lg:aspect-auto">
-                      <div aria-hidden className="absolute inset-0 bg-grid-navy opacity-30" />
-                      <div
-                        aria-hidden
-                        className="pointer-events-none absolute -right-20 -top-20 h-[380px] w-[380px] rounded-full bg-[var(--color-accent)]/20 blur-[100px]"
-                      />
-                      <Image
-                        src="/images/services/stockhr-mac.png"
-                        alt="Stock-HR"
-                        fill
-                        sizes="(min-width: 1024px) 40vw, 100vw"
-                        className="object-contain object-center p-6 transition-transform duration-700 group-hover:scale-[1.04] sm:p-8"
-                      />
-                      <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white backdrop-blur sm:left-6 sm:top-6" style={{ fontFamily: "var(--font-display-en)" }}>
-                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-white dot-pulse" />
-                        Featured Product
-                      </div>
-                      <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-6 sm:left-6 sm:right-6">
-                        <p
-                          className="text-[10px] uppercase tracking-[0.32em] text-white/70"
-                          style={{ fontFamily: "var(--font-display-en)" }}
-                        >
-                          stock-hr.com ↗
-                        </p>
-                        <s.Icon className="h-9 w-9 shrink-0 text-white/85 sm:h-10 sm:w-10" />
-                      </div>
-                    </div>
-                  )}
+          {feature.map((s) => (
+            <ServiceCard key={s.slug} s={s} variant="feature" />
+          ))}
+        </ul>
 
-                  {/* Beta product image (resimatch) */}
-                  {i === 3 && (
-                    <div className="relative aspect-[4/3] overflow-hidden bg-[var(--color-slate-100)] sm:aspect-[16/9]">
-                      <Image
-                        src="/images/services/resimatch.jpg"
-                        alt=""
-                        fill
-                        sizes="(min-width: 640px) 50vw, 100vw"
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-900)]/75 via-[var(--color-navy-900)]/30 to-transparent" />
-                      <div
-                        className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white sm:left-6 sm:top-6"
-                        style={{ fontFamily: "var(--font-display-en)" }}
-                      >
-                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-white dot-pulse" />
-                        β版 Testing
-                      </div>
-                      <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-5 sm:left-5 sm:right-5">
-                        <div className="flex items-center gap-2.5 rounded-2xl bg-white/95 px-3 py-2 shadow-[0_8px_24px_-12px_rgba(15,35,71,0.45)] backdrop-blur sm:gap-3 sm:px-4 sm:py-2.5">
-                          <div className="relative h-8 w-8 shrink-0 sm:h-9 sm:w-9">
-                            <Image
-                              src="/images/services/resimatch-logo.png"
-                              alt="レジマッチ ロゴ"
-                              fill
-                              sizes="36px"
-                              className="object-contain"
-                            />
-                          </div>
-                          <div className="leading-tight">
-                            <p
-                              className="text-[14px] font-bold text-[var(--color-slate-900)] sm:text-[15px]"
-                              style={{ fontFamily: "var(--font-display-jp)" }}
-                            >
-                              レジマッチ
-                            </p>
-                            <p
-                              className="text-[10px] uppercase tracking-[0.28em] text-[var(--color-slate-500)]"
-                              style={{ fontFamily: "var(--font-display-en)" }}
-                            >
-                              resi-match.com ↗
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* New product image (saloriku) */}
-                  {i === 4 && (
-                    <div className="relative aspect-[4/3] overflow-hidden bg-[var(--color-slate-100)] sm:aspect-[16/9]">
-                      <Image
-                        src="/images/services/saloriku-hero.png"
-                        alt="サロリク — 美容師の採用ページ"
-                        fill
-                        sizes="(min-width: 640px) 50vw, 100vw"
-                        className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-900)]/60 via-transparent to-transparent" />
-                      <div
-                        className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white sm:left-6 sm:top-6"
-                        style={{ fontFamily: "var(--font-display-en)" }}
-                      >
-                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-white dot-pulse" />
-                        New
-                      </div>
-                      <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-5 sm:left-5 sm:right-5">
-                        <p
-                          className="rounded-full bg-white/90 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[var(--color-slate-700)] backdrop-blur"
-                          style={{ fontFamily: "var(--font-display-en)" }}
-                        >
-                          saloriku.com ↗
-                        </p>
-                        <s.Icon className="h-8 w-8 shrink-0 text-white sm:h-9 sm:w-9" />
-                      </div>
-                    </div>
-                  )}
-
-                  <div className={"p-6 sm:p-7 " + (i === 0 ? "lg:col-span-7 lg:p-10" : "")}>
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-start gap-4">
-                        {i !== 0 && (
-                          <div className="grid h-11 w-11 place-items-center rounded-xl bg-[var(--color-navy-50)] text-[var(--color-navy-700)] transition-colors group-hover:bg-[var(--color-navy-700)] group-hover:text-[var(--color-slate-0)]">
-                            <s.Icon className="h-5 w-5" />
-                          </div>
-                        )}
-                        <div>
-                          <p
-                            className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-slate-500)]"
-                            style={{ fontFamily: "var(--font-display-en)" }}
-                          >
-                            Line {s.no} · {s.category}
-                          </p>
-                          <p
-                            className={
-                              "mt-1.5 font-bold leading-[1.2] text-balance text-[var(--color-slate-900)] " +
-                              (i === 0
-                                ? "text-[clamp(24px,2.8vw,36px)]"
-                                : "text-[clamp(18px,2vw,24px)]")
-                            }
-                            style={{ fontFamily: "var(--font-display-jp)" }}
-                          >
-                            {s.name}
-                          </p>
-                          <p
-                            className="mt-1.5 text-balance text-[13px] leading-[1.7] text-[var(--color-slate-700)]"
-                            style={{ fontFamily: "var(--font-display-jp)" }}
-                          >
-                            {s.tagline}
-                          </p>
-                        </div>
-                      </div>
-
-                      <StatusBadge status={s.status} />
-                    </div>
-
-                    {/* Problem / Approach */}
-                    <div
-                      className={
-                        "mt-5 grid gap-4 " + (i === 0 ? "sm:grid-cols-2" : "")
-                      }
-                    >
-                      <div className="border-t border-[var(--color-slate-200)] pt-3">
-                        <p
-                          className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-warn)]"
-                          style={{ fontFamily: "var(--font-display-en)" }}
-                        >
-                          Problem
-                        </p>
-                        <p className="mt-1.5 text-pretty text-[13px] leading-[1.85] text-[var(--color-slate-700)]">
-                          {s.problem}
-                        </p>
-                      </div>
-                      <div className="border-t border-[var(--color-navy-200)] pt-3">
-                        <p
-                          className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
-                          style={{ fontFamily: "var(--font-display-en)" }}
-                        >
-                          Approach
-                        </p>
-                        <p className="mt-1.5 text-pretty text-[13px] leading-[1.85] text-[var(--color-slate-700)]">
-                          {s.approach}
-                        </p>
-                      </div>
-                    </div>
-
-                    <ul className="mt-5 flex flex-wrap gap-1.5">
-                      {s.highlights.map((h) => (
-                        <li
-                          key={h}
-                          className="rounded-full border border-[var(--color-slate-200)] bg-[var(--color-slate-50)] px-2.5 py-0.5 text-[11.5px] text-[var(--color-slate-600)]"
-                        >
-                          {h}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="mt-6 flex items-center justify-between">
-                      <span className="inline-flex items-center gap-2 text-[12.5px] font-bold text-[var(--color-navy-700)]">
-                        <span className="underline-grow">詳しく見る</span>
-                      </span>
-                      <span
-                        aria-hidden
-                        className="grid h-9 w-9 place-items-center rounded-full border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] text-[var(--color-navy-700)] transition-all group-hover:border-[var(--color-navy-700)] group-hover:bg-[var(--color-navy-700)] group-hover:text-[var(--color-slate-0)]"
-                      >
-                        <IconArrowOut className="h-3.5 w-3.5 arrow-slide" />
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </li>
+        {/* 下段：事業支援・医療（コンパクト3列） */}
+        <ul className="mt-4 grid gap-4 sm:grid-cols-3" data-reveal-stagger>
+          {rest.map((s) => (
+            <ServiceCard key={s.slug} s={s} variant="compact" />
           ))}
         </ul>
       </div>
     </section>
+  );
+}
+
+function ServiceImageHeader({ s }: { s: Service }) {
+  if (s.slug === "stockhr") {
+    return (
+      <div className="relative aspect-[16/10] overflow-hidden bg-[var(--color-navy-800)]">
+        <div aria-hidden className="absolute inset-0 bg-grid-navy opacity-30" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-20 -top-20 h-[360px] w-[360px] rounded-full bg-[var(--color-accent)]/20 blur-[100px]"
+        />
+        <Image
+          src="/images/services/stockhr-mac.png"
+          alt="Stock-HR"
+          fill
+          sizes="(min-width: 640px) 45vw, 100vw"
+          className="object-contain object-center p-6 transition-transform duration-700 group-hover:scale-[1.04] sm:p-8"
+        />
+        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-5 sm:left-5 sm:right-5">
+          <p
+            className="rounded-full bg-white/15 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white backdrop-blur"
+            style={{ fontFamily: "var(--font-display-en)" }}
+          >
+            stock-hr.com ↗
+          </p>
+          <s.Icon className="h-8 w-8 shrink-0 text-white/85 sm:h-9 sm:w-9" />
+        </div>
+      </div>
+    );
+  }
+  if (s.slug === "saloriku") {
+    return (
+      <div className="relative aspect-[16/10] overflow-hidden bg-[var(--color-slate-100)]">
+        <Image
+          src="/images/services/saloriku-hero.png"
+          alt="サロリク — 美容師の採用ページ"
+          fill
+          sizes="(min-width: 640px) 45vw, 100vw"
+          className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+        />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-900)]/55 via-transparent to-transparent" />
+        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-5 sm:left-5 sm:right-5">
+          <p
+            className="rounded-full bg-white/90 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[var(--color-slate-700)] backdrop-blur"
+            style={{ fontFamily: "var(--font-display-en)" }}
+          >
+            saloriku.com ↗
+          </p>
+          <s.Icon className="h-8 w-8 shrink-0 text-white sm:h-9 sm:w-9" />
+        </div>
+      </div>
+    );
+  }
+  return null;
+}
+
+function ServiceCard({ s, variant }: { s: Service; variant: "feature" | "compact" }) {
+  const isFeature = variant === "feature";
+  return (
+    <li className="relative overflow-hidden rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] lift">
+      <Link
+        href={s.href}
+        target={s.external ? "_blank" : undefined}
+        rel={s.external ? "noreferrer" : undefined}
+        className="group flex h-full flex-col"
+      >
+        {isFeature && <ServiceImageHeader s={s} />}
+        <div className="flex flex-1 flex-col p-6 sm:p-7">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--color-navy-50)] text-[var(--color-navy-700)] transition-colors group-hover:bg-[var(--color-navy-700)] group-hover:text-[var(--color-slate-0)]">
+                <s.Icon className="h-5 w-5" />
+              </div>
+              <div>
+                <p
+                  className="text-[9.5px] uppercase tracking-[0.3em] text-[var(--color-slate-500)]"
+                  style={{ fontFamily: "var(--font-display-en)" }}
+                >
+                  Line {s.no} · {s.category}
+                </p>
+                <p
+                  className={
+                    "mt-1 font-bold leading-[1.2] text-balance text-[var(--color-slate-900)] " +
+                    (isFeature ? "text-[clamp(20px,2.2vw,26px)]" : "text-[18px]")
+                  }
+                  style={{ fontFamily: "var(--font-display-jp)" }}
+                >
+                  {s.name}
+                </p>
+              </div>
+            </div>
+            <StatusBadge status={s.status} />
+          </div>
+
+          <p
+            className="mt-3 text-balance text-[13px] leading-[1.7] text-[var(--color-slate-700)]"
+            style={{ fontFamily: "var(--font-display-jp)" }}
+          >
+            {s.tagline}
+          </p>
+
+          {isFeature ? (
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div className="border-t border-[var(--color-slate-200)] pt-3">
+                <p
+                  className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-warn)]"
+                  style={{ fontFamily: "var(--font-display-en)" }}
+                >
+                  Problem
+                </p>
+                <p className="mt-1.5 text-pretty text-[12.5px] leading-[1.8] text-[var(--color-slate-700)]">
+                  {s.problem}
+                </p>
+              </div>
+              <div className="border-t border-[var(--color-navy-200)] pt-3">
+                <p
+                  className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
+                  style={{ fontFamily: "var(--font-display-en)" }}
+                >
+                  Approach
+                </p>
+                <p className="mt-1.5 text-pretty text-[12.5px] leading-[1.8] text-[var(--color-slate-700)]">
+                  {s.approach}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <p className="mt-3 border-t border-[var(--color-slate-200)] pt-3 text-pretty text-[12.5px] leading-[1.85] text-[var(--color-slate-600)]">
+              {s.approach}
+            </p>
+          )}
+
+          <ul className="mt-4 flex flex-wrap gap-1.5">
+            {s.highlights.map((h) => (
+              <li
+                key={h}
+                className="rounded-full border border-[var(--color-slate-200)] bg-[var(--color-slate-50)] px-2.5 py-0.5 text-[11px] text-[var(--color-slate-600)]"
+              >
+                {h}
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-auto flex items-center justify-between pt-6">
+            <span className="inline-flex items-center gap-2 text-[12.5px] font-bold text-[var(--color-navy-700)]">
+              <span className="underline-grow">詳しく見る</span>
+            </span>
+            <span
+              aria-hidden
+              className="grid h-9 w-9 place-items-center rounded-full border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] text-[var(--color-navy-700)] transition-all group-hover:border-[var(--color-navy-700)] group-hover:bg-[var(--color-navy-700)] group-hover:text-[var(--color-slate-0)]"
+            >
+              <IconArrowOut className="h-3.5 w-3.5 arrow-slide" />
+            </span>
+          </div>
+        </div>
+      </Link>
+    </li>
   );
 }
 

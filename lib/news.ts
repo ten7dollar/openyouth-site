@@ -20,6 +20,21 @@ export type NewsItem = {
 
 export const NEWS_ITEMS: NewsItem[] = [
   {
+    date: "2026.06.13",
+    category: "Release",
+    title: "美容師採用ページ「サロリク」をリリースしました。",
+    description:
+      "美容室・理容室向けに、初期費用0円・月額制でお店専用の採用ページを持てる「サロリク」を公開しました。採用の現場を知るプロが高品質なデザインで仕上げます。",
+    href: "https://saloriku.com",
+  },
+  {
+    date: "2026.05.30",
+    category: "Notice",
+    title: "創業のご報告と、これからのこと。",
+    description:
+      "株式会社OpenYouth創業の正式なご報告。事業の現在地と、次の章で取り組むテーマを綴ります。",
+  },
+  {
     date: "2026.04.30",
     category: "Product",
     title: "Stock-HRの新LPを公開しました。",
@@ -36,10 +51,11 @@ export const NEWS_ITEMS: NewsItem[] = [
     href: "https://app.stock-hr.jp",
   },
   {
-    date: "2026.05.30",
-    category: "Notice",
-    title: "創業のご報告と、これからのこと。",
+    date: "2026.01.04",
+    category: "Release",
+    title: "Stock-HR事業を開始しました。",
     description:
-      "株式会社OpenYouth創業の正式なご報告。事業の現在地と、次の章で取り組むテーマを綴ります。",
+      "組織のAI活用を最大化するプロダクト「Stock-HR」の提供を開始しました。採用領域から実装を進めています。",
+    href: "https://stock-hr.com",
   },
 ];
