@@ -40,6 +40,20 @@ export function IconStockHR(props: IconProps) {
   );
 }
 
+// Saloriku: サロンのミラーアーチ + シザー（サロリクのエンブレム）
+export function IconSaloriku(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M7 28V15a9 9 0 0 1 18 0v13" />
+      <path d="M5 28h22" />
+      <circle cx="12.5" cy="22.5" r="1.7" />
+      <circle cx="19.5" cy="22.5" r="1.7" />
+      <path d="M13.65 21.25 19 12M18.35 21.25 13 12" />
+      <circle cx="16" cy="16.6" r="0.8" fill="currentColor" stroke="none" />
+    </Base>
+  );
+}
+
 // Recruitment: 人型を矢印で繋ぐ
 export function IconRecruitment(props: IconProps) {
   return (

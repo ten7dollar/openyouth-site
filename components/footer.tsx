@@ -10,6 +10,7 @@ const footerNav = [
       { href: "/services#recruitment", label: "採用支援" },
       { href: "/services#sales", label: "営業支援" },
       { href: "/services#resimatch", label: "ResiMatch" },
+      { href: "/services#saloriku", label: "サロリク" },
     ],
   },
   {

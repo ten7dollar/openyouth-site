@@ -8,6 +8,7 @@ import {
   IconRecruitment,
   IconSales,
   IconResiMatch,
+  IconSaloriku,
   IconLongBet,
   IconFieldFirst,
   IconOpenByDefault,
@@ -24,7 +25,7 @@ import {
 
 import type { ComponentType, SVGProps } from "react";
 
-type ServiceStatus = "Active" | "Beta" | "Coming Soon";
+type ServiceStatus = "Active" | "New" | "Beta" | "Coming Soon";
 
 type Service = {
   no: string;
@@ -104,6 +105,22 @@ const SERVICES: Service[] = [
     external: true,
     Icon: IconResiMatch,
   },
+  {
+    no: "05",
+    slug: "saloriku",
+    name: "サロリク",
+    tagline: "美容師の採用を、お店専用ページで。",
+    category: "Beauty × Recruitment",
+    problem:
+      "美容室・理容室の採用は、媒体に高い初期費用と不透明な運用費を払い続ける構造になりがち。小さなサロンほど、自分たちの採用ページを持つ余力がありません。",
+    approach:
+      "申し込みから簡単なヒアリングだけで、AIがそのお店専用の採用ページを生成し、公開まで完結。初期費用0円・月額制で、どんな規模のサロンも自社の採用ページを持てる形にしました。",
+    highlights: ["初期費用0円", "AIでページ生成", "月額1万円〜"],
+    status: "New",
+    href: "https://saloriku.com",
+    external: true,
+    Icon: IconSaloriku,
+  },
 ];
 
 type ValueItem = {
@@ -146,7 +163,7 @@ type NumberItem = {
 };
 
 const NUMBERS: NumberItem[] = [
-  { label: "事業ライン", value: 4, suffix: "", hint: "AI · HR · Sales · Medical" },
+  { label: "事業ライン", value: 5, suffix: "", hint: "AI · HR · Sales · Medical · Beauty" },
   { label: "代表の採用実績", value: 100, suffix: "+", hint: "名 — 採用立ち上げ〜組織グロース" },
   { label: "支援企業", value: 10, suffix: "+", hint: "社 — BtoB · SaaS · 事業会社" },
   { label: "創業", value: "2025" as string, hint: "December · Shibuya" },
@@ -222,8 +239,13 @@ const HEX_TILES: HexTileData[] = [
     external: true,
   },
   {
-    kind: "exploring",
-    label: "AI教育",
+    kind: "service",
+    label: "サロリク",
+    sub: "Beauty Recruit",
+    status: "New",
+    Icon: IconSaloriku,
+    href: "https://saloriku.com",
+    external: true,
   },
 ];
 
@@ -269,17 +291,18 @@ function HexTile({ tile }: { tile: HexTileData }) {
   }
 
   const isActive = tile.status === "Active";
+  const isNew = tile.status === "New";
   const isBeta = tile.status === "Beta";
 
-  // Background: solid navy for Active, soft navy gradient for Beta
-  const bg = isActive
+  // Background: solid navy for Active/New, soft navy gradient for Beta
+  const bg = isActive || isNew
     ? "bg-[var(--color-navy-700)]"
     : isBeta
     ? "bg-gradient-to-br from-[var(--color-navy-400)] via-[var(--color-navy-500)] to-[var(--color-navy-700)]"
     : "bg-[var(--color-slate-100)]";
 
   // Outer ring: tone the ring to the background so Beta doesn't pop too hard
-  const ring = isActive
+  const ring = isActive || isNew
     ? "bg-[var(--color-navy-900)]"
     : isBeta
     ? "bg-[var(--color-navy-700)]"
@@ -332,6 +355,15 @@ function HexTile({ tile }: { tile: HexTileData }) {
           >
             <span className="inline-block h-1 w-1 rounded-full bg-white dot-pulse" />
             β版 Testing
+          </span>
+        )}
+        {isNew && (
+          <span
+            className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-1.5 py-[1px] text-[8px] uppercase tracking-[0.18em] text-white"
+            style={{ fontFamily: "var(--font-display-en)" }}
+          >
+            <span className="inline-block h-1 w-1 rounded-full bg-white dot-pulse" />
+            New
           </span>
         )}
       </div>
@@ -467,7 +499,7 @@ function Hero() {
           </h1>
 
           <p className="mt-9 max-w-[60ch] text-pretty text-[15.5px] leading-[1.95] text-[var(--color-slate-600)] sm:text-[16px]">
-            テクノロジーと現場の知見で、若者の挑戦の選択肢を増やしていく会社です。組織AI活用プロダクト <strong className="font-bold text-[var(--color-slate-900)]">Stock-HR</strong> を中核に、採用・営業・医療キャリアなど複数の領域で実装中。
+            テクノロジーと現場の知見で、若者の挑戦の選択肢を増やしていく会社です。組織AI活用プロダクト <strong className="font-bold text-[var(--color-slate-900)]">Stock-HR</strong> を中核に、採用・営業・医療・美容など複数の領域で実装中。
           </p>
 
           <div className="mt-11 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
@@ -489,7 +521,7 @@ function Hero() {
 
           {/* Tag chips */}
           <div className="mt-10 flex flex-wrap gap-2">
-            {["AIプロダクト", "採用支援", "営業支援", "医療キャリア"].map((t) => (
+            {["AIプロダクト", "採用支援", "営業支援", "医療キャリア", "美容採用"].map((t) => (
               <span
                 key={t}
                 className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-slate-200)] bg-[var(--color-slate-0)]/70 px-3 py-1 text-[12px] text-[var(--color-slate-700)] backdrop-blur"
@@ -707,7 +739,7 @@ function WhySection() {
             私たちが、解こうとしていること。
           </h2>
           <p className="mt-7 max-w-[42ch] text-pretty text-[15px] leading-[2.05] text-white/75">
-            事業はまだ4つ。けれど私たちは、創業時期だからこそ「いまここで取り組む課題」をひとつずつ確かに選んでいます。
+            事業はまだ5つ。けれど私たちは、創業時期だからこそ「いまここで取り組む課題」をひとつずつ確かに選んでいます。
             これから10、20と増えていく事業の、すべての根っこには同じ問いがあります。
           </p>
 
@@ -883,7 +915,7 @@ function ServicesSection() {
               className="mt-4 text-balance text-[clamp(28px,3.6vw,48px)] font-bold leading-[1.25]"
               style={{ fontFamily: "var(--font-display-jp)" }}
             >
-              4つの事業で、Visionを実装します。
+              5つの事業で、Visionを実装します。
             </h2>
           </div>
           <p className="max-w-[44ch] text-pretty text-[15px] leading-[2] text-[var(--color-slate-600)] lg:col-span-8">
@@ -983,6 +1015,36 @@ function ServicesSection() {
                             </p>
                           </div>
                         </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* New product image (saloriku) */}
+                  {i === 4 && (
+                    <div className="relative aspect-[4/3] overflow-hidden bg-[var(--color-slate-100)] sm:aspect-[16/9]">
+                      <Image
+                        src="/images/services/saloriku-hero.png"
+                        alt="サロリク — 美容師の採用ページ"
+                        fill
+                        sizes="(min-width: 640px) 50vw, 100vw"
+                        className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-900)]/60 via-transparent to-transparent" />
+                      <div
+                        className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white sm:left-6 sm:top-6"
+                        style={{ fontFamily: "var(--font-display-en)" }}
+                      >
+                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-white dot-pulse" />
+                        New
+                      </div>
+                      <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-5 sm:left-5 sm:right-5">
+                        <p
+                          className="rounded-full bg-white/90 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[var(--color-slate-700)] backdrop-blur"
+                          style={{ fontFamily: "var(--font-display-en)" }}
+                        >
+                          saloriku.com ↗
+                        </p>
+                        <s.Icon className="h-8 w-8 shrink-0 text-white sm:h-9 sm:w-9" />
                       </div>
                     </div>
                   )}
@@ -1097,6 +1159,11 @@ function StatusBadge({ status }: { status: ServiceStatus }) {
       wrap: "bg-[var(--color-navy-700)] text-[var(--color-slate-0)]",
       dot: "bg-[var(--color-slate-0)] dot-pulse",
       label: "Active",
+    },
+    New: {
+      wrap: "bg-[var(--color-accent)] text-[var(--color-slate-0)]",
+      dot: "bg-[var(--color-slate-0)] dot-pulse",
+      label: "New",
     },
     Beta: {
       wrap: "bg-[var(--color-accent)] text-[var(--color-slate-0)]",

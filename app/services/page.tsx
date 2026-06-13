@@ -7,6 +7,7 @@ import {
   IconRecruitment,
   IconSales,
   IconResiMatch,
+  IconSaloriku,
 } from "@/components/icons";
 import { PulseNetwork } from "@/components/decorations";
 import type { ComponentType, SVGProps } from "react";
@@ -14,7 +15,7 @@ import type { ComponentType, SVGProps } from "react";
 export const metadata = {
   title: "事業 — OpenYouth",
   description:
-    "OpenYouthが手がける4つの事業ライン。Stock-HR、採用支援、営業支援、医療キャリアマッチング。",
+    "OpenYouthが手がける5つの事業ライン。Stock-HR、採用支援、営業支援、医療キャリアマッチング、美容採用のサロリク。",
 };
 
 const INDEX = [
@@ -22,6 +23,7 @@ const INDEX = [
   { no: "02", nameJp: "採用支援", nameEn: "Recruitment", anchor: "recruitment" },
   { no: "03", nameJp: "営業支援", nameEn: "Sales", anchor: "sales" },
   { no: "04", nameJp: "レジマッチ", nameEn: "Medical Career", anchor: "resimatch" },
+  { no: "05", nameJp: "サロリク", nameEn: "Beauty Recruit", anchor: "saloriku" },
 ];
 
 export default function ServicesPage() {
@@ -33,7 +35,7 @@ export default function ServicesPage() {
         eyebrowJp="事業のご紹介"
         titleJp={
           <>
-            4つの事業で、
+            5つの事業で、
             <br />
             <span className="text-[var(--color-navy-700)]">Visionを実装する。</span>
           </>
@@ -58,7 +60,7 @@ export default function ServicesPage() {
               Index
             </span>
             {INDEX.map((c, i) => {
-              const Icons = [IconStockHR, IconRecruitment, IconSales, IconResiMatch];
+              const Icons = [IconStockHR, IconRecruitment, IconSales, IconResiMatch, IconSaloriku];
               const Icon = Icons[i];
               return (
                 <a
@@ -488,6 +490,133 @@ export default function ServicesPage() {
         }
       />
 
+      {/* ====================== 05 — Saloriku ====================== */}
+      <BusinessSection
+        Icon={IconSaloriku}
+        anchor="saloriku"
+        no="05"
+        category="Beauty × Recruitment SaaS"
+        nameJp="サロリク"
+        nameEn="Recruitment Pages for Salons"
+        status="New"
+        accent="navy"
+        lead="美容室・理容室の採用は、媒体に高い初期費用と不透明な運用費を払い続ける構造になりがちです。採用ページを自前で作る時間もノウハウもなく、媒体に載せるしかない——。サロリクは、申し込みと簡単なヒアリングだけで、AIがそのお店専用の採用ページを生成し、公開まで完結するサービス。初期費用0円・月額制で、小さなサロンでも自分たちの採用ページを持てる形にしました。"
+        body={
+          <>
+            <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-white/15">
+              <Image
+                src="/images/services/saloriku-hero.png"
+                alt="サロリク — 美容師の採用ページ"
+                fill
+                sizes="(min-width: 1024px) 60vw, 100vw"
+                className="object-cover object-top"
+              />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-900)]/55 via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4">
+                <p
+                  className="rounded-full bg-white/90 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[var(--color-slate-700)] backdrop-blur"
+                  style={{ fontFamily: "var(--font-display-en)" }}
+                >
+                  saloriku.com
+                </p>
+                <a
+                  href="https://saloriku.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-[12px] font-bold text-[var(--color-navy-800)] backdrop-blur transition hover:bg-white"
+                >
+                  公式サイトへ
+                  <span aria-hidden className="arrow-slide">↗</span>
+                </a>
+              </div>
+            </div>
+
+            <SubSection label="Why now" title="美容業界の採用に起きていること">
+              <ul className="space-y-4">
+                {[
+                  {
+                    n: "01",
+                    t: "採用コストが、固定費として重い",
+                    d: "媒体掲載は数十万円の初期費用や不透明な月額がかかりがち。採用できてもできなくても出ていく固定費が、小さなサロンの体力を削ります。",
+                  },
+                  {
+                    n: "02",
+                    t: "自分たちの採用ページを、持てない",
+                    d: "ページ制作には時間も知識も必要で、結局は媒体任せ。お店の魅力や働き方が、応募者にきちんと伝わりません。",
+                  },
+                  {
+                    n: "03",
+                    t: "応募が「店の言葉」で語られない",
+                    d: "媒体のテンプレートでは、給与や勤務地以外の魅力が埋もれます。共感で人が集まる採用が、しづらい構造です。",
+                  },
+                ].map((p) => (
+                  <li
+                    key={p.n}
+                    className="flex gap-5 rounded-2xl border border-current/15 bg-current/[0.04] p-5 text-current"
+                  >
+                    <span
+                      className="w-8 shrink-0 text-[14px] tabular tracking-[0.18em] text-[var(--color-accent)] opacity-90"
+                      style={{ fontFamily: "var(--font-display-en)" }}
+                    >
+                      {p.n}
+                    </span>
+                    <div>
+                      <p
+                        className="text-base font-bold leading-[1.5]"
+                        style={{ fontFamily: "var(--font-display-jp)" }}
+                      >
+                        {p.t}
+                      </p>
+                      <p className="mt-1.5 text-[13.5px] leading-[1.9] opacity-80">
+                        {p.d}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </SubSection>
+
+            <SubSection label="How it works" title="申し込みから公開まで、4ステップ">
+              <FeatureGrid
+                items={[
+                  { n: "01", t: "申し込み", d: "店名やホットペッパー等のURLなど、最小限の入力でスタートできます。" },
+                  { n: "02", t: "ヒアリング", d: "お店の魅力や働き方を、簡単な質問に答える形で言語化していきます。" },
+                  { n: "03", t: "AIがページ生成", d: "回答をもとにAIがそのお店専用の採用ページを自動生成。内容を確認して微調整します。" },
+                  { n: "04", t: "公開・運用", d: "承認すると専用URLで自動公開。追加費用なしで内容の更新まで続けられます。" },
+                ]}
+              />
+            </SubSection>
+
+            <SubSection label="Plan" title="初期費用0円・月額制">
+              <div className="rounded-2xl border border-white/15 bg-current/[0.04] p-7 text-current">
+                <p className="text-[15px] leading-[1.95]">
+                  初期費用は0円。月額1万円（税抜）から、追加費用なしで採用ページを持てます。買い切りプランも用意しています。
+                  いまは先着のローンチキャンペーンとして、初期費用・初月無料（買い切りは50%OFF）でご案内中です。
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a
+                    href="https://saloriku.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group btn-press btn-press-light inline-flex items-center gap-3 rounded-full bg-[var(--color-slate-0)] px-6 py-3 text-sm font-bold text-[var(--color-navy-800)] transition hover:bg-[var(--color-navy-100)]"
+                  >
+                    サロリクを見る
+                    <span aria-hidden className="arrow-slide">↗</span>
+                  </a>
+                  <Link
+                    href="/contact"
+                    className="group inline-flex items-center gap-2 text-sm font-bold text-white"
+                  >
+                    <span className="link-underline">導入のご相談</span>
+                    <span aria-hidden className="arrow-slide">→</span>
+                  </Link>
+                </div>
+              </div>
+            </SubSection>
+          </>
+        }
+      />
+
       {/* ====================== Final CTA ====================== */}
       <section className="relative overflow-hidden bg-[var(--color-slate-0)] py-28 sm:py-32">
         <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
@@ -542,7 +671,7 @@ type BusinessSectionProps = {
   category: string;
   nameJp: string;
   nameEn: string;
-  status: "Active" | "Beta" | "Coming Soon";
+  status: "Active" | "New" | "Beta" | "Coming Soon";
   accent: "navy" | "light";
   lead: string;
   body: React.ReactNode;
@@ -655,7 +784,7 @@ function BusinessSection({
                   ? isNavy
                     ? "bg-white text-[var(--color-navy-800)]"
                     : "bg-[var(--color-navy-700)] text-[var(--color-slate-0)]"
-                  : status === "Beta"
+                  : status === "Beta" || status === "New"
                   ? "bg-[var(--color-accent)] text-white"
                   : isNavy
                   ? "border border-white/30 text-white/80"
@@ -670,7 +799,7 @@ function BusinessSection({
                     ? isNavy
                       ? "bg-[var(--color-navy-800)] dot-pulse"
                       : "bg-white dot-pulse"
-                    : status === "Beta"
+                    : status === "Beta" || status === "New"
                     ? "bg-white dot-pulse"
                     : "bg-[var(--color-slate-400)]")
                 }
