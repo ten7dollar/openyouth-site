@@ -20,6 +20,15 @@ export type NewsItem = {
 
 export const NEWS_ITEMS: NewsItem[] = [
   {
+    date: "2026.06.27",
+    category: "Release",
+    title:
+      "Stock-HRに、LinkedIn採用向けの新機能をリリースしました。",
+    description:
+      "気になった候補者の氏名と現職社名（または LinkedIn の PDF）を入れるだけで、note・X・登壇・寄稿・メディア記事など Web 上の公開情報まで自動で探索。求人との適合度・強み・スカウト切り口を整理した候補者プロファイルから、その人にだけ刺さるスカウト文面を生成します。",
+    href: "https://stock-hr.com/#linkedin",
+  },
+  {
     date: "2026.06.13",
     category: "Release",
     title: "美容師採用ページ「サロリク」をリリースしました。",
