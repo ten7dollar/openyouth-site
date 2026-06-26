@@ -1,8 +1,19 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import Script from "next/script";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+// 各フィールドの上限（サーバー側と一致させる）
+const FIELD_LIMITS = {
+  name: 80,
+  email: 254,
+  company: 120,
+  message: 3000,
+} as const;
 
 type Topic = {
   id: string;
@@ -24,6 +35,41 @@ export function ContactForm() {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [statusType, setStatusType] = useState<"error" | null>(null);
   const [topic, setTopic] = useState<string>(TOPICS[0].id);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileWidgetRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetId = useRef<string | null>(null);
+
+  // Cloudflare Turnstile ウィジェット初期化（環境変数が設定されてる場合のみ）
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return;
+    const tryRender = () => {
+      const w = window as unknown as {
+        turnstile?: {
+          render: (el: HTMLElement, opts: { sitekey: string; callback: (token: string) => void; "expired-callback"?: () => void; theme?: string }) => string;
+          remove: (id: string) => void;
+        };
+      };
+      if (!w.turnstile || !turnstileWidgetRef.current) {
+        setTimeout(tryRender, 200);
+        return;
+      }
+      if (turnstileWidgetId.current) return;
+      turnstileWidgetId.current = w.turnstile.render(turnstileWidgetRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        callback: (token) => setTurnstileToken(token),
+        "expired-callback": () => setTurnstileToken(null),
+        theme: "light",
+      });
+    };
+    tryRender();
+    return () => {
+      const w = window as unknown as { turnstile?: { remove: (id: string) => void } };
+      if (turnstileWidgetId.current && w.turnstile) {
+        w.turnstile.remove(turnstileWidgetId.current);
+        turnstileWidgetId.current = null;
+      }
+    };
+  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,7 +89,17 @@ export function ContactForm() {
       message:
         `[ご相談カテゴリ] ${topicLabel}\n\n` +
         ((formData.get("message") as string) || ""),
+      website: (formData.get("website") as string) || "", // honeypot
+      turnstileToken: turnstileToken ?? undefined,
     };
+
+    // Turnstile 必須なのに未取得なら早期に止める
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setStatusType("error");
+      setStatusMessage("ボット検証を完了してから送信してください。");
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const res = await fetch("/api/contact", {
@@ -58,6 +114,7 @@ export function ContactForm() {
       // Reset form, then navigate to the Thanks page.
       form.reset();
       setTopic(TOPICS[0].id);
+      setTurnstileToken(null);
       router.push("/contact/thanks");
     } catch (error: unknown) {
       const msg =
@@ -71,7 +128,28 @@ export function ContactForm() {
   };
 
   return (
+    <>
+      {TURNSTILE_SITE_KEY && (
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+          async
+          defer
+          strategy="afterInteractive"
+        />
+      )}
     <form onSubmit={handleSubmit} className="space-y-10">
+      {/* honeypot: 通常ユーザーには見えない、bot は自動で埋めがち */}
+      <div className="absolute -left-[9999px] top-0 h-0 w-0 overflow-hidden" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
       {/* === Topic chooser === */}
       <Fieldset
         label="01"
@@ -138,19 +216,27 @@ export function ContactForm() {
       {/* === Personal info === */}
       <Fieldset label="02" title="ご連絡先">
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field id="name" label="お名前" required placeholder="深谷 洸樹" />
+          <Field
+            id="name"
+            label="お名前"
+            required
+            placeholder="山田 太郎"
+            maxLength={FIELD_LIMITS.name}
+          />
           <Field
             id="email"
             label="メールアドレス"
             required
             type="email"
             placeholder="your@email.com"
+            maxLength={FIELD_LIMITS.email}
           />
           <div className="sm:col-span-2">
             <Field
               id="company"
               label="会社名 / 所属"
               placeholder="株式会社〇〇"
+              maxLength={FIELD_LIMITS.company}
             />
           </div>
         </div>
@@ -167,10 +253,21 @@ export function ContactForm() {
           name="message"
           required
           rows={8}
+          maxLength={FIELD_LIMITS.message}
           placeholder="例：toB SaaSのプロダクトセールス採用で、スカウト返信率が伸び悩んでいます..."
           className="w-full resize-y rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] px-4 py-3.5 text-[15px] leading-[1.85] text-[var(--color-slate-900)] placeholder:text-[var(--color-slate-400)] focus:border-[var(--color-navy-700)] focus:outline-none"
         />
+        <p className="mt-2 text-[11px] text-[var(--color-slate-400)]">
+          最大 {FIELD_LIMITS.message.toLocaleString()} 文字まで
+        </p>
       </Fieldset>
+
+      {/* === Cloudflare Turnstile（環境変数が設定されている場合のみ表示） === */}
+      {TURNSTILE_SITE_KEY && (
+        <div className="border-t border-[var(--color-slate-200)] pt-6">
+          <div ref={turnstileWidgetRef} className="flex justify-start" />
+        </div>
+      )}
 
       {/* === Submit === */}
       <div className="pt-2">
@@ -209,6 +306,7 @@ export function ContactForm() {
         )}
       </div>
     </form>
+    </>
   );
 }
 
@@ -258,12 +356,14 @@ function Field({
   required,
   type = "text",
   placeholder,
+  maxLength,
 }: {
   id: string;
   label: string;
   required?: boolean;
   type?: string;
   placeholder?: string;
+  maxLength?: number;
 }) {
   return (
     <div>
@@ -287,6 +387,7 @@ function Field({
         type={type}
         required={required}
         placeholder={placeholder}
+        maxLength={maxLength}
         className="mt-2 w-full border-b border-[var(--color-slate-200)] bg-transparent px-1 py-2.5 text-[15px] text-[var(--color-slate-900)] placeholder:text-[var(--color-slate-400)] transition focus:border-[var(--color-navy-700)] focus:outline-none"
       />
     </div>
