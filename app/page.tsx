@@ -9,6 +9,7 @@ import {
   IconSales,
   IconResiMatch,
   IconSaloriku,
+  IconMarketing,
   IconLongBet,
   IconFieldFirst,
   IconOpenByDefault,
@@ -120,6 +121,21 @@ const SERVICES: Service[] = [
     href: "https://saloriku.com",
     external: true,
     Icon: IconSaloriku,
+  },
+  {
+    no: "06",
+    slug: "marketing",
+    name: "マーケティング・PR支援",
+    tagline: "目的に合わせて、手段を選ぶ。",
+    category: "Marketing & PR",
+    problem:
+      "集客・PR・ブランディング——目的は会社ごとに違うのに、提案はいつも手段から始まってしまう。何から手をつけるべきかが決まらないまま、施策だけが増えていきます。",
+    approach:
+      "目的とゴールの言語化から入り、Web広告・メディア運用・インフルエンサー・動画のうち、必要なものだけを選んで組み立てます。企画から運用まで一貫して並走します。",
+    highlights: ["Web広告運用", "メディア・SNS", "インフルエンサー"],
+    status: "Active",
+    href: "/services#marketing",
+    Icon: IconMarketing,
   },
 ];
 
@@ -739,7 +755,7 @@ function WhySection() {
             私たちが、解こうとしていること。
           </h2>
           <p className="mt-7 max-w-[42ch] text-pretty text-[15px] leading-[2.05] text-white/75">
-            事業はまだ5つ。けれど私たちは、創業時期だからこそ「いまここで取り組む課題」をひとつずつ確かに選んでいます。
+            事業はまだ6つ。けれど私たちは、創業時期だからこそ「いまここで取り組む課題」をひとつずつ確かに選んでいます。
             これから10、20と増えていく事業の、すべての根っこには同じ問いがあります。
           </p>
 
@@ -747,7 +763,7 @@ function WhySection() {
             style={{ fontFamily: "var(--font-display-en)" }}
           >
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-white dot-pulse" />
-            4 lines today · more to come
+            6 lines today · more to come
           </div>
         </div>
 
@@ -897,16 +913,16 @@ function ValuesSection() {
 }
 
 /* ============================================================
-   Services Section (4 lines)
+   Services Section (6 lines)
 ============================================================ */
 function ServicesSection() {
   const feature = [SERVICES[0], SERVICES[4]]; // Stock-HR・サロリク（プロダクト2本）
-  const rest = [SERVICES[1], SERVICES[2], SERVICES[3]]; // 採用支援・営業支援・レジマッチ
+  const rest = [SERVICES[1], SERVICES[2], SERVICES[5], SERVICES[3]]; // 採用支援・営業支援・マーケティング/PR・レジマッチ
   return (
     <section className="relative bg-[var(--color-slate-0)] py-28 sm:py-36">
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
         <div className="flex flex-col lg:grid gap-10 lg:grid-cols-12" data-reveal>
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-5">
             <p
               className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
               style={{ fontFamily: "var(--font-display-en)" }}
@@ -917,10 +933,12 @@ function ServicesSection() {
               className="mt-4 text-balance text-[clamp(28px,3.6vw,48px)] font-bold leading-[1.25]"
               style={{ fontFamily: "var(--font-display-jp)" }}
             >
-              5つの事業で、Visionを実装します。
+              6つの事業で、
+              <br />
+              Visionを実装します。
             </h2>
           </div>
-          <p className="max-w-[44ch] text-pretty text-[15px] leading-[2] text-[var(--color-slate-600)] lg:col-span-8">
+          <p className="max-w-[44ch] text-pretty text-[15px] leading-[2] text-[var(--color-slate-600)] lg:col-span-7">
             それぞれが独立した事業として動きつつ、「若者の挑戦を支える」というひとつの目的で繋がっています。
             プロダクトと事業支援を行き来しながら、実装を続けています。
           </p>
@@ -933,8 +951,8 @@ function ServicesSection() {
           ))}
         </ul>
 
-        {/* 下段：事業支援・医療（コンパクト3列） */}
-        <ul className="mt-4 grid gap-4 sm:grid-cols-3" data-reveal-stagger>
+        {/* 下段：事業支援・マーケティング・医療（コンパクト） */}
+        <ul className="mt-4 grid gap-4 sm:grid-cols-2" data-reveal-stagger>
           {rest.map((s) => (
             <ServiceCard key={s.slug} s={s} variant="compact" />
           ))}
@@ -1024,7 +1042,7 @@ function ServiceCard({ s, variant }: { s: Service; variant: "feature" | "compact
                 </p>
                 <p
                   className={
-                    "mt-1 font-bold leading-[1.2] text-balance text-[var(--color-slate-900)] " +
+                    "heading-jp mt-1 font-bold leading-[1.2] text-balance text-[var(--color-slate-900)] " +
                     (isFeature ? "text-[clamp(20px,2.2vw,26px)]" : "text-[18px]")
                   }
                   style={{ fontFamily: "var(--font-display-jp)" }}

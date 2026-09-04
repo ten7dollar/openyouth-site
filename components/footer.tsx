@@ -11,6 +11,7 @@ const footerNav = [
       { href: "/services#sales", label: "営業支援" },
       { href: "/services#resimatch", label: "ResiMatch" },
       { href: "/services#saloriku", label: "サロリク" },
+      { href: "/services#marketing", label: "マーケティング・PR支援" },
     ],
   },
   {

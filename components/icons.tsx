@@ -93,6 +93,19 @@ export function IconResiMatch(props: IconProps) {
   );
 }
 
+// Marketing & PR: メガホン + 届いていく波
+export function IconMarketing(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M4 13v6a2 2 0 0 0 2 2h3l9 5V6l-9 5H6a2 2 0 0 0-2 2z" />
+      <path d="M9 21v4a2 2 0 0 0 4 0v-2.9" />
+      <path d="M22 12.5a6 6 0 0 1 0 7" />
+      <path d="M25.5 9.5a11 11 0 0 1 0 13" />
+      <circle cx="18" cy="16" r="1.4" fill="currentColor" stroke="none" />
+    </Base>
+  );
+}
+
 /* ============== Value icons ============== */
 
 // Long Bet: 時計＋長い矢印（時を超えて効くもの）

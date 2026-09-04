@@ -8,6 +8,7 @@ import {
   IconSales,
   IconResiMatch,
   IconSaloriku,
+  IconMarketing,
 } from "@/components/icons";
 import { PulseNetwork } from "@/components/decorations";
 import type { ComponentType, SVGProps } from "react";
@@ -15,7 +16,7 @@ import type { ComponentType, SVGProps } from "react";
 export const metadata = {
   title: "事業 — OpenYouth",
   description:
-    "OpenYouthが手がける5つの事業ライン。Stock-HR、採用支援、営業支援、医療キャリアマッチング、美容採用のサロリク。",
+    "OpenYouthが手がける6つの事業ライン。Stock-HR、採用支援、営業支援、医療キャリアマッチング、美容採用のサロリク、マーケティング・PR支援。",
 };
 
 const INDEX = [
@@ -24,6 +25,7 @@ const INDEX = [
   { no: "03", nameJp: "営業支援", nameEn: "Sales", anchor: "sales" },
   { no: "04", nameJp: "レジマッチ", nameEn: "Medical Career", anchor: "resimatch" },
   { no: "05", nameJp: "サロリク", nameEn: "Beauty Recruit", anchor: "saloriku" },
+  { no: "06", nameJp: "マーケティング・PR支援", nameEn: "Marketing & PR", anchor: "marketing" },
 ];
 
 export default function ServicesPage() {
@@ -35,7 +37,7 @@ export default function ServicesPage() {
         eyebrowJp="事業のご紹介"
         titleJp={
           <>
-            5つの事業で、
+            6つの事業で、
             <br />
             <span className="text-[var(--color-navy-700)]">Visionを実装する。</span>
           </>
@@ -60,7 +62,7 @@ export default function ServicesPage() {
               Index
             </span>
             {INDEX.map((c, i) => {
-              const Icons = [IconStockHR, IconRecruitment, IconSales, IconResiMatch, IconSaloriku];
+              const Icons = [IconStockHR, IconRecruitment, IconSales, IconResiMatch, IconSaloriku, IconMarketing];
               const Icon = Icons[i];
               return (
                 <a
@@ -617,6 +619,73 @@ export default function ServicesPage() {
         }
       />
 
+      {/* ====================== 06 — Marketing & PR ====================== */}
+      <BusinessSection
+        Icon={IconMarketing}
+        anchor="marketing"
+        no="06"
+        category="Marketing · PR"
+        nameJp="マーケティング・PR支援"
+        nameEn="Marketing & PR"
+        status="Active"
+        accent="light"
+        lead="「集客を伸ばしたい」「商品を知ってほしい」「ブランドを立て直したい」——目的は会社ごとに違うのに、提案はいつも手段から始まりがちです。私たちは目的とゴールの言語化から入り、Web広告・メディア運用・インフルエンサー・動画のうち、必要なものだけを選んで組み立てます。もちろん「この手段でやりたい」というご相談からでも構いません。"
+        body={
+          <>
+            <SubSection label="Approach" title="目的に合わせて、手段を選ぶ">
+              <PurposeMeansDiagram />
+            </SubSection>
+
+            <SubSection label="Service" title="4つの支援領域">
+              <FeatureGrid
+                items={[
+                  {
+                    n: "01",
+                    t: "Web広告運用",
+                    d: "Meta・Google・Yahoo! などの主要媒体で、配信設計から日々の運用改善まで。クリエイティブの検証設計込みで回します。",
+                  },
+                  {
+                    n: "02",
+                    t: "メディア・SNS運用",
+                    d: "オウンドメディアの立ち上げ、記事の設計、検索流入の改善、SNSアカウントの企画・運用。認知からリード獲得までを地続きに設計します。",
+                  },
+                  {
+                    n: "03",
+                    t: "インフルエンサー活用",
+                    d: "「誰に・何を・どう届けるか」から逆算したキャスティングと投稿設計。広告運用で得た訴求の検証結果をそのまま持ち込みます。",
+                  },
+                  {
+                    n: "04",
+                    t: "動画・クリエイティブ制作",
+                    d: "広告用の短尺から、サービス紹介・採用動画まで。離脱させない構成づくりから編集まで一貫して対応します。",
+                  },
+                ]}
+              />
+            </SubSection>
+
+            <SubSection label="Field" title="対応する領域">
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "美容・サロン",
+                  "クリニック・医療",
+                  "BtoB SaaS",
+                  "採用ブランディング",
+                  "地域・観光",
+                  "業界横断（要件次第）",
+                ].map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-full border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] px-3 py-1.5 text-[12.5px] text-[var(--color-slate-700)]"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </SubSection>
+          </>
+        }
+      />
+
       {/* ====================== Final CTA ====================== */}
       <section className="relative overflow-hidden bg-[var(--color-slate-0)] py-28 sm:py-32">
         <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
@@ -887,5 +956,109 @@ function FeatureGrid({
         </li>
       ))}
     </ul>
+  );
+}
+
+/* ========================================================
+   目的 × 手段 → ゴール の図（マーケティング・PR支援）
+======================================================== */
+function PurposeMeansDiagram() {
+  return (
+    <div className="rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-50)] p-5 sm:p-8">
+      <div className="flex flex-col items-stretch gap-4 lg:flex-row lg:gap-6">
+        <DiagramCard
+          badge="クライアント"
+          title="目的"
+          tone="light"
+          items={["集客", "商品PR", "売上の向上", "ブランディング", "採用強化", "新規事業"]}
+        />
+        <div className="flex items-center justify-center">
+          <span
+            aria-hidden
+            className="text-[22px] font-bold text-[var(--color-slate-400)]"
+            style={{ fontFamily: "var(--font-display-en)" }}
+          >
+            ×
+          </span>
+        </div>
+        <DiagramCard
+          badge="OpenYouth"
+          title="手段"
+          tone="navy"
+          items={["Web広告運用", "メディア・SNS", "インフルエンサー", "動画制作"]}
+        />
+      </div>
+
+      <div className="flex justify-center py-4" aria-hidden>
+        <svg width="30" height="22" viewBox="0 0 30 22" fill="none">
+          <path d="M15 21 0.7 1h28.6L15 21z" fill="var(--color-slate-300)" />
+        </svg>
+      </div>
+
+      <div className="rounded-2xl bg-[var(--color-navy-700)] px-6 py-8 text-center text-white sm:px-10">
+        <p
+          className="text-[10px] uppercase tracking-[0.32em] text-white/60"
+          style={{ fontFamily: "var(--font-display-en)" }}
+        >
+          Goal
+        </p>
+        <p
+          className="mt-3 text-[clamp(18px,2.2vw,24px)] font-bold leading-[1.5]"
+          style={{ fontFamily: "var(--font-display-jp)" }}
+        >
+          目的から逆算して手段を選び、ゴールまで並走します。
+        </p>
+        <p className="mx-auto mt-3 max-w-[52ch] text-[13.5px] leading-[1.95] text-white/70">
+          まずは目的とゴールの共有から。
+          <br className="sm:hidden" />
+          手段ありきの提案はしません。
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function DiagramCard({
+  badge,
+  title,
+  items,
+  tone,
+}: {
+  badge: string;
+  title: string;
+  items: string[];
+  tone: "light" | "navy";
+}) {
+  const isNavy = tone === "navy";
+  return (
+    <div className="relative flex min-w-0 flex-1 flex-col rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] px-5 pb-6 pt-8 sm:px-6">
+      <span
+        className={
+          "absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-1.5 text-[12px] font-bold " +
+          (isNavy
+            ? "bg-[var(--color-navy-700)] text-white"
+            : "bg-[var(--color-navy-100)] text-[var(--color-navy-700)]")
+        }
+        style={{ fontFamily: "var(--font-display-jp)" }}
+      >
+        {badge}
+      </span>
+      <p
+        className="text-center text-[15px] font-bold text-[var(--color-slate-900)]"
+        style={{ fontFamily: "var(--font-display-jp)" }}
+      >
+        {title}
+      </p>
+      <ul className="my-auto grid grid-cols-2 gap-2 pt-4">
+        {items.map((t) => (
+          <li
+            key={t}
+            className="rounded-xl bg-[var(--color-slate-100)] px-2.5 py-3 text-center text-[12.5px] font-bold leading-[1.5] text-[var(--color-slate-800)]"
+          >
+            {t}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
