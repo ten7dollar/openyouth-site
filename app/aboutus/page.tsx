@@ -308,7 +308,7 @@ export default function AboutPage() {
             <div className="mt-10 overflow-hidden rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] p-1.5 lift lg:max-w-[300px]">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-[var(--color-slate-100)]">
                 <Image
-                  src="/images/company/ceo-2026.jpg"
+                  src="/images/company/ceo-2026-v2.jpg"
                   alt="代表取締役 深谷洸樹"
                   fill
                   className="object-cover"
