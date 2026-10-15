@@ -102,12 +102,6 @@ export function Header() {
             className="group inline-flex items-center gap-2 rounded-full bg-[var(--color-navy-700)] px-5 py-2 text-[13.5px] font-bold text-[var(--color-slate-0)] transition-all hover:bg-[var(--color-navy-600)]"
           >
             お問い合わせ
-            <span
-              aria-hidden
-              className="inline-block transition-transform duration-300 group-hover:translate-x-0.5"
-            >
-              →
-            </span>
           </Link>
         </nav>
 
@@ -135,12 +129,14 @@ export function Header() {
 
       {/* Mobile sheet */}
       <div
+        inert={!open}
+        aria-hidden={!open}
         className={clsx(
-          "overflow-hidden border-t border-[var(--color-slate-200)] bg-[var(--color-slate-0)] transition-[max-height,opacity] duration-500 md:hidden",
-          open ? "max-h-[420px] opacity-100" : "max-h-0 opacity-0"
+          "overflow-hidden bg-[var(--color-slate-0)] transition-[max-height,opacity] duration-500 md:hidden",
+          open ? "max-h-[520px] opacity-100" : "max-h-0 opacity-0"
         )}
       >
-        <nav className="mx-auto flex max-w-[1320px] flex-col px-5 py-4">
+        <nav className="mx-auto flex max-w-[1320px] flex-col px-5 pb-8 pt-4">
           {navItems.map((item) => {
             const active = pathname === item.href;
             return (
@@ -148,22 +144,20 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 className={clsx(
-                  "flex items-center justify-between border-b border-[var(--color-slate-100)] py-3 text-base",
-                  active
-                    ? "text-[var(--color-navy-700)] font-bold"
-                    : "text-[var(--color-slate-900)]"
+                  "py-2.5 text-[26px] font-bold leading-tight",
+                  active ? "text-[var(--color-navy-600)]" : "text-[var(--color-slate-900)]"
                 )}
+                style={{ fontFamily: "var(--font-display-jp)" }}
               >
                 {item.label}
-                <span aria-hidden className="text-[var(--color-slate-400)]">→</span>
               </Link>
             );
           })}
           <Link
             href="/contact"
-            className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-navy-700)] px-5 py-3 text-sm font-bold text-[var(--color-slate-0)]"
+            className="mt-6 inline-flex items-center justify-center rounded-full bg-[var(--color-navy-600)] px-5 py-4 text-[15px] font-bold text-[var(--color-slate-0)]"
           >
-            お問い合わせ →
+            お問い合わせ
           </Link>
         </nav>
       </div>

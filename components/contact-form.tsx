@@ -1,9 +1,10 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
+import { MEDIA_COUNT } from "@/lib/businesses";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
@@ -26,7 +27,8 @@ const TOPICS: Topic[] = [
   { id: "recruit", label: "採用支援のご相談", hint: "ペルソナ設計 / スカウト運用 / 選考設計" },
   { id: "sales", label: "営業支援のご相談", hint: "アポ獲得 / 商談同席 / セールス設計" },
   { id: "career", label: "採用相談・カジュアル面談", hint: "副業・業務委託・正社員ポジション" },
-  { id: "other", label: "取材・協業・その他", hint: "メディア / アライアンス / ご相談" },
+  { id: "media", label: "運営メディアへの掲載・協業", hint: `御朱印ナビ / エンジニア進路図 など${MEDIA_COUNT}つのメディア` },
+  { id: "other", label: "取材・その他", hint: "取材 / 業務提携 / ご相談" },
 ];
 
 export function ContactForm() {
@@ -127,6 +129,7 @@ export function ContactForm() {
     }
   };
 
+
   return (
     <>
       {TURNSTILE_SITE_KEY && (
@@ -137,7 +140,7 @@ export function ContactForm() {
           strategy="afterInteractive"
         />
       )}
-    <form onSubmit={handleSubmit} className="space-y-10">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-20 sm:gap-24">
       {/* honeypot: 通常ユーザーには見えない、bot は自動で埋めがち */}
       <div className="absolute -left-[9999px] top-0 h-0 w-0 overflow-hidden" aria-hidden="true">
         <label htmlFor="website">Website</label>
@@ -150,23 +153,24 @@ export function ContactForm() {
         />
       </div>
 
-      {/* === Topic chooser === */}
+      {/* === 相談の分類：選んだ行の地色が変わる === */}
       <Fieldset
-        label="01"
+        no="01"
         title="ご相談のカテゴリ"
-        hint="複数該当の場合は、もっとも近いものをひとつ選んでください。"
+        hint="複数該当の|場合は、|もっとも|近いものを|ひとつ|選んでください。"
       >
-        <div className="grid gap-3 sm:grid-cols-2">
-          {TOPICS.map((t) => {
+        <div className="flex flex-col gap-1">
+          {TOPICS.map((t, i) => {
             const active = topic === t.id;
             return (
               <label
                 key={t.id}
                 className={clsx(
-                  "group flex cursor-pointer items-start gap-3 rounded-2xl border p-4 transition",
+                  "flex cursor-pointer items-baseline gap-4 rounded-2xl px-4 py-4 transition-colors duration-200 sm:gap-6 sm:px-6 sm:py-5",
+                  "has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--color-navy-600)]",
                   active
-                    ? "border-[var(--color-navy-700)] bg-[var(--color-navy-700)] text-[var(--color-slate-0)]"
-                    : "border-[var(--color-slate-200)] bg-[var(--color-slate-0)] hover:border-[var(--color-slate-400)]"
+                    ? "bg-[var(--color-navy-600)] text-[var(--color-slate-0)]"
+                    : "bg-transparent text-[var(--color-slate-900)] hover:bg-[var(--color-slate-100)]"
                 )}
               >
                 <input
@@ -178,30 +182,26 @@ export function ContactForm() {
                   className="sr-only"
                 />
                 <span
+                  aria-hidden
                   className={clsx(
-                    "mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full border transition",
-                    active
-                      ? "border-[var(--color-slate-0)] bg-[var(--color-slate-0)]"
-                      : "border-[var(--color-slate-300)] bg-transparent"
+                    "shrink-0 text-[13px] font-bold tabular",
+                    active ? "text-[var(--color-navy-200)]" : "text-[var(--color-slate-400)]"
                   )}
+                  style={{ fontFamily: "var(--font-display-en)" }}
                 >
-                  {active && (
-                    <span className="h-2 w-2 rounded-full bg-[var(--color-navy-700)]" />
-                  )}
+                  {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="flex-1">
+                <span className="min-w-0 flex-1 lg:grid lg:grid-cols-2 lg:items-baseline lg:gap-6">
                   <span
-                    className="block text-sm font-bold"
+                    className="phrased block text-[16px] font-bold leading-[1.6]"
                     style={{ fontFamily: "var(--font-display-jp)" }}
                   >
                     {t.label}
                   </span>
                   <span
                     className={clsx(
-                      "mt-1 block text-[12px]",
-                      active
-                        ? "text-white/75"
-                        : "text-[var(--color-slate-500)]"
+                      "phrased mt-1 block text-[13px] leading-[1.7] lg:mt-0",
+                      active ? "text-white/75" : "text-[var(--color-slate-500)]"
                     )}
                   >
                     {t.hint}
@@ -213,15 +213,16 @@ export function ContactForm() {
         </div>
       </Fieldset>
 
-      {/* === Personal info === */}
-      <Fieldset label="02" title="ご連絡先">
-        <div className="grid gap-5 sm:grid-cols-2">
+      {/* === ご連絡先 === */}
+      <Fieldset no="02" title="ご連絡先">
+        <div className="flex flex-col gap-7 sm:grid sm:grid-cols-2 sm:gap-x-5">
           <Field
             id="name"
             label="お名前"
             required
             placeholder="山田 太郎"
             maxLength={FIELD_LIMITS.name}
+            autoComplete="name"
           />
           <Field
             id="email"
@@ -230,23 +231,26 @@ export function ContactForm() {
             type="email"
             placeholder="your@email.com"
             maxLength={FIELD_LIMITS.email}
+            autoComplete="email"
           />
-          <div className="sm:col-span-2">
+          <div className="min-w-0 sm:col-span-2">
             <Field
               id="company"
               label="会社名 / 所属"
               placeholder="株式会社〇〇"
               maxLength={FIELD_LIMITS.company}
+              autoComplete="organization"
             />
           </div>
         </div>
       </Fieldset>
 
-      {/* === Message === */}
+      {/* === ご相談内容 === */}
       <Fieldset
-        label="03"
+        no="03"
         title="ご相談内容"
-        hint="背景・タイムライン・課題感など、わかる範囲で記載いただけると返信がスムーズです。"
+        required
+        hint="背景・|タイムライン・|課題感など、|わかる|範囲で|記載いただけると|返信が|スムーズです。"
       >
         <textarea
           id="message"
@@ -255,55 +259,43 @@ export function ContactForm() {
           rows={8}
           maxLength={FIELD_LIMITS.message}
           placeholder="例：toB SaaSのプロダクトセールス採用で、スカウト返信率が伸び悩んでいます..."
-          className="w-full resize-y rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] px-4 py-3.5 text-[15px] leading-[1.85] text-[var(--color-slate-900)] placeholder:text-[var(--color-slate-400)] focus:border-[var(--color-navy-700)] focus:outline-none"
+          className={clsx(INPUT_CLS, "block resize-y leading-[1.85]")}
         />
-        <p className="mt-2 text-[11px] text-[var(--color-slate-400)]">
+        <p className="mt-3 text-[12px] text-[var(--color-slate-500)]">
           最大 {FIELD_LIMITS.message.toLocaleString()} 文字まで
         </p>
       </Fieldset>
 
-      {/* === Cloudflare Turnstile（環境変数が設定されている場合のみ表示） === */}
-      {TURNSTILE_SITE_KEY && (
-        <div className="border-t border-[var(--color-slate-200)] pt-6">
-          <div ref={turnstileWidgetRef} className="flex justify-start" />
-        </div>
-      )}
+      {/* === 送信（ボット検証は環境変数が設定されている場合のみ表示） === */}
+      <div className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-10">
+        <div className="min-w-0 lg:col-span-9 lg:col-start-4">
+          {TURNSTILE_SITE_KEY && (
+            <div ref={turnstileWidgetRef} className="mb-8 flex justify-start" />
+          )}
 
-      {/* === Submit === */}
-      <div className="pt-2">
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="group inline-flex w-full items-center justify-between gap-3 rounded-full bg-[var(--color-navy-700)] px-6 py-4 text-[15px] font-bold text-[var(--color-slate-0)] transition hover:bg-[var(--color-navy-600)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:min-w-[280px]"
-        >
-          {isSubmitting ? "送信中…" : "送信する"}
-          <span
-            aria-hidden
-            className="text-xl transition-transform group-hover:translate-x-1"
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="btn-press inline-flex w-full items-center justify-center rounded-full bg-[var(--color-navy-600)] px-8 py-4 text-[15px] font-bold text-[var(--color-slate-0)] transition hover:bg-[var(--color-navy-800)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:min-w-[240px]"
           >
-            →
-          </span>
-        </button>
+            {isSubmitting ? "送信中…" : "送信する"}
+          </button>
 
-        <p className="mt-4 text-[11.5px] leading-[1.85] text-[var(--color-slate-400)]">
-          ご入力いただいた情報は、プライバシーポリシーに基づき適切に取り扱います。
-          営業・勧誘を目的とした送信は固くお断りいたします。事前承諾なく営業・勧誘行為を行った場合、1件の送信につき一律3万円（税込）の対応費用を請求いたします。
-        </p>
+          <p className="mt-6 max-w-[46em] text-pretty text-[13px] leading-[1.9] text-[var(--color-slate-500)]">
+            <Jp t="ご入力いただいた|情報は、|プライバシーポリシーに|基づき|適切に|取り扱います。" />
+            <Jp t="営業・勧誘を|目的とした|送信は|固く|お断りいたします。|事前承諾なく|営業・勧誘行為を|行った|場合、|1件の|送信につき|一律3万円（税込）の|対応費用を|請求いたします。" />
+          </p>
 
-        {statusMessage && statusType === "error" && (
-          <div
-            role="status"
-            className="mt-6 rounded-2xl border border-[var(--color-warn)]/40 bg-[var(--color-slate-0)] px-5 py-4 text-sm text-[var(--color-warn)]"
-          >
-            <p
-              className="text-[10px] uppercase tracking-[0.32em]"
-              style={{ fontFamily: "var(--font-display-en)" }}
+          {statusMessage && statusType === "error" && (
+            <div
+              role="status"
+              className="mt-6 rounded-xl bg-[var(--color-warn)]/[0.07] px-5 py-4 text-[14px] leading-[1.8] text-[var(--color-warn)]"
             >
-              Error
-            </p>
-            <p className="mt-1">{statusMessage}</p>
-          </div>
-        )}
+              <p className="font-bold">送信できませんでした</p>
+              <p className="mt-1">{statusMessage}</p>
+            </div>
+          )}
+        </div>
       </div>
     </form>
     </>
@@ -312,40 +304,68 @@ export function ContactForm() {
 
 /* ============== UI bits ============== */
 
+// 入力欄は塗りの地色。太い枠は使わず、入力中だけ白地＋細い線で示す
+const INPUT_CLS =
+  "w-full rounded-xl bg-[var(--color-slate-100)] px-4 py-3.5 text-[16px] text-[var(--color-slate-900)] placeholder:text-[var(--color-slate-400)] transition-[background-color,box-shadow] duration-200 focus:bg-[var(--color-slate-0)] focus:outline-none focus:ring-1 focus:ring-[var(--color-navy-600)]";
+
+// 文節の切れ目（"|"）でだけ折り返す。クライアント側なので BudouX を使わず手で区切る
+function Jp({ t }: { t: string }) {
+  const parts = t.split("|");
+  return (
+    <span className="phrased">
+      {parts.map((p, i) => (
+        <Fragment key={i}>
+          {i > 0 && <wbr />}
+          {p}
+        </Fragment>
+      ))}
+    </span>
+  );
+}
+
 function Fieldset({
-  label,
+  no,
   title,
   hint,
+  required,
   children,
 }: {
-  label: string;
+  no: string;
   title: string;
   hint?: string;
+  required?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <fieldset className="grid gap-6 border-t border-[var(--color-slate-200)] pt-8 lg:grid-cols-12">
-      <legend className="hidden">{title}</legend>
-      <div className="lg:col-span-4">
-        <p
-          className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-navy-700)] tabular"
-          style={{ fontFamily: "var(--font-display-en)" }}
-        >
-          Step {label}
-        </p>
-        <p
-          className="mt-2 text-xl font-bold text-[var(--color-slate-900)]"
-          style={{ fontFamily: "var(--font-display-jp)" }}
-        >
-          {title}
-        </p>
-        {hint && (
-          <p className="mt-2 text-[12px] leading-[1.85] text-[var(--color-slate-500)]">
-            {hint}
+    <fieldset className="min-w-0">
+      <legend className="sr-only">{title}</legend>
+      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:gap-10" data-reveal>
+        <div className="min-w-0 lg:col-span-3 lg:pt-1">
+          <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span
+              className="text-[14px] font-bold tabular text-[var(--color-accent)]"
+              style={{ fontFamily: "var(--font-display-en)" }}
+            >
+              {no}
+            </span>
+            <span
+              className="text-[20px] font-bold leading-[1.4] text-[var(--color-slate-900)] sm:text-[22px]"
+              style={{ fontFamily: "var(--font-display-jp)" }}
+            >
+              {title}
+            </span>
+            {required && (
+              <span className="text-[12px] font-bold text-[var(--color-warn)]">必須</span>
+            )}
           </p>
-        )}
+          {hint && (
+            <p className="mt-3 text-pretty text-[14px] leading-[1.9] text-[var(--color-slate-500)]">
+              <Jp t={hint} />
+            </p>
+          )}
+        </div>
+        <div className="min-w-0 lg:col-span-9">{children}</div>
       </div>
-      <div className="lg:col-span-8">{children}</div>
     </fieldset>
   );
 }
@@ -357,6 +377,7 @@ function Field({
   type = "text",
   placeholder,
   maxLength,
+  autoComplete,
 }: {
   id: string;
   label: string;
@@ -364,21 +385,17 @@ function Field({
   type?: string;
   placeholder?: string;
   maxLength?: number;
+  autoComplete?: string; // スマホの自動入力用（送信内容は変わらない）
 }) {
   return (
-    <div>
+    <div className="min-w-0">
       <label
         htmlFor={id}
-        className="flex items-baseline justify-between text-[12px] text-[var(--color-slate-900)]"
+        className="flex items-baseline gap-2 text-[14px] font-bold text-[var(--color-slate-900)]"
       >
         <span style={{ fontFamily: "var(--font-display-jp)" }}>{label}</span>
         {required && (
-          <span
-            className="text-[10px] uppercase tracking-[0.3em] text-[var(--color-warn)]"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            必須
-          </span>
+          <span className="text-[12px] font-bold text-[var(--color-warn)]">必須</span>
         )}
       </label>
       <input
@@ -388,7 +405,8 @@ function Field({
         required={required}
         placeholder={placeholder}
         maxLength={maxLength}
-        className="mt-2 w-full border-b border-[var(--color-slate-200)] bg-transparent px-1 py-2.5 text-[15px] text-[var(--color-slate-900)] placeholder:text-[var(--color-slate-400)] transition focus:border-[var(--color-navy-700)] focus:outline-none"
+        autoComplete={autoComplete}
+        className={clsx(INPUT_CLS, "mt-2.5")}
       />
     </div>
   );

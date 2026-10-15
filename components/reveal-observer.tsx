@@ -9,7 +9,7 @@ import { useEffect } from "react";
  */
 export function RevealObserver() {
   useEffect(() => {
-    const selector = "[data-reveal], [data-reveal-stagger]";
+    const selector = "[data-reveal], [data-reveal-stagger], [data-paint], [data-mask]";
     const targets = Array.from(document.querySelectorAll<HTMLElement>(selector));
 
     if (typeof IntersectionObserver === "undefined") {

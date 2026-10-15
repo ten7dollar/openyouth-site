@@ -1,18 +1,15 @@
 // components/footer.tsx
+// 各ページの末尾には「相談する」の章があるので、フッターは案内と連絡先に絞る。
+// 地色は黒に近い色（直前の濃紺の章と切り替わる）。英字ラベル・矢印・区切り線・装飾は使わない。
+import { Fragment } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { BUSINESSES } from "@/lib/businesses";
 
 const footerNav = [
   {
     label: "事業",
-    items: [
-      { href: "/services#stockhr", label: "Stock-HR" },
-      { href: "/services#recruitment", label: "採用支援" },
-      { href: "/services#sales", label: "営業支援" },
-      { href: "/services#resimatch", label: "ResiMatch" },
-      { href: "/services#saloriku", label: "サロリク" },
-      { href: "/services#marketing", label: "マーケティング・PR支援" },
-    ],
+    items: BUSINESSES.map((b) => ({ href: `/services#${b.slug}`, label: b.name })),
   },
   {
     label: "会社",
@@ -20,20 +17,14 @@ const footerNav = [
       { href: "/aboutus", label: "会社概要" },
       { href: "/aboutus#message", label: "代表メッセージ" },
       { href: "/news", label: "お知らせ" },
-    ],
-  },
-  {
-    label: "その他",
-    items: [
       { href: "/recruitment", label: "採用情報" },
       { href: "/contact", label: "お問い合わせ" },
-      { href: "/privacy-policy", label: "プライバシーポリシー" },
     ],
   },
 ];
 
 const externalLinks = [
-  { href: "https://stock-hr.com", label: "Stock-HR 公式" },
+  { href: "https://stock-hr.com", label: "Stock-HR 公式サイト" },
   { href: "https://app.stock-hr.jp", label: "Stock-HR アプリ" },
 ];
 
@@ -41,170 +32,103 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden bg-[var(--color-navy-800)] text-[var(--color-slate-0)]">
-      {/* Decorative grid backdrop */}
-      <div aria-hidden className="absolute inset-0 bg-grid-navy opacity-50" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-32 -top-32 h-[480px] w-[480px] rounded-full bg-[var(--color-accent)]/15 blur-[120px]"
-      />
-
-      <div className="relative mx-auto max-w-[1320px] px-5 py-20 sm:px-8 lg:px-12">
-        {/* Top: tagline + CTA */}
-        <div className="grid gap-12 border-b border-white/10 pb-14 lg:grid-cols-12">
-          <div className="lg:col-span-7">
+    <footer className="relative overflow-hidden bg-[var(--color-slate-900)] text-[var(--color-slate-0)]">
+      <div className="relative mx-auto max-w-[1320px] px-5 pb-10 pt-20 sm:px-8 sm:pt-24 lg:px-12">
+        <div className="flex flex-col gap-14 lg:grid lg:grid-cols-12 lg:gap-10">
+          <div className="min-w-0 lg:col-span-5">
             <Link href="/" className="inline-flex items-center gap-3">
               <span className="relative inline-block h-9 w-9">
-                <Image
-                  src="/openyouth-logo.svg"
-                  alt="OpenYouth"
-                  fill
-                  className="object-contain brightness-0 invert"
-                />
+                <Image src="/openyouth-logo.svg" alt="OpenYouth" fill className="object-contain brightness-0 invert" />
               </span>
-              <span
-                className="text-xl font-bold tracking-[-0.01em]"
-                style={{ fontFamily: "var(--font-display-en)" }}
-              >
+              <span className="text-xl font-bold tracking-[-0.01em]" style={{ fontFamily: "var(--font-display-en)" }}>
                 OpenYouth
               </span>
             </Link>
             <p
-              className="mt-7 max-w-xl text-[clamp(22px,2.6vw,32px)] font-bold leading-[1.45]"
+              className="mt-8 text-[clamp(24px,2.8vw,34px)] font-bold leading-[1.45]"
               style={{ fontFamily: "var(--font-display-jp)" }}
             >
               すべての若者に、
               <br />
               可能性の選択肢を。
             </p>
-            <p className="mt-5 max-w-md text-[14px] leading-[1.85] text-white/65">
-              テクノロジーと現場の知見で、若者が挑戦するための選択肢を、ひとつずつ増やしていく会社です。
-            </p>
           </div>
 
-          <div className="flex flex-col justify-end gap-3 lg:col-span-5">
-            <Link
-              href="/contact"
-              className="group inline-flex items-center justify-between gap-3 rounded-full bg-[var(--color-slate-0)] px-6 py-4 text-[15px] font-bold text-[var(--color-navy-800)] transition hover:bg-[var(--color-navy-100)]"
-            >
-              お問い合わせ
-              <span aria-hidden className="text-lg transition-transform group-hover:translate-x-0.5">
-                →
-              </span>
-            </Link>
-            <Link
-              href="/recruitment"
-              className="group inline-flex items-center justify-between gap-3 rounded-full border border-white/25 bg-transparent px-6 py-4 text-[15px] font-bold text-white transition hover:border-white"
-            >
-              採用情報を見る
-              <span aria-hidden className="text-lg transition-transform group-hover:translate-x-0.5">
-                →
-              </span>
-            </Link>
-          </div>
-        </div>
+          <div className="grid min-w-0 grid-cols-2 gap-x-6 gap-y-12 lg:col-span-7 lg:grid-cols-3">
+            {footerNav.map((col) => (
+              <div key={col.label} className="min-w-0">
+                <p className="text-[14px] font-bold text-[var(--color-navy-200)]">{col.label}</p>
+                <ul className="mt-5 flex flex-col gap-3">
+                  {col.items.map((it) => (
+                    <li key={it.href + it.label}>
+                      <Link href={it.href} className="text-[14px] text-white/80 transition [word-break:keep-all] hover:text-white">
+                        {/* 「・」の後ろでだけ折り返す（語の途中で割らない） */}
+                        {it.label.split("・").map((part, i) => (
+                          <Fragment key={i}>
+                            {i > 0 && (
+                              <>
+                                ・<wbr />
+                              </>
+                            )}
+                            {part}
+                          </Fragment>
+                        ))}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
 
-        {/* Mid: nav columns + meta */}
-        <div className="grid gap-12 py-14 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
-          <div>
-            <p
-              className="text-[11px] uppercase tracking-[0.32em] text-white/45"
-              style={{ fontFamily: "var(--font-display-en)" }}
-            >
-              Office
-            </p>
-            <div className="mt-5 text-[14px] leading-[1.95] text-white/80">
-              <p>株式会社OpenYouth</p>
-              <p className="text-white/55">
-                〒150-0043
-                <br />
-                東京都渋谷区道玄坂１丁目１０−８
-              </p>
-              <p
-                className="mt-3 tabular text-white/85"
-                style={{ fontFamily: "var(--font-display-en)" }}
-              >
-                admin@openyouth.co.jp
-              </p>
-            </div>
+            <div className="col-span-2 min-w-0 lg:col-span-1">
+              <p className="text-[14px] font-bold text-[var(--color-navy-200)]">所在地</p>
+              <div className="mt-5 text-[14px] leading-[1.9] text-white/80">
+                <p>株式会社OpenYouth</p>
+                <p className="text-white/60">
+                  〒150-0043
+                  <br />
+                  東京都渋谷区道玄坂１丁目１０−８
+                </p>
+                <a href="mailto:admin@openyouth.co.jp" className="mt-3 inline-block text-white/80 transition hover:text-white">
+                  admin@openyouth.co.jp
+                </a>
+              </div>
 
-            <div className="mt-8">
-              <p
-                className="text-[11px] uppercase tracking-[0.32em] text-white/45"
-                style={{ fontFamily: "var(--font-display-en)" }}
-              >
-                Products
-              </p>
-              <ul className="mt-3 space-y-2">
+              <p className="mt-10 text-[14px] font-bold text-[var(--color-navy-200)]">プロダクト</p>
+              <ul className="mt-5 flex flex-col gap-3">
                 {externalLinks.map((it) => (
                   <li key={it.href}>
                     <a
                       href={it.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="group inline-flex items-center gap-1.5 text-[14px] text-white/85 transition hover:text-white"
+                      className="text-[14px] text-white/80 transition hover:text-white"
                     >
                       {it.label}
-                      <span
-                        aria-hidden
-                        className="text-[10px] text-white/45 transition group-hover:translate-x-0.5 group-hover:text-white"
-                      >
-                        ↗
-                      </span>
                     </a>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-
-          {footerNav.map((col) => (
-            <div key={col.label}>
-              <p
-                className="text-[11px] uppercase tracking-[0.32em] text-white/45"
-                style={{ fontFamily: "var(--font-display-en)" }}
-              >
-                {col.label}
-              </p>
-              <ul className="mt-5 space-y-3">
-                {col.items.map((it) => (
-                  <li key={it.href + it.label}>
-                    <Link
-                      href={it.href}
-                      className="text-[14px] text-white/85 transition hover:text-white"
-                    >
-                      {it.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
         </div>
 
-        {/* Giant wordmark */}
-        <div className="overflow-hidden border-t border-white/10 pt-12">
+        {/* 社名の特大の文字（装飾。読み上げない） */}
+        <div className="mt-20 overflow-hidden sm:mt-28">
           <p
             aria-hidden
-            className="select-none whitespace-nowrap text-[clamp(80px,16vw,260px)] font-bold leading-[0.8] tracking-[-0.04em] text-white/[0.06]"
+            className="select-none whitespace-nowrap text-[clamp(72px,17vw,260px)] font-bold leading-[0.8] tracking-[-0.04em] text-white/[0.07]"
             style={{ fontFamily: "var(--font-display-en)" }}
           >
             OpenYouth
           </p>
         </div>
 
-        {/* Bottom */}
-        <div className="mt-6 flex flex-col items-start justify-between gap-3 text-[11.5px] text-white/45 sm:flex-row sm:items-center">
-          <p
-            className="tabular tracking-wider"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            © {year} OpenYouth Inc. All rights reserved.
+        <div className="mt-8 flex flex-col items-start justify-between gap-3 text-[12px] text-white/50 sm:flex-row sm:items-center">
+          <p className="tabular" style={{ fontFamily: "var(--font-display-en)" }}>
+            © {year} OpenYouth Inc.
           </p>
-          <Link
-            href="/privacy-policy"
-            className="text-white/55 transition hover:text-white"
-          >
+          <Link href="/privacy-policy" className="transition hover:text-white">
             プライバシーポリシー
           </Link>
         </div>

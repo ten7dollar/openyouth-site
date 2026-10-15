@@ -77,6 +77,17 @@
     overflow-wrap: anywhere;
     word-break: normal;
   }
+  .grid > * {
+    min-width: 0;
+  }
+  br.lb {
+    display: inline;
+  }
+  @media (max-width: 960px) {
+    br.lb {
+      display: none;
+    }
+  }
   ::selection {
     background: var(--color-navy-600);
     color: var(--color-slate-0);
@@ -180,6 +191,11 @@
    日本語見出しで句点だけが次行に取り残されるのを抑止する。
    block 要素直下で末尾フレーズに .heading-tail を付けて inline-block 化することで、
    フレーズ単位での折返しを実現する。 */
+/* 文節の切れ目（wbr 要素の位置）でだけ折り返す。1文節が行に入りきらないときだけ文字単位に落とす */
+.phrased {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
 .heading-jp {
   word-break: keep-all;
   overflow-wrap: anywhere;
@@ -329,4 +345,112 @@
     var(--color-navy-100) 10px,
     var(--color-navy-100) 11px
   );
+}
+
+/* ============================================================
+   動き：題字の塗り（ロゴのYの斜線の角度＝115deg の境界で塗る）
+============================================================ */
+/* 既定の色は components 層に置く（題字側の [--paint-to:…] で上書きできるように） */
+@layer components {
+  .paint-title {
+    --paint-from: var(--color-slate-200);
+    --paint-to: var(--color-navy-800);
+  }
+}
+.paint-char {
+  color: var(--paint-to);
+  /* 字形が箱からはみ出す分も塗れるように、左右に余白を足して同じだけ詰める */
+  padding-inline: 0.08em;
+  margin-inline: -0.08em;
+}
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .paint-char {
+    color: transparent;
+    background-image: linear-gradient(115deg, var(--paint-to) 0 46%, var(--paint-from) 54% 100%);
+    background-size: 280% 100%;
+    background-position: 100% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: paint-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--paint-delay, 0s) + var(--i, 0) * 0.045s);
+  }
+}
+@keyframes paint-in {
+  to { background-position: 0 0; }
+}
+
+/* 題字のあとに、下の文とボタンを静かに出す */
+.after-paint {
+  animation: after-paint-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--after-delay, 0.9s);
+}
+@keyframes after-paint-in {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   動き：領域の帯（等速で横に流れる）
+============================================================ */
+.ticker-track {
+  animation: marquee-x 38s linear infinite;
+}
+.ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+.ticker-slash {
+  display: inline-block;
+  width: 0.09em;
+  height: 0.9em;
+  background: var(--color-accent);
+  transform: skewX(-25deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paint-char {
+    animation: none;
+    background-position: 0 0;
+  }
+  .after-paint {
+    animation: none;
+  }
+  .ticker-track {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   動き：画面に入ってから塗る見出し／窓からせり上がる行
+============================================================ */
+[data-paint] .paint-char {
+  animation-play-state: paused;
+}
+[data-paint][data-revealed="true"] .paint-char {
+  animation-play-state: running;
+}
+.mask-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.mask-line > span {
+  display: block;
+  transform: translate3d(0, 108%, 0);
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--d, 0s);
+}
+[data-mask][data-revealed="true"] .mask-line > span {
+  transform: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mask-line > span {
+    transform: none;
+    transition: none;
+  }
 }

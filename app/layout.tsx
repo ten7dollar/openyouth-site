@@ -37,17 +37,14 @@ const murecho = Murecho({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://openyouth.co.jp"),
+  metadataBase: new URL("https://www.openyouth.co.jp"),
   title: "株式会社OpenYouth",
   description:
-    "株式会社OpenYouthは、テクノロジーと現場の知見で、若者が挑戦するための選択肢を増やしていく会社です。スカウト運用AI Stock-HRをはじめ、採用支援・営業支援・新規事業の立ち上げに伴走します。",
+    "株式会社OpenYouthは、テクノロジーと現場の知見で、若者が挑戦するための選択肢を増やしていく会社です。組織AI活用プロダクト Stock-HRをはじめ、採用支援・営業支援・マーケティング・PR支援、美容採用のサロリク、医療キャリアのレジマッチ、Webメディア事業を展開しています。",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
     apple: "/favicon.ico",
-  },
-  alternates: {
-    canonical: "/",
   },
   openGraph: {
     title: "株式会社OpenYouth",

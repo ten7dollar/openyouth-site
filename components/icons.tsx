@@ -106,6 +106,19 @@ export function IconMarketing(props: IconProps) {
   );
 }
 
+// Webメディア：ブラウザの窓＋記事の行（領域ごとの専門メディア）
+export function IconMedia(props: IconProps) {
+  return (
+    <Base {...props}>
+      <rect x="4" y="6" width="24" height="20" rx="2.5" />
+      <path d="M4 11h24" />
+      <circle cx="7.5" cy="8.5" r="0.9" fill="currentColor" stroke="none" />
+      <path d="M8 16h9M8 20h6" />
+      <rect x="20" y="15" width="5" height="6" rx="1" />
+    </Base>
+  );
+}
+
 /* ============== Value icons ============== */
 
 // Long Bet: 時計＋長い矢印（時を超えて効くもの）

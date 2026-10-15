@@ -10,6 +10,17 @@ export type NewsCategory =
   | "Event"
   | "Recruit";
 
+// 画面に出すときの日本語の分類名
+export const NEWS_CATEGORY_LABEL: Record<NewsCategory, string> = {
+  Product: "プロダクト",
+  Release: "リリース",
+  Notice: "お知らせ",
+  Press: "プレス",
+  Media: "メディア",
+  Event: "イベント",
+  Recruit: "採用",
+};
+
 export type NewsItem = {
   date: string; // "YYYY.MM.DD"
   category: NewsCategory;
@@ -19,6 +30,38 @@ export type NewsItem = {
 };
 
 export const NEWS_ITEMS: NewsItem[] = [
+  {
+    date: "2026.10.16",
+    category: "Release",
+    title: "Webメディア事業を、7つ目の事業ラインに加えました。",
+    description:
+      "文化・観光・キャリア・セキュリティ・エンタメの5つの領域で、専門メディアを運営しています。",
+    href: "/services/media",
+  },
+  {
+    date: "2026.10.05",
+    category: "Release",
+    title: "Stock-HRに、複数の求人の基準でまとめて評価する機能を追加しました。",
+    description:
+      "1回の取り込みで複数の求人の基準を当て、求人ごとに並べて確認できます。評価軸を直したときは、保存してそのまま評価済みの人を評価し直せます。",
+    href: "https://stock-hr.com/#features",
+  },
+  {
+    date: "2026.10.05",
+    category: "Release",
+    title: "Stock-HRに、送付候補を自動で選ぶ機能を追加しました。",
+    description:
+      "S・Aの評価が出た人は、確認が必要な点がなければ自動で送付候補に入り、文面の作成も始まります。送信の画面で評価を見ながら、最終確認ができます。",
+    href: "https://stock-hr.com/#features",
+  },
+  {
+    date: "2026.08.03",
+    category: "Release",
+    title: "Stock-HRに、候補者ファイルを一括で評価する機能を追加しました。",
+    description:
+      "ビズリーチなどから書き出したファイルを取り込むと、求人の評価軸で全員を採点して並べます。送ると決めた人には、文面まで続けて作成できます。",
+    href: "https://stock-hr.com/#features",
+  },
   {
     date: "2026.06.27",
     category: "Release",

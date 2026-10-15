@@ -1,143 +1,32 @@
 // app/page.tsx
 import Link from "next/link";
 import Image from "next/image";
-import { NEWS_ITEMS, type NewsItem } from "@/lib/news";
+import { NEWS_ITEMS, NEWS_CATEGORY_LABEL, type NewsItem } from "@/lib/news";
 import { CountUp } from "@/components/count-up";
+import { PaintTitle } from "@/components/motion/paint-title";
+import { ScrubText } from "@/components/motion/scrub-text";
+import { FieldTicker } from "@/components/motion/field-ticker";
+import { Phrased } from "@/components/motion/phrased";
+import { PhrasedSafe } from "@/components/motion/phrased-safe";
+import { ParallaxRow } from "@/components/motion/parallax-row";
+import { phrases } from "@/lib/phrases";
 import {
-  IconStockHR,
-  IconRecruitment,
-  IconSales,
-  IconResiMatch,
-  IconSaloriku,
-  IconMarketing,
   IconLongBet,
   IconFieldFirst,
   IconOpenByDefault,
-  IconArrowOut,
 } from "@/components/icons";
 import {
-  BlueprintRings,
-  GrowthSpray,
-  MiniBars,
-  PulseNetwork,
-  QuoteBracket,
-  TimelineArc,
-} from "@/components/decorations";
+  BUSINESS_COUNT,
+  MEDIA_COUNT,
+  MEDIA_SITES,
+  getBusiness,
+  businessesIn,
+  type Business,
+} from "@/lib/businesses";
 
 import type { ComponentType, SVGProps } from "react";
 
-type ServiceStatus = "Active" | "New" | "Beta" | "Coming Soon";
-
-type Service = {
-  no: string;
-  slug: string;
-  name: string;        // プロダクト名・サービス名（日本語/英語混在OKだが見出し内で混ぜない）
-  tagline: string;     // 短い説明（1行）
-  category: string;
-  problem: string;     // 「どんな課題に向き合っているか」
-  approach: string;    // 「どう解いているか」
-  highlights: string[];
-  status: ServiceStatus;
-  href: string;
-  external?: boolean;
-  Icon: ComponentType<SVGProps<SVGSVGElement>>;
-};
-
-const SERVICES: Service[] = [
-  {
-    no: "01",
-    slug: "stockhr",
-    name: "Stock-HR",
-    tagline: "AIを、組織のものにする。",
-    category: "Enterprise AI · HR",
-    problem:
-      "AIが当たり前に現場で使われる時代に、個人情報の漏洩リスク、人によってバラつく精度、組織として測れない効果――AIを「安全に・標準化して」使える状態には、まだ届かない。",
-    approach:
-      "Stock-HRは個人情報を抽象化したままAIを使える設計と、プロの推論フレームで人による精度の差を吸収する仕組みで、組織全体のAI活用を最大化します。最初の領域は採用。",
-    highlights: ["AIガバナンス", "標準化された推論", "組織で可視化"],
-    status: "Active",
-    href: "https://stock-hr.com",
-    external: true,
-    Icon: IconStockHR,
-  },
-  {
-    no: "02",
-    slug: "recruitment",
-    name: "採用支援",
-    tagline: "母集団形成から定着まで、現場に並走。",
-    category: "Recruitment Support",
-    problem:
-      "採用担当者の手数が足りない。スカウトも選考も日次のオペレーションも、全部を高い精度で回せる体制が組みづらい。",
-    approach:
-      "Stock-HRの運用知見を背景に、ペルソナ設計・スカウト運用・選考ロジック・日次の書類選考まで、業界横断で並走します。",
-    highlights: ["スカウト運用", "ペルソナ設計", "選考設計"],
-    status: "Active",
-    href: "/services#recruitment",
-    Icon: IconRecruitment,
-  },
-  {
-    no: "03",
-    slug: "sales",
-    name: "営業支援",
-    tagline: "BtoBセールスを、内製チームと一緒に走らせる。",
-    category: "Sales Support",
-    problem:
-      "PMF前後のプロダクトで、内製セールスを十分に組めない。アポ獲得から商談クロージングまで、繋ぎ目で止まってしまう。",
-    approach:
-      "インサイドセールスから商談同席・営業資料整備まで、現場に踏み込んで一緒に走らせます。BtoB SaaS / 受託の現場知をベースに。",
-    highlights: ["インサイドセールス", "商談同席", "営業設計"],
-    status: "Active",
-    href: "/services#sales",
-    Icon: IconSales,
-  },
-  {
-    no: "04",
-    slug: "resimatch",
-    name: "レジマッチ",
-    tagline: "医療業界の就活を、DX化する。",
-    category: "Healthcare × Career",
-    problem:
-      "初期研修先の選択肢は、いまだに紙とOB訪問が中心。医療業界の就活はDX化が大きく遅れています。",
-    approach:
-      "病院と研修医のマッチングを、情報の整理とオンライン化で改めて設計しました。病院一括比較・AIレジュメ生成・ダイレクトスカウトをひとつのプロダクトに。現在テスト運用中。",
-    highlights: ["病院一括比較", "AIレジュメ生成", "ダイレクトスカウト"],
-    status: "Beta",
-    href: "https://www.resi-match.com/lp1",
-    external: true,
-    Icon: IconResiMatch,
-  },
-  {
-    no: "05",
-    slug: "saloriku",
-    name: "サロリク",
-    tagline: "美容師の採用を、お店専用ページで。",
-    category: "Beauty × Recruitment",
-    problem:
-      "美容室・理容室の採用は、媒体に高い初期費用と不透明な運用費を払い続ける構造になりがち。小さなサロンほど、自分たちの採用ページを持つ余力がありません。",
-    approach:
-      "採用の現場を知り尽くしたプロが、お店ごとの魅力を引き出して高品質なデザインの採用ページに仕上げます。初期費用0円・月額制で、どんな規模のサロンも自社の採用ページを持てる形にしました。",
-    highlights: ["初期費用0円", "プロが制作", "月額1万円〜"],
-    status: "New",
-    href: "https://saloriku.com",
-    external: true,
-    Icon: IconSaloriku,
-  },
-  {
-    no: "06",
-    slug: "marketing",
-    name: "マーケティング・PR支援",
-    tagline: "目的に合わせて、手段を選ぶ。",
-    category: "Marketing & PR",
-    problem:
-      "集客・PR・ブランディング——目的は会社ごとに違うのに、提案はいつも手段から始まってしまう。何から手をつけるべきかが決まらないまま、施策だけが増えていきます。",
-    approach:
-      "目的とゴールの言語化から入り、Web広告・メディア運用・インフルエンサー・動画のうち、必要なものだけを選んで組み立てます。企画から運用まで一貫して並走します。",
-    highlights: ["Web広告運用", "メディア・SNS", "インフルエンサー"],
-    status: "Active",
-    href: "/services#marketing",
-    Icon: IconMarketing,
-  },
-];
+type Service = Business;
 
 type ValueItem = {
   no: string;
@@ -175,27 +64,29 @@ type NumberItem = {
   label: string;
   value: number | string;
   suffix?: string;
-  hint?: string;
+  unit: string;
 };
 
 const NUMBERS: NumberItem[] = [
-  { label: "事業ライン", value: 5, suffix: "", hint: "AI · HR · Sales · Medical · Beauty" },
-  { label: "代表の採用実績", value: 100, suffix: "+", hint: "名 — 採用立ち上げ〜組織グロース" },
-  { label: "支援企業", value: 10, suffix: "+", hint: "社 — BtoB · SaaS · 事業会社" },
-  { label: "創業", value: "2025" as string, hint: "December · Shibuya" },
+  { label: "事業", value: BUSINESS_COUNT, unit: "つ" },
+  { label: "代表の採用実績", value: 100, suffix: "+", unit: "名" },
+  { label: "支援企業", value: 10, suffix: "+", unit: "社" },
+  { label: "創業", value: "2025", unit: "年" },
 ];
 
+export const metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default function HomePage() {
-  const homeNews = NEWS_ITEMS.slice(0, 3);
+  const homeNews = NEWS_ITEMS.slice(0, 4);
   return (
     <div className="bg-[var(--color-slate-0)] text-[var(--color-slate-900)]">
       <Hero />
-      <NumbersStrip />
       <VisionSection />
       <WhySection />
       <ValuesSection />
       <ServicesSection />
-      <StockHRSpot />
       <FounderTeaser />
       <NewsTeaser news={homeNews} />
       <ContactCTA />
@@ -204,1082 +95,426 @@ export default function HomePage() {
 }
 
 /* ============================================================
-   Service honeycomb — pointy-top hex tiles in a staggered grid
+   Hero — 題字だけで立つ。事業は置かない
 ============================================================ */
+const FIELDS = ["AI", "採用", "営業", "医療", "美容", "マーケティング", "文化", "観光", "キャリア", "セキュリティ", "エンタメ"];
 
-type HexTileData =
-  | {
-      kind: "service";
-      label: string;
-      sub: string;
-      status: ServiceStatus;
-      Icon: ComponentType<SVGProps<SVGSVGElement>>;
-      href: string;
-      external?: boolean;
-    }
-  | { kind: "exploring"; label: string };
-
-const HEX_TILES: HexTileData[] = [
-  {
-    kind: "service",
-    label: "Stock-HR",
-    sub: "Enterprise AI",
-    status: "Active",
-    Icon: IconStockHR,
-    href: "https://stock-hr.com",
-    external: true,
-  },
-  {
-    kind: "service",
-    label: "採用支援",
-    sub: "Recruitment",
-    status: "Active",
-    Icon: IconRecruitment,
-    href: "/services#recruitment",
-  },
-  {
-    kind: "service",
-    label: "営業支援",
-    sub: "Sales",
-    status: "Active",
-    Icon: IconSales,
-    href: "/services#sales",
-  },
-  {
-    kind: "service",
-    label: "レジマッチ",
-    sub: "Medical Career",
-    status: "Beta",
-    Icon: IconResiMatch,
-    href: "https://www.resi-match.com/lp1",
-    external: true,
-  },
-  {
-    kind: "service",
-    label: "サロリク",
-    sub: "Beauty Recruit",
-    status: "New",
-    Icon: IconSaloriku,
-    href: "https://saloriku.com",
-    external: true,
-  },
-];
-
-// Regular pointy-top hexagon
-const HEX_CLIP =
-  "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)";
-
-function HexTile({ tile }: { tile: HexTileData }) {
-  if (tile.kind === "exploring") {
-    return (
-      <div className="group relative aspect-[1/1.155]">
-        {/* dashed-style hex via two stacked clipped layers */}
-        <div
-          className="absolute inset-0 bg-[var(--color-slate-300)]"
-          style={{ clipPath: HEX_CLIP }}
-        />
-        <div
-          className="absolute inset-[2px] bg-[var(--color-slate-50)]"
-          style={{ clipPath: HEX_CLIP }}
-        />
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-3 text-center text-[var(--color-slate-600)]">
-          <span
-            className="text-[20px] text-[var(--color-slate-400)] transition group-hover:text-[var(--color-navy-700)]"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            +
-          </span>
-          <p
-            className="mt-1 text-[12px] font-bold"
-            style={{ fontFamily: "var(--font-display-jp)" }}
-          >
-            {tile.label}
-          </p>
-          <p
-            className="mt-0.5 text-[8.5px] uppercase tracking-[0.22em] text-[var(--color-slate-400)]"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            Exploring
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const isActive = tile.status === "Active";
-  const isNew = tile.status === "New";
-  const isBeta = tile.status === "Beta";
-
-  // Background: solid navy for Active/New, soft navy gradient for Beta
-  const bg = isActive || isNew
-    ? "bg-[var(--color-navy-700)]"
-    : isBeta
-    ? "bg-gradient-to-br from-[var(--color-navy-400)] via-[var(--color-navy-500)] to-[var(--color-navy-700)]"
-    : "bg-[var(--color-slate-100)]";
-
-  // Outer ring: tone the ring to the background so Beta doesn't pop too hard
-  const ring = isActive || isNew
-    ? "bg-[var(--color-navy-900)]"
-    : isBeta
-    ? "bg-[var(--color-navy-700)]"
-    : "bg-[var(--color-slate-300)]";
-
-  const Tag = tile.external ? "a" : Link;
-  const tagProps = tile.external
-    ? { href: tile.href, target: "_blank", rel: "noreferrer" }
-    : { href: tile.href };
-
+function Hero() {
   return (
-    <Tag
-      {...(tagProps as { href: string })}
-      className="group relative block aspect-[1/1.155] text-white transition-transform duration-500 hover:-translate-y-1"
-    >
-      {/* Outer ring */}
-      <div
-        className={"absolute inset-0 " + ring}
-        style={{ clipPath: HEX_CLIP }}
-      />
-      <div
-        className={"absolute inset-[2px] " + bg}
-        style={{ clipPath: HEX_CLIP }}
-      />
-      {/* Subtle grid backdrop */}
-      <div
-        aria-hidden
-        className="absolute inset-[2px] bg-grid-navy opacity-25"
-        style={{ clipPath: HEX_CLIP }}
-      />
+    <>
+      <section className="relative overflow-hidden bg-[var(--color-slate-0)]">
+        <div className="relative mx-auto flex min-h-[calc(100svh-170px)] max-w-[1320px] flex-col justify-center px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+          <PaintTitle
+            lines={[
+              { text: "すべての若者に、", segments: ["すべての", "若者に、"], className: "[--paint-to:var(--color-slate-900)]" },
+              { text: "可能性の選択肢を。", segments: ["可能性の", "選択肢を。"], className: "[--paint-to:var(--color-navy-600)]" },
+            ]}
+            className="text-[16.5vw] font-bold leading-[1.12] tracking-[-0.035em] lg:text-[clamp(34px,9.4vw,136px)] lg:leading-[1.14]"
+            style={{ fontFamily: "var(--font-display-jp)" }}
+            delay={0.15}
+          />
 
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 px-3 text-center">
-        <tile.Icon className="h-6 w-6 text-white opacity-95 icon-rotate-hover" />
-        <p
-          className="mt-0.5 text-[13px] font-bold leading-tight text-white"
-          style={{ fontFamily: "var(--font-display-jp)" }}
-        >
-          {tile.label}
-        </p>
-        <p
-          className="text-[8.5px] uppercase tracking-[0.22em] text-white/75"
-          style={{ fontFamily: "var(--font-display-en)" }}
-        >
-          {tile.sub}
-        </p>
-        {isBeta && (
-          <span
-            className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-white/20 px-1.5 py-[1px] text-[8px] uppercase tracking-[0.18em] text-white"
-            style={{ fontFamily: "var(--font-display-en)" }}
+          <div
+            className="after-paint mt-10 flex flex-col gap-9 sm:mt-12 lg:mt-16 lg:flex-row lg:items-end lg:justify-between lg:gap-12"
+            style={{ ["--after-delay" as string]: "0.85s" }}
           >
-            <span className="inline-block h-1 w-1 rounded-full bg-white dot-pulse" />
-            β版 Testing
-          </span>
-        )}
-        {isNew && (
-          <span
-            className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-1.5 py-[1px] text-[8px] uppercase tracking-[0.18em] text-white"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            <span className="inline-block h-1 w-1 rounded-full bg-white dot-pulse" />
-            New
-          </span>
-        )}
-      </div>
-    </Tag>
+            <p className="max-w-[38em] text-[15.5px] leading-[1.95] text-[var(--color-slate-600)] sm:text-[17px]">
+              <Phrased text="テクノロジーと現場の知見で、若者の挑戦の選択肢を増やしていく会社です。" />
+              <br />
+              <Phrased text="組織AI活用プロダクト" />{" "}
+              <strong className="font-bold text-[var(--color-slate-900)]">Stock-HR</strong>{" "}
+              <Phrased text={`を中核に、${BUSINESS_COUNT}つの事業を展開しています。`} />
+            </p>
+            <div className="flex shrink-0 flex-col items-start gap-5 sm:flex-row sm:items-center">
+              <Link
+                href="/services"
+                className="btn-press inline-flex items-center rounded-full bg-[var(--color-navy-600)] px-8 py-4 text-[15px] font-bold text-[var(--color-slate-0)] transition hover:bg-[var(--color-navy-800)]"
+              >
+                事業を見る
+              </Link>
+              <Link
+                href="/aboutus"
+                className="group inline-flex items-center px-1 text-[15px] font-bold text-[var(--color-slate-900)]"
+              >
+                <span className="underline-grow">会社のことを読む</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+      <FieldTicker words={FIELDS} />
+    </>
   );
 }
 
-function ServiceHoneycomb() {
+/* ============================================================
+   Vision / Mission — スクロールに合わせて文節ごとに塗る
+============================================================ */
+function VisionSection() {
   return (
-    <div className="relative mx-auto w-full max-w-[460px] lg:max-w-none">
-      {/* Compact label row */}
-      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-        <p
-          className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-slate-500)]"
-          style={{ fontFamily: "var(--font-display-en)" }}
-        >
-          Service Lines
-        </p>
-        <p
-          className="inline-flex items-center gap-1.5 text-[11px] tabular tracking-[0.18em] text-[var(--color-slate-500)]"
-          style={{ fontFamily: "var(--font-display-en)" }}
-        >
-          <span className="inline-block h-1 w-1 rounded-full bg-[var(--color-navy-700)] dot-pulse" />
-          Now active · expanding
-        </p>
-      </div>
-
-      {/* Honeycomb body */}
-      <div className="relative mt-6 pb-2">
-        {/* Row 1: 3 hexes filling the full width */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-3">
-          {HEX_TILES.slice(0, 3).map((t, i) => (
-            <HexTile key={`r1-${i}`} tile={t} />
-          ))}
-        </div>
-        {/* Row 2: 2 hexes, offset by half a hex (~16.66%), pulled up to interlock */}
-        <div
-          className="-mt-[11.5%] grid grid-cols-2 gap-2 sm:gap-3"
-          style={{ paddingLeft: "16.66%", paddingRight: "16.66%" }}
-        >
-          {HEX_TILES.slice(3, 5).map((t, i) => (
-            <HexTile key={`r2-${i}`} tile={t} />
-          ))}
-        </div>
-      </div>
-
-      {/* And more tag cloud */}
-      <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2">
-        <p
-          className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.32em] text-[var(--color-accent)]"
-          style={{ fontFamily: "var(--font-display-en)" }}
-        >
-          <span className="inline-block h-1 w-1 rounded-full bg-[var(--color-accent)] dot-pulse" />
-          And more
-        </p>
-        {["医療DX", "BtoB SaaS", "教育", "新規ドメイン", "..."].map((t) => (
-          <span
-            key={t}
-            className="text-[11.5px] text-[var(--color-slate-600)]"
+    <section className="relative bg-[var(--color-slate-0)] py-28 sm:py-40">
+      <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
+        <div className="flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:gap-10">
+          <p
+            className="text-[15px] font-bold text-[var(--color-navy-600)] lg:col-span-3 lg:pt-4"
+            style={{ fontFamily: "var(--font-display-jp)" }}
           >
-            {t}
-          </span>
-        ))}
+            目指す世界
+          </p>
+          <div className="lg:col-span-9">
+            <ScrubText
+              phrases={phrases("学歴・所属・経験。これまでの決まりごとに縛られず、挑戦したいときに挑戦できる社会へ。")}
+              className="text-[clamp(26px,4.2vw,58px)] font-bold leading-[1.5] tracking-[-0.02em]"
+            />
+            <p className="mt-8 max-w-[38em] text-[15px] leading-[2] text-[var(--color-slate-600)] sm:text-[16px]">
+              <PhrasedSafe text="選べる進路が一段増えること、信頼できる伴走者が隣にいること。そんな当たり前を、私たちの事業を通してひとつずつ増やしていきます。" tail />
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-24 flex flex-col gap-6 sm:mt-32 lg:grid lg:grid-cols-12 lg:gap-10">
+          <p
+            className="text-[15px] font-bold text-[var(--color-navy-600)] lg:col-span-3 lg:pt-4"
+            style={{ fontFamily: "var(--font-display-jp)" }}
+          >
+            私たちのやり方
+          </p>
+          <div className="lg:col-span-9">
+            <ScrubText
+              phrases={phrases("テクノロジーと現場の知見で、挑戦のための「次の一歩」を増やす。")}
+              className="text-[clamp(26px,4.2vw,58px)] font-bold leading-[1.5] tracking-[-0.02em]"
+            />
+            <p className="mt-8 max-w-[38em] text-[15px] leading-[2] text-[var(--color-slate-600)] sm:text-[16px]">
+              <PhrasedSafe text="プロダクトと事業支援、両方を持ち寄って、現場で起こる小さな摩擦からひとつずつ解いていく。スケールではなく、組織が自走できる確かさを優先します。" tail />
+            </p>
+          </div>
+        </div>
+
+        <p className="mt-24 text-[14px] leading-[1.9] text-[var(--color-slate-500)] sm:mt-32 lg:ml-[25%] lg:pl-2">
+          <PhrasedSafe text="社名の「Open Youth」は、若者に世界が開かれる、という意志からつけました。" tail />
+        </p>
       </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   Why — 解こうとしていること（濃紺の章）＋数字
+============================================================ */
+const WHY_ITEMS = [
+  {
+    k: "AIの波に、しっかり乗ること。",
+    body: "産業革命と同等以上の変化が、いまAIで起きています。波を眺めるのではなく、現場のプロダクトに落とし込みながら、私たち自身が乗り続けます。",
+  },
+  {
+    k: "関わってきた業界の、課題を解くこと。",
+    body: "採用・営業・医療キャリア。代表が現場で見てきた業界の不便から、事業を選んでいます。新しい領域も、手触りのある場所から始めます。",
+  },
+  {
+    k: "プロダクトと現場、両輪で進めること。",
+    body: "作って終わりにしません。現場で運用しながらプロダクトを育て、プロダクトで運用を底上げする。両輪が揃って初めて、組織は自走できると考えています。",
+  },
+  {
+    k: "時代に合わせて、事業は増やしていく。",
+    body: "今やっていない領域も、明日始まるかもしれない。社会の変化と私たちの好奇心を信じて、事業を増やしていきます。",
+  },
+];
+
+function WhySection() {
+  return (
+    <section className="relative overflow-hidden bg-[var(--color-navy-800)] py-28 text-[var(--color-slate-0)] sm:py-40">
+      <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
+        <div className="flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:gap-10">
+          <p
+            className="text-[15px] font-bold text-[var(--color-navy-200)] lg:col-span-3 lg:pt-4"
+            style={{ fontFamily: "var(--font-display-jp)" }}
+          >
+            解こうとしていること
+          </p>
+          <div className="lg:col-span-9">
+            <ScrubText
+              as="h2"
+              phrases={phrases("事業はまだ" + BUSINESS_COUNT + "つ。すべての根っこには、同じ問いがあります。")}
+              className="text-[clamp(26px,4.2vw,58px)] font-bold leading-[1.5] tracking-[-0.02em]"
+              from="rgba(255,255,255,0.16)"
+              to="#ffffff"
+            />
+          </div>
+        </div>
+
+        <ol className="mt-20 flex flex-col gap-14 sm:mt-28 sm:gap-20">
+          {WHY_ITEMS.map((it, i) => (
+            <li key={it.k} className="flex flex-col gap-4 lg:grid lg:grid-cols-12 lg:gap-10" data-reveal>
+              <span
+                className="text-[clamp(40px,5vw,64px)] font-bold leading-none tabular text-[var(--color-accent)] lg:col-span-3"
+                style={{ fontFamily: "var(--font-display-en)", letterSpacing: "-0.02em" }}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div className="lg:col-span-9 lg:grid lg:grid-cols-9 lg:gap-10">
+                <p
+                  className="text-[clamp(22px,2.6vw,32px)] font-bold leading-[1.45] lg:col-span-5"
+                  style={{ fontFamily: "var(--font-display-jp)" }}
+                >
+                  <PhrasedSafe text={it.k} tail />
+                </p>
+                <p className="mt-4 text-[15px] leading-[2] text-white/70 lg:col-span-4 lg:mt-1">
+                  <PhrasedSafe text={it.body} tail />
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <dl className="mt-24 grid grid-cols-2 gap-x-6 gap-y-12 sm:mt-32 lg:grid-cols-4" data-reveal-stagger>
+          {NUMBERS.map((n) => (
+            <div key={n.label} className="min-w-0">
+              <dt className="text-[14px] font-bold text-[var(--color-navy-200)]">{n.label}</dt>
+              <dd className="mt-3 flex items-baseline gap-1.5">
+                <span
+                  className="text-[clamp(44px,6vw,84px)] font-bold leading-none tabular"
+                  style={{ fontFamily: "var(--font-display-en)", letterSpacing: "-0.03em" }}
+                >
+                  {typeof n.value === "number" ? <CountUp value={n.value} suffix={n.suffix} /> : <CountUp literal={n.value} />}
+                </span>
+                <span className="text-[16px] font-bold text-white/70">{n.unit}</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   Values — 3つの姿勢（行ごとに窓からせり上がる）
+============================================================ */
+function ValuesSection() {
+  return (
+    <section className="relative bg-[var(--color-slate-0)] py-28 sm:py-40">
+      <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
+        <h2
+          className="text-[15px] font-bold text-[var(--color-navy-600)]"
+          style={{ fontFamily: "var(--font-display-jp)" }}
+        >
+          事業を貫く、3つの姿勢
+        </h2>
+        <ul className="mt-14 flex flex-col gap-16 sm:mt-20 sm:gap-24">
+          {VALUES.map((v) => (
+            <li key={v.no} className="flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:items-end lg:gap-10" data-mask>
+              <p
+                aria-label={v.jp}
+                className="text-[clamp(48px,14vw,128px)] font-bold leading-[1.08] tracking-[-0.03em] text-[var(--color-slate-900)] lg:col-span-7"
+                style={{ fontFamily: "var(--font-display-jp)" }}
+              >
+                {/* 読点の位置で2行に分け、行ごとにせり上げる */}
+                {v.jp.split(/(?<=、)/).map((seg, si) => (
+                  <span key={si} aria-hidden className="mask-line whitespace-nowrap">
+                    <span style={{ ["--d" as string]: `${si * 0.12}s` }}>{seg}</span>
+                  </span>
+                ))}
+              </p>
+              <p className="max-w-[30em] text-[15px] leading-[2] text-[var(--color-slate-600)] lg:col-span-5 lg:pb-3">
+                <PhrasedSafe text={v.body} tail />
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   Services — 見出し → Stock-HR（濃紺の章）→ ほかの事業の行
+============================================================ */
+function ServicesSection() {
+  return (
+    <>
+      <section className="relative bg-[var(--color-slate-50)] pt-28 pb-20 sm:pt-40 sm:pb-28">
+        <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
+          <div className="flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:gap-10">
+            <p
+              className="text-[15px] font-bold text-[var(--color-navy-600)] lg:col-span-3 lg:pt-4"
+              style={{ fontFamily: "var(--font-display-jp)" }}
+            >
+              事業
+            </p>
+            <div className="lg:col-span-9">
+              <ScrubText
+                as="h2"
+                phrases={phrases(BUSINESS_COUNT + "つの事業で、目指す世界を形にする。")}
+                className="text-[clamp(26px,4.2vw,58px)] font-bold leading-[1.5] tracking-[-0.02em]"
+              />
+              <p className="mt-8 max-w-[38em] text-[15px] leading-[2] text-[var(--color-slate-600)] sm:text-[16px]">
+                <PhrasedSafe text="それぞれが独立して動きつつ、「若者の挑戦を支える」というひとつの目的で繋がっています。" tail />
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <StockHRChapter />
+
+      <section className="relative bg-[var(--color-slate-0)] py-24 sm:py-32">
+        <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
+          <BusinessGroup label="プロダクト" items={[getBusiness("resimatch"), getBusiness("saloriku")]} />
+          <BusinessGroup label="支援" items={businessesIn("support")} className="mt-20 sm:mt-28" />
+        </div>
+      </section>
+
+      <MediaChapter />
+    </>
+  );
+}
+
+function BusinessGroup({ label, items, className = "" }: { label: string; items: Service[]; className?: string }) {
+  return (
+    <div className={className}>
+      <h3
+        className="text-[15px] font-bold text-[var(--color-navy-600)]"
+        style={{ fontFamily: "var(--font-display-jp)" }}
+      >
+        {label}
+      </h3>
+      <ul className="mt-6 flex flex-col gap-3 sm:mt-8">
+        {items.map((s) => (
+          <li key={s.slug} data-reveal>
+            <BusinessRow s={s} />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-/* ============================================================
-   Hero
-============================================================ */
-function Hero() {
+const BUSINESS_IMAGE: Record<string, { src: string; alt: string; pos: string }> = {
+  saloriku: { src: "/images/services/saloriku-hero.png", alt: "サロリクの画面", pos: "object-top" },
+  resimatch: { src: "/images/services/resimatch.jpg", alt: "レジマッチの画面", pos: "object-left" },
+};
+
+function BusinessRow({ s }: { s: Service }) {
+  const img = BUSINESS_IMAGE[s.slug];
   return (
-    <section className="relative overflow-hidden">
-      <div aria-hidden className="absolute inset-0 hero-glow" />
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-grid-fine opacity-40" />
-
-      {/* Subtle accent in the top-right corner only — no overlap with the card */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-44 -top-44 hidden h-[420px] w-[420px] rounded-full bg-[var(--color-accent)]/10 blur-[120px] lg:block"
-      />
-
-      {/* Animated blueprint rings — placed bottom-left, behind copy block, slowly rotating */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-32 -bottom-32 hidden h-[520px] w-[520px] text-[var(--color-navy-500)] opacity-25 lg:block"
-      >
-        <div className="ring-orbit h-full w-full">
-          <BlueprintRings className="h-full w-full" />
-        </div>
-      </div>
-
-      <div className="relative mx-auto flex flex-col lg:grid max-w-[1320px] gap-12 px-5 pb-28 pt-20 sm:px-8 sm:pb-32 sm:pt-24 lg:grid-cols-12 lg:gap-10 lg:px-12 lg:pb-36 lg:pt-28">
-        {/* Index bar */}
-        <div
-          className="col-span-12 flex items-center justify-between border-t border-[var(--color-slate-200)] pt-4"
-          data-reveal
-        >
-          <p
-            className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-slate-500)] tabular"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            <span className="font-bold text-[var(--color-navy-700)]">001</span>
-            <span className="mx-2 text-[var(--color-slate-300)]">/</span>
-            <span>OpenYouth Inc.</span>
-          </p>
-          <p
-            className="hidden text-[11px] uppercase tracking-[0.32em] text-[var(--color-slate-400)] sm:block"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            Est. 2025 · Tokyo
-          </p>
-        </div>
-
-        {/* Main copy */}
-        <div className="col-span-12 min-w-0 lg:col-span-7 xl:col-span-7" data-reveal-stagger>
-          <p
-            className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.42em] text-[var(--color-navy-700)]"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-navy-700)] dot-pulse" />
-            For the Next Generation
-          </p>
-
-          <h1
-            className="heading-jp mt-7 text-[clamp(36px,5.8vw,76px)] font-bold leading-[1.06] tracking-[-0.02em]"
-            style={{ fontFamily: "var(--font-display-jp)" }}
-          >
-            <span className="heading-tail">すべての若者に、</span>
-            <br />
-            <span className="heading-tail text-gradient-navy">可能性の選択肢を。</span>
-          </h1>
-
-          <p className="mt-9 max-w-[60ch] text-pretty text-[15.5px] leading-[1.95] text-[var(--color-slate-600)] sm:text-[16px]">
-            テクノロジーと現場の知見で、若者の挑戦の選択肢を増やしていく会社です。組織AI活用プロダクト <strong className="font-bold text-[var(--color-slate-900)]">Stock-HR</strong> を中核に、採用・営業・医療・美容など複数の領域で実装中。
-          </p>
-
-          <div className="mt-11 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-            <Link
-              href="/services"
-              className="group btn-press inline-flex items-center gap-3 rounded-full bg-[var(--color-navy-700)] px-7 py-4 text-[15px] font-bold text-[var(--color-slate-0)] transition hover:bg-[var(--color-navy-600)]"
-            >
-              事業を見る
-              <span aria-hidden className="arrow-slide">→</span>
-            </Link>
-            <Link
-              href="/aboutus"
-              className="group inline-flex items-center gap-2 px-1 text-[15px] font-bold text-[var(--color-slate-900)]"
-            >
-              <span className="underline-grow">会社のことを読む</span>
-              <span aria-hidden className="arrow-slide">→</span>
-            </Link>
-          </div>
-
-          {/* Tag chips */}
-          <div className="mt-10 flex flex-wrap gap-2">
-            {["AIプロダクト", "採用支援", "営業支援", "医療キャリア", "美容採用"].map((t) => (
-              <span
-                key={t}
-                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-slate-200)] bg-[var(--color-slate-0)]/70 px-3 py-1 text-[12px] text-[var(--color-slate-700)] backdrop-blur"
-              >
-                <span className="h-1 w-1 rounded-full bg-[var(--color-navy-600)]" />
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Right rail — Service Lines (honeycomb) */}
-        <aside className="col-span-12 min-w-0 lg:col-span-5 xl:col-span-5" data-reveal>
-          <ServiceHoneycomb />
-        </aside>
-      </div>
-
-      {/* Scroll indicator */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 lg:flex lg:flex-col lg:items-center"
-      >
-        <span
-          className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-slate-400)]"
-          style={{ fontFamily: "var(--font-display-en)" }}
-        >
-          Scroll
-        </span>
-        <span className="mt-2 h-10 w-px bg-gradient-to-b from-[var(--color-slate-300)] to-transparent" />
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   Numbers strip
-============================================================ */
-function NumbersStrip() {
-  return (
-    <section className="relative border-y border-[var(--color-slate-200)] bg-[var(--color-slate-50)]">
-      <div className="mx-auto grid max-w-[1320px] grid-cols-2 gap-px overflow-hidden bg-[var(--color-slate-200)] sm:grid-cols-4">
-        {NUMBERS.map((n, i) => (
-          <div
-            key={n.label}
-            className="relative overflow-hidden bg-[var(--color-slate-50)] px-5 py-9 sm:px-8 sm:py-12 lg:px-10"
-            data-reveal
-          >
-            <p
-              className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-slate-500)]"
-              style={{ fontFamily: "var(--font-display-en)" }}
-            >
-              {n.label}
-            </p>
-            <p
-              className="mt-3 text-[clamp(32px,4.4vw,52px)] font-bold tabular leading-[1] text-[var(--color-navy-700)]"
-              style={{
-                fontFamily: "var(--font-display-en)",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              {typeof n.value === "number" ? (
-                <CountUp value={n.value} suffix={n.suffix} />
-              ) : (
-                <CountUp literal={n.value} />
-              )}
-            </p>
-            {n.hint && (
-              <p
-                className="mt-2 text-[11px] tracking-[0.18em] text-[var(--color-slate-400)]"
-                style={{ fontFamily: "var(--font-display-en)" }}
-              >
-                {n.hint}
-              </p>
-            )}
-            {i === NUMBERS.length - 1 && (
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -bottom-1 right-3 h-8 w-24 text-[var(--color-navy-200)]"
-              >
-                <MiniBars className="h-full w-full" />
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   Vision Section
-============================================================ */
-function VisionSection() {
-  return (
-    <section className="relative bg-[var(--color-slate-0)] py-28 sm:py-36">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-12 top-20 hidden h-[280px] w-[280px] text-[var(--color-navy-200)] opacity-70 lg:block"
-      >
-        <GrowthSpray className="h-full w-full" />
-      </div>
-
-      <div className="relative mx-auto flex flex-col lg:grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
-        <div className="lg:col-span-4" data-reveal>
-          <p
-            className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            Vision &amp; Mission
-          </p>
-          <p className="mt-4 text-[12px] tracking-[0.18em] text-[var(--color-slate-400)]">
-            私たちの目的と、果たし方
-          </p>
-          <div className="mt-10 rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-50)] p-7 lift">
-            <p
-              className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-slate-400)]"
-              style={{ fontFamily: "var(--font-display-en)" }}
-            >
-              社名について
-            </p>
-            <p
-              className="mt-3 text-balance text-[17px] leading-[1.9] text-[var(--color-slate-800)]"
-              style={{ fontFamily: "var(--font-display-jp)" }}
-            >
-              「Open Youth」は、若者に世界が開かれる、という意志からつけました。
-            </p>
-          </div>
-        </div>
-
-        <div className="lg:col-span-8" data-reveal-stagger>
-          <div className="border-l-2 border-[var(--color-navy-600)] pl-6 sm:pl-10">
-            <p
-              className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-slate-400)]"
-              style={{ fontFamily: "var(--font-display-en)" }}
-            >
-              Vision · 目指す世界
-            </p>
-            <p
-              className="mt-4 text-balance text-[clamp(28px,3.4vw,44px)] font-bold leading-[1.4]"
-              style={{ fontFamily: "var(--font-display-jp)" }}
-            >
-              すべての若者に、
-              <br />
-              <span className="text-[var(--color-navy-700)]">可能性の選択肢を。</span>
-            </p>
-            <p className="mt-5 max-w-[44ch] text-pretty text-[15px] leading-[2] text-[var(--color-slate-600)]">
-              学歴・所属・経験。これまでの「決まりごと」に縛られず、挑戦したいときに挑戦できる社会。
-              選べる進路が一段増えること、信頼できる伴走者が隣にいること。
-              そんな当たり前を、私たちの事業を通してひとつずつ増やしていきます。
-            </p>
-          </div>
-
-          <div className="mt-14 border-l-2 border-[var(--color-accent)] pl-6 sm:pl-10">
-            <p
-              className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-slate-400)]"
-              style={{ fontFamily: "var(--font-display-en)" }}
-            >
-              Mission · 私たちのやり方
-            </p>
-            <p
-              className="mt-4 text-balance text-[clamp(22px,2.8vw,34px)] font-bold leading-[1.5]"
-              style={{ fontFamily: "var(--font-display-jp)" }}
-            >
-              テクノロジーと現場の知見で、挑戦のための「次の一歩」を増やす。
-            </p>
-            <p className="mt-5 max-w-[46ch] text-pretty text-[15px] leading-[2] text-[var(--color-slate-600)]">
-              プロダクトと事業支援、両方を持ち寄って、現場で起こる小さな摩擦からひとつずつ解いていく。
-              スケールではなく、組織が自走できる確かさを優先します。
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Connector arc */}
-      <div
-        aria-hidden
-        className="mx-auto mt-20 hidden max-w-[800px] px-5 text-[var(--color-slate-300)] sm:px-8 lg:block"
-      >
-        <TimelineArc className="h-16 w-full" />
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   Why Section — 事業を選ぶ理由とこれから
-============================================================ */
-function WhySection() {
-  return (
-    <section className="relative overflow-hidden bg-[var(--color-navy-800)] py-28 text-[var(--color-slate-0)] sm:py-36">
-      <div aria-hidden className="absolute inset-0 bg-grid-navy opacity-40" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-32 -top-32 h-[420px] w-[420px] rounded-full bg-[var(--color-accent)]/15 blur-[120px]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-12 bottom-12 hidden h-[280px] w-[280px] text-white/10 lg:block ring-orbit"
-      >
-        <BlueprintRings className="h-full w-full" />
-      </div>
-
-      <div className="relative mx-auto flex flex-col lg:grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
-        <div className="lg:col-span-5" data-reveal>
-          <p
-            className="text-[11px] uppercase tracking-[0.32em] text-white/55"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            Why we exist
-          </p>
-          <h2
-            className="mt-5 text-balance text-[clamp(30px,4vw,56px)] font-bold leading-[1.15] tracking-[-0.015em]"
-            style={{ fontFamily: "var(--font-display-jp)" }}
-          >
-            私たちが、解こうとしていること。
-          </h2>
-          <p className="mt-7 max-w-[42ch] text-pretty text-[15px] leading-[2.05] text-white/75">
-            事業はまだ6つ。けれど私たちは、創業時期だからこそ「いまここで取り組む課題」をひとつずつ確かに選んでいます。
-            これから10、20と増えていく事業の、すべての根っこには同じ問いがあります。
-          </p>
-
-          <div className="mt-10 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-[11px] uppercase tracking-[0.28em] text-white/85 backdrop-blur"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-white dot-pulse" />
-            6 lines today · more to come
-          </div>
-        </div>
-
-        <ul className="lg:col-span-7" data-reveal-stagger>
-          {[
-            {
-              n: "01",
-              k: "AIの波に、しっかり乗ること。",
-              en: "Ride the wave",
-              body: "産業革命と同等以上の変化が、いまAIで起きています。波を眺めるのではなく、現場のプロダクトに落とし込みながら、私たち自身が乗り続けます。",
-            },
-            {
-              n: "02",
-              k: "関わってきた業界の、課題を解くこと。",
-              en: "From the field we know",
-              body: "採用・営業・医療キャリア。代表が現場で見てきた業界の不便から、事業を選んでいます。新規領域も、見知らぬ場所ではなく、手触りのある場所から始めます。",
-            },
-            {
-              n: "03",
-              k: "プロダクトと現場、両輪で進めること。",
-              en: "Product × Operation",
-              body: "AIで作って終わりにしません。現場で運用しながらプロダクトを育て、プロダクトで運用を底上げする。両輪が揃って初めて、組織は自走できると考えています。",
-            },
-            {
-              n: "04",
-              k: "時代に合わせて、事業は増やしていく。",
-              en: "Open by design",
-              body: "今やっていない領域も、明日始まるかもしれない。OpenYouthという名のとおり、開かれた状態で構えながら、社会の変化と私たちの好奇心を信じて、事業を増やしていきます。",
-            },
-          ].map((it) => (
-            <li
-              key={it.n}
-              className="group grid grid-cols-[60px_1fr] gap-5 border-t border-white/15 py-7 sm:grid-cols-[80px_1fr] sm:gap-8"
-            >
-              <div>
-                <p
-                  className="text-[36px] font-bold tabular leading-none text-[var(--color-accent)]"
-                  style={{ fontFamily: "var(--font-display-en)", letterSpacing: "-0.02em" }}
-                >
-                  {it.n}
-                </p>
-                <p
-                  className="mt-2 text-[10px] uppercase tracking-[0.28em] text-white/45"
-                  style={{ fontFamily: "var(--font-display-en)" }}
-                >
-                  {it.en}
-                </p>
-              </div>
-              <div>
-                <p
-                  className="text-balance text-[clamp(20px,2.2vw,26px)] font-bold leading-[1.45]"
-                  style={{ fontFamily: "var(--font-display-jp)" }}
-                >
-                  {it.k}
-                </p>
-                <p className="mt-3 text-pretty text-[14px] leading-[1.95] text-white/70">
-                  {it.body}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   Values Section
-============================================================ */
-function ValuesSection() {
-  return (
-    <section className="relative bg-[var(--color-slate-50)] py-28 sm:py-36">
-      <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
-        <div
-          className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end"
-          data-reveal
-        >
-          <div>
-            <p
-              className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
-              style={{ fontFamily: "var(--font-display-en)" }}
-            >
-              Values
-            </p>
-            <h2
-              className="mt-4 text-balance text-[clamp(28px,3.6vw,48px)] font-bold leading-[1.25]"
-              style={{ fontFamily: "var(--font-display-jp)" }}
-            >
-              事業を貫く、3つの姿勢。
-            </h2>
-          </div>
-          <p className="max-w-[28ch] text-pretty text-[14px] leading-[1.95] text-[var(--color-slate-600)]">
-            プロダクトも事業支援も、これからの新規事業も。すべての営みに通底させている構えです。
-          </p>
-        </div>
-
-        <ul className="mt-14 flex flex-col lg:grid gap-6 lg:grid-cols-3" data-reveal-stagger>
-          {VALUES.map((v) => (
-            <li
-              key={v.no}
-              className="group relative overflow-hidden rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] p-8 lift"
-            >
-              <div className="flex items-start justify-between">
-                <div className="grid h-14 w-14 place-items-center rounded-2xl bg-[var(--color-navy-50)] text-[var(--color-navy-700)] transition-colors group-hover:bg-[var(--color-navy-700)] group-hover:text-[var(--color-slate-0)]">
-                  <v.Icon className="h-7 w-7 icon-rotate-hover" />
-                </div>
-                <div className="text-right">
-                  <p
-                    className="text-[40px] font-bold tabular leading-none text-[var(--color-navy-700)]"
-                    style={{
-                      fontFamily: "var(--font-display-en)",
-                      letterSpacing: "-0.02em",
-                    }}
-                  >
-                    {v.no}
-                  </p>
-                  <p
-                    className="mt-2 text-[11px] uppercase tracking-[0.32em] text-[var(--color-slate-400)]"
-                    style={{ fontFamily: "var(--font-display-en)" }}
-                  >
-                    {v.en}
-                  </p>
-                </div>
-              </div>
-              <p
-                className="mt-8 text-balance text-[22px] font-bold leading-[1.5] text-[var(--color-slate-900)]"
-                style={{ fontFamily: "var(--font-display-jp)" }}
-              >
-                {v.jp}
-              </p>
-              <p className="mt-3 text-pretty text-[14px] leading-[1.95] text-[var(--color-slate-600)]">
-                {v.body}
-              </p>
-
-              {/* decorative corner */}
-              <span
-                aria-hidden
-                className="absolute -bottom-12 -right-12 h-32 w-32 rounded-full border border-[var(--color-navy-100)] transition-all duration-700 group-hover:scale-110"
-              />
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   Services Section (6 lines)
-============================================================ */
-function ServicesSection() {
-  const feature = [SERVICES[0], SERVICES[4]]; // Stock-HR・サロリク（プロダクト2本）
-  const rest = [SERVICES[1], SERVICES[2], SERVICES[5], SERVICES[3]]; // 採用支援・営業支援・マーケティング/PR・レジマッチ
-  return (
-    <section className="relative bg-[var(--color-slate-0)] py-28 sm:py-36">
-      <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
-        <div className="flex flex-col lg:grid gap-10 lg:grid-cols-12" data-reveal>
-          <div className="lg:col-span-5">
-            <p
-              className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
-              style={{ fontFamily: "var(--font-display-en)" }}
-            >
-              Services
-            </p>
-            <h2
-              className="mt-4 text-balance text-[clamp(28px,3.6vw,48px)] font-bold leading-[1.25]"
-              style={{ fontFamily: "var(--font-display-jp)" }}
-            >
-              6つの事業で、
-              <br />
-              Visionを実装します。
-            </h2>
-          </div>
-          <p className="max-w-[44ch] text-pretty text-[15px] leading-[2] text-[var(--color-slate-600)] lg:col-span-7">
-            それぞれが独立した事業として動きつつ、「若者の挑戦を支える」というひとつの目的で繋がっています。
-            プロダクトと事業支援を行き来しながら、実装を続けています。
-          </p>
-        </div>
-
-        {/* 上段：プロダクト2本（画像付き） */}
-        <ul className="mt-12 grid gap-4 sm:grid-cols-2" data-reveal-stagger>
-          {feature.map((s) => (
-            <ServiceCard key={s.slug} s={s} variant="feature" />
-          ))}
-        </ul>
-
-        {/* 下段：事業支援・マーケティング・医療（コンパクト） */}
-        <ul className="mt-4 grid gap-4 sm:grid-cols-2" data-reveal-stagger>
-          {rest.map((s) => (
-            <ServiceCard key={s.slug} s={s} variant="compact" />
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-function ServiceImageHeader({ s }: { s: Service }) {
-  if (s.slug === "stockhr") {
-    return (
-      <div className="relative aspect-[16/10] overflow-hidden bg-[var(--color-navy-800)]">
-        <div aria-hidden className="absolute inset-0 bg-grid-navy opacity-30" />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-20 -top-20 h-[360px] w-[360px] rounded-full bg-[var(--color-accent)]/20 blur-[100px]"
-        />
-        <Image
-          src="/images/services/stockhr-mac.png"
-          alt="Stock-HR"
-          fill
-          sizes="(min-width: 640px) 45vw, 100vw"
-          className="object-contain object-center p-6 transition-transform duration-700 group-hover:scale-[1.04] sm:p-8"
-        />
-        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-5 sm:left-5 sm:right-5">
-          <p
-            className="rounded-full bg-white/15 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white backdrop-blur"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            stock-hr.com ↗
-          </p>
-          <s.Icon className="h-8 w-8 shrink-0 text-white/85 sm:h-9 sm:w-9" />
-        </div>
-      </div>
-    );
-  }
-  if (s.slug === "saloriku") {
-    return (
-      <div className="relative aspect-[16/10] overflow-hidden bg-[var(--color-slate-100)]">
-        <Image
-          src="/images/services/saloriku-hero.png"
-          alt="サロリク — 美容師の採用ページ"
-          fill
-          sizes="(min-width: 640px) 45vw, 100vw"
-          className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-        />
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-900)]/55 via-transparent to-transparent" />
-        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-5 sm:left-5 sm:right-5">
-          <p
-            className="rounded-full bg-white/90 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[var(--color-slate-700)] backdrop-blur"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            saloriku.com ↗
-          </p>
-          <s.Icon className="h-8 w-8 shrink-0 text-white sm:h-9 sm:w-9" />
-        </div>
-      </div>
-    );
-  }
-  return null;
-}
-
-function ServiceCard({ s, variant }: { s: Service; variant: "feature" | "compact" }) {
-  const isFeature = variant === "feature";
-  return (
-    <li className="relative overflow-hidden rounded-2xl border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] lift">
-      <Link
-        href={s.href}
-        target={s.external ? "_blank" : undefined}
-        rel={s.external ? "noreferrer" : undefined}
-        className="group flex h-full flex-col"
-      >
-        {isFeature && <ServiceImageHeader s={s} />}
-        <div className="flex flex-1 flex-col p-6 sm:p-7">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-start gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--color-navy-50)] text-[var(--color-navy-700)] transition-colors group-hover:bg-[var(--color-navy-700)] group-hover:text-[var(--color-slate-0)]">
-                <s.Icon className="h-5 w-5" />
-              </div>
-              <div>
-                <p
-                  className="text-[9.5px] uppercase tracking-[0.3em] text-[var(--color-slate-500)]"
-                  style={{ fontFamily: "var(--font-display-en)" }}
-                >
-                  Line {s.no} · {s.category}
-                </p>
-                <p
-                  className={
-                    "heading-jp mt-1 font-bold leading-[1.2] text-balance text-[var(--color-slate-900)] " +
-                    (isFeature ? "text-[clamp(20px,2.2vw,26px)]" : "text-[18px]")
-                  }
-                  style={{ fontFamily: "var(--font-display-jp)" }}
-                >
-                  {s.name}
-                </p>
-              </div>
-            </div>
-            <StatusBadge status={s.status} />
-          </div>
-
-          <p
-            className="mt-3 text-balance text-[13px] leading-[1.7] text-[var(--color-slate-700)]"
-            style={{ fontFamily: "var(--font-display-jp)" }}
-          >
-            {s.tagline}
-          </p>
-
-          {isFeature ? (
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div className="border-t border-[var(--color-slate-200)] pt-3">
-                <p
-                  className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-warn)]"
-                  style={{ fontFamily: "var(--font-display-en)" }}
-                >
-                  Problem
-                </p>
-                <p className="mt-1.5 text-pretty text-[12.5px] leading-[1.8] text-[var(--color-slate-700)]">
-                  {s.problem}
-                </p>
-              </div>
-              <div className="border-t border-[var(--color-navy-200)] pt-3">
-                <p
-                  className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
-                  style={{ fontFamily: "var(--font-display-en)" }}
-                >
-                  Approach
-                </p>
-                <p className="mt-1.5 text-pretty text-[12.5px] leading-[1.8] text-[var(--color-slate-700)]">
-                  {s.approach}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <p className="mt-3 border-t border-[var(--color-slate-200)] pt-3 text-pretty text-[12.5px] leading-[1.85] text-[var(--color-slate-600)]">
-              {s.approach}
-            </p>
-          )}
-
-          <ul className="mt-4 flex flex-wrap gap-1.5">
-            {s.highlights.map((h) => (
-              <li
-                key={h}
-                className="rounded-full border border-[var(--color-slate-200)] bg-[var(--color-slate-50)] px-2.5 py-0.5 text-[11px] text-[var(--color-slate-600)]"
-              >
-                {h}
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-auto flex items-center justify-between pt-6">
-            <span className="inline-flex items-center gap-2 text-[12.5px] font-bold text-[var(--color-navy-700)]">
-              <span className="underline-grow">詳しく見る</span>
-            </span>
-            <span
-              aria-hidden
-              className="grid h-9 w-9 place-items-center rounded-full border border-[var(--color-slate-200)] bg-[var(--color-slate-0)] text-[var(--color-navy-700)] transition-all group-hover:border-[var(--color-navy-700)] group-hover:bg-[var(--color-navy-700)] group-hover:text-[var(--color-slate-0)]"
-            >
-              <IconArrowOut className="h-3.5 w-3.5 arrow-slide" />
-            </span>
-          </div>
-        </div>
-      </Link>
-    </li>
-  );
-}
-
-function StatusBadge({ status }: { status: ServiceStatus }) {
-  const styles: Record<
-    ServiceStatus,
-    { wrap: string; dot: string; label: string }
-  > = {
-    Active: {
-      wrap: "bg-[var(--color-navy-700)] text-[var(--color-slate-0)]",
-      dot: "bg-[var(--color-slate-0)] dot-pulse",
-      label: "Active",
-    },
-    New: {
-      wrap: "bg-[var(--color-accent)] text-[var(--color-slate-0)]",
-      dot: "bg-[var(--color-slate-0)] dot-pulse",
-      label: "New",
-    },
-    Beta: {
-      wrap: "bg-[var(--color-accent)] text-[var(--color-slate-0)]",
-      dot: "bg-[var(--color-slate-0)] dot-pulse",
-      label: "β版 Testing",
-    },
-    "Coming Soon": {
-      wrap:
-        "border border-[var(--color-slate-300)] bg-[var(--color-slate-0)] text-[var(--color-slate-500)]",
-      dot: "bg-[var(--color-slate-400)]",
-      label: "Coming Soon",
-    },
-  };
-  const s = styles[status];
-  return (
-    <span
-      className={
-        "inline-flex shrink-0 items-center gap-2 rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.24em] " +
-        s.wrap
-      }
-      style={{ fontFamily: "var(--font-display-en)" }}
+    <Link
+      href={s.href}
+      target={s.external ? "_blank" : undefined}
+      rel={s.external ? "noreferrer" : undefined}
+      className="group flex flex-col gap-5 rounded-2xl px-1 py-6 transition-colors duration-300 hover:bg-[var(--color-slate-50)] sm:px-6 lg:grid lg:grid-cols-12 lg:items-center lg:gap-10 lg:py-8"
     >
-      <span className={"inline-block h-1.5 w-1.5 rounded-full " + s.dot} />
-      {s.label}
-    </span>
+      <span
+        className="text-[14px] font-bold tabular text-[var(--color-slate-400)] lg:col-span-1"
+        style={{ fontFamily: "var(--font-display-en)" }}
+      >
+        {s.no}
+      </span>
+      <div className={"min-w-0 " + (img ? "lg:col-span-6" : "lg:col-span-11 lg:grid lg:grid-cols-11 lg:items-baseline lg:gap-10")}>
+        <p
+          className={
+            "heading-jp text-[clamp(28px,3.6vw,48px)] font-bold leading-[1.2] tracking-[-0.02em] text-[var(--color-slate-900)] transition-colors duration-300 group-hover:text-[var(--color-navy-600)] " +
+            (img ? "" : "lg:col-span-6")
+          }
+          style={{ fontFamily: "var(--font-display-jp)" }}
+        >
+          {s.name}
+        </p>
+        <p className={"mt-3 text-[15px] leading-[1.9] text-[var(--color-slate-600)] " + (img ? "" : "lg:col-span-5 lg:mt-0")}>
+          <PhrasedSafe text={s.tagline} tail />
+        </p>
+      </div>
+      {img && (
+        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-[var(--color-slate-100)] lg:col-span-5">
+          <Image
+            src={img.src}
+            alt={img.alt}
+            fill
+            sizes="(min-width: 1024px) 38vw, 100vw"
+            className={"object-cover transition-transform duration-700 group-hover:scale-[1.04] " + img.pos}
+          />
+        </div>
+      )}
+    </Link>
   );
 }
 
 /* ============================================================
-   Stock-HR Spot
+   Stock-HR — 代表的な事業（濃紺の章）
 ============================================================ */
-function StockHRSpot() {
+function StockHRChapter() {
+  const s = getBusiness("stockhr");
   return (
     <section className="relative overflow-hidden bg-[var(--color-navy-800)] py-28 text-[var(--color-slate-0)] sm:py-36">
-      <div aria-hidden className="absolute inset-0 bg-grid-navy opacity-40" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-20 -top-20 h-[420px] w-[420px] rounded-full bg-[var(--color-accent)]/15 blur-[120px]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-32 -left-32 h-[460px] w-[460px] text-white/10 ring-orbit"
-      >
-        <PulseNetwork className="h-full w-full" />
-      </div>
+      <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
+        <p
+          className="text-[15px] font-bold text-[var(--color-navy-200)]"
+          style={{ fontFamily: "var(--font-display-jp)" }}
+        >
+          代表的な事業
+        </p>
+        <PaintTitle
+          as="h2"
+          onView
+          lines={[{ text: "Stock-HR" }]}
+          className="mt-6 text-[clamp(64px,15vw,200px)] font-bold leading-[0.95] tracking-[-0.04em] [--paint-from:rgba(255,255,255,0.14)] [--paint-to:#ffffff]"
+          style={{ fontFamily: "var(--font-display-en)" }}
+        />
 
-      <div className="relative mx-auto flex flex-col lg:grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
-        <div className="lg:col-span-7" data-reveal-stagger>
-          <p
-            className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.32em] text-white/70"
-            style={{ fontFamily: "var(--font-display-en)" }}
-          >
-            <span className="grid h-7 w-7 place-items-center rounded-md bg-white/10 text-white">
-              <IconStockHR className="h-4 w-4" />
-            </span>
-            Featured Product · Stock-HR
-          </p>
-          <h2
-            className="mt-6 text-balance text-[clamp(34px,5vw,72px)] font-bold leading-[1.05] tracking-[-0.018em]"
-            style={{ fontFamily: "var(--font-display-jp)" }}
-          >
-            AIを、組織のものに。
-          </h2>
-          <p className="mt-8 max-w-[64ch] text-pretty text-[16px] leading-[1.95] text-white/75">
-            AIが当たり前になった時代に、組織には「安全・標準化・効果測定」の土台が必要です。
-            <strong className="font-bold text-white">Stock-HR</strong> は、個人情報漏洩リスクを設計で抑え、推論フレームで人による精度差を吸収する、組織AI活用を最大化するAI。採用領域から実装中。
-          </p>
-
-          <ul className="mt-10 grid gap-5 sm:grid-cols-2">
-            {[
-              { t: "個人情報を、設計で守る", d: "候補者情報は業界カテゴリへ自動抽象化。生データをAIに渡さず、漏洩リスクを設計レベルで抑えます。" },
-              { t: "プロの推論フレームを内蔵", d: "課題仮説 → 訴求軸選定 の2段階推論を組み込み済み。使う人によって出る精度のバラつきを吸収します。" },
-              { t: "組織で、効果を可視化", d: "誰がどの訴求で送ったかをデータで残し、改善ループを組織として回せる土台に。" },
-              { t: "運用ごと並走する", d: "ハンズオン／ハイブリッドプランでは Stock-HR のプロが選定・送付・運用設計まで担い、AIの使い方ごと組織に残します。" },
-            ].map((f, i) => (
-              <li key={f.t} className="border-t border-white/15 pt-4">
-                <p
-                  className="flex items-baseline gap-3 text-base font-bold"
-                  style={{ fontFamily: "var(--font-display-jp)" }}
-                >
-                  <span
-                    className="text-[11px] tabular text-white/55"
-                    style={{ fontFamily: "var(--font-display-en)" }}
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  {f.t}
-                </p>
-                <p className="mt-1.5 text-[13.5px] leading-[1.85] text-white/65">
-                  {f.d}
-                </p>
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-12 flex flex-wrap items-center gap-4">
-            <a
-              href="https://stock-hr.com"
-              target="_blank"
-              rel="noreferrer"
-              className="group btn-press btn-press-light inline-flex items-center gap-3 rounded-full bg-[var(--color-slate-0)] px-7 py-4 text-sm font-bold text-[var(--color-navy-800)] transition hover:bg-[var(--color-navy-100)]"
+        <div className="mt-12 flex flex-col gap-14 lg:mt-16 lg:grid lg:grid-cols-12 lg:gap-12">
+          <div className="min-w-0 lg:col-span-6" data-reveal-stagger>
+            <p
+              className="text-[clamp(24px,3vw,40px)] font-bold leading-[1.4]"
+              style={{ fontFamily: "var(--font-display-jp)" }}
             >
-              Stock-HR 公式サイト
-              <span aria-hidden className="arrow-slide">↗</span>
-            </a>
-            <a
-              href="https://app.stock-hr.jp"
-              target="_blank"
-              rel="noreferrer"
-              className="group inline-flex items-center gap-2 px-1 text-sm font-bold text-white"
-            >
-              <span className="underline-grow">プロダクトを開く</span>
-              <span aria-hidden className="arrow-slide">↗</span>
-            </a>
+              {s.tagline}
+            </p>
+            <p className="mt-6 text-[15px] leading-[2] text-white/75 sm:text-[16px]">
+              <PhrasedSafe text={s.approach} tail />
+            </p>
+            <ul className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+              {STOCKHR_POINTS.map((f, i) => (
+                <li key={f.t}>
+                  <p className="flex items-baseline gap-3 text-[17px] font-bold" style={{ fontFamily: "var(--font-display-jp)" }}>
+                    <span className="text-[13px] tabular text-[var(--color-accent)]" style={{ fontFamily: "var(--font-display-en)" }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    {f.t}
+                  </p>
+                  <p className="mt-2 text-[14px] leading-[1.9] text-white/65">
+                    <PhrasedSafe text={f.d} tail />
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-12 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+              <a
+                href="https://stock-hr.com"
+                target="_blank"
+                rel="noreferrer"
+                className="btn-press inline-flex items-center rounded-full bg-[var(--color-slate-0)] px-8 py-4 text-[15px] font-bold text-[var(--color-navy-800)] transition hover:bg-[var(--color-navy-100)]"
+              >
+                Stock-HR の公式サイト
+              </a>
+              <a
+                href="https://app.stock-hr.jp"
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex items-center px-1 text-[15px] font-bold text-white"
+              >
+                <span className="underline-grow">プロダクトを開く</span>
+              </a>
+            </div>
           </div>
-        </div>
-
-        {/* Right visual — product dashboard */}
-        <div className="relative lg:col-span-5" data-reveal>
-          <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-white/[0.06] to-white/[0.02] backdrop-blur-sm">
-            <div className="relative aspect-[4/5] w-full">
+          <div className="min-w-0 lg:col-span-6" data-reveal>
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-white/[0.04]">
               <Image
                 src="/images/services/stockhr-dashboard.png"
-                alt="Stock-HR ダッシュボード — 今月のスカウト運用"
+                alt="Stock-HR のダッシュボード"
                 fill
-                sizes="(min-width: 1024px) 40vw, 100vw"
-                className="object-contain object-center p-5 transition-transform duration-700 hover:scale-[1.03]"
-              />
-              {/* Soft inner glow behind the device */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[var(--color-accent)]/20 to-transparent blur-2xl"
+                sizes="(min-width: 1024px) 45vw, 100vw"
+                className="object-contain object-center p-4 sm:p-6"
               />
             </div>
-            {/* Corner ticks */}
-            <span aria-hidden className="absolute left-3 top-3 h-3 w-3 border-l border-t border-white/30" />
-            <span aria-hidden className="absolute right-3 top-3 h-3 w-3 border-r border-t border-white/30" />
-            <span aria-hidden className="absolute left-3 bottom-3 h-3 w-3 border-l border-b border-white/30" />
-            <span aria-hidden className="absolute right-3 bottom-3 h-3 w-3 border-r border-b border-white/30" />
-            {/* Caption */}
-            <p
-              className="absolute left-5 top-5 text-[10px] uppercase tracking-[0.32em] text-white/55"
-              style={{ fontFamily: "var(--font-display-en)" }}
-            >
-              Stock-HR · Dashboard
-            </p>
           </div>
         </div>
       </div>
@@ -1287,68 +522,110 @@ function StockHRSpot() {
   );
 }
 
+const STOCKHR_POINTS = [
+  { t: "個人情報を、設計で守る", d: "AIへの送信は学習に使われない条件で行い、候補者情報は組織ごとに分けて保管します。" },
+  { t: "プロの推論を内蔵", d: "課題仮説を立ててから訴求を選ぶ2段階の推論で、使う人による精度の差を吸収します。" },
+  { t: "組織で効果が見える", d: "誰がどの訴求で送ったかが残り、改善を組織として回せます。" },
+  { t: "運用ごと並走する", d: "上位のプランでは、プロが選定から運用設計まで一緒に回し、使い方ごと組織に残します。" },
+];
+
 /* ============================================================
-   Founder teaser
+   Webメディア事業（黒に近い章）— 媒体名の帯＋スマホ画面の列
+============================================================ */
+const PHONE_DEPTH = [0.9, -0.4, 0.6, -0.8, 0.3];
+
+function MediaChapter() {
+  const media = getBusiness("media");
+  return (
+    <section className="relative overflow-hidden bg-[var(--color-slate-900)] text-[var(--color-slate-0)]">
+      <FieldTicker words={MEDIA_SITES.map((m) => m.name)} className="bg-[var(--color-accent)] text-white" />
+      <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 sm:py-32 lg:px-12">
+        <div className="flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:gap-10">
+          <p
+            className="text-[15px] font-bold text-[var(--color-navy-200)] lg:col-span-3 lg:pt-4"
+            style={{ fontFamily: "var(--font-display-jp)" }}
+          >
+            {media.name}
+          </p>
+          <div className="lg:col-span-9">
+            <ScrubText
+              as="h2"
+              phrases={phrases(MEDIA_COUNT + "つの領域で、知りたいことに答える専門メディアを。")}
+              className="text-[clamp(26px,4.2vw,58px)] font-bold leading-[1.5] tracking-[-0.02em]"
+              from="rgba(255,255,255,0.16)"
+              to="#ffffff"
+            />
+          </div>
+        </div>
+
+        <ParallaxRow className="no-scrollbar -mx-5 mt-16 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:mt-24 sm:scroll-px-8 sm:px-8 lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-6 lg:overflow-visible lg:px-0 lg:py-16">
+          {MEDIA_SITES.map((m, i) => (
+            <a
+              key={m.slug}
+              href={m.url}
+              target="_blank"
+              rel="noreferrer"
+              data-depth={PHONE_DEPTH[i]}
+              className="group w-[58vw] max-w-[260px] shrink-0 snap-start lg:w-auto lg:max-w-none"
+            >
+              <div className="relative aspect-[600/1298] overflow-hidden rounded-[22px] bg-white/5 ring-1 ring-white/10 transition-transform duration-500 group-hover:-translate-y-1">
+                <Image
+                  src={`/images/media/sp/${m.slug}.webp`}
+                  alt={`${m.name}のスマホ画面`}
+                  fill
+                  sizes="(min-width: 1024px) 18vw, 58vw"
+                  className="object-cover object-top"
+                />
+              </div>
+              <p className="mt-5 text-[13px] font-bold text-[var(--color-navy-200)]">{m.domain}</p>
+              <p className="mt-1 text-[18px] font-bold leading-snug" style={{ fontFamily: "var(--font-display-jp)" }}>
+                {m.name}
+              </p>
+            </a>
+          ))}
+        </ParallaxRow>
+
+        <div className="mt-14 sm:mt-16">
+          <Link
+            href="/services/media"
+            className="btn-press inline-flex items-center rounded-full bg-[var(--color-slate-0)] px-8 py-4 text-[15px] font-bold text-[var(--color-slate-900)] transition hover:bg-[var(--color-navy-100)]"
+          >
+            {MEDIA_COUNT}つのメディアを見る
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   Founder — 代表から
 ============================================================ */
 function FounderTeaser() {
   return (
-    <section className="relative bg-[var(--color-slate-0)] py-28 sm:py-36">
-      <div className="mx-auto flex flex-col lg:grid max-w-[1320px] gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
-        <div className="lg:col-span-5" data-reveal>
+    <section className="relative bg-[var(--color-slate-0)] py-28 sm:py-40">
+      <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
+        <div className="flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:gap-10">
           <p
-            className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
-            style={{ fontFamily: "var(--font-display-en)" }}
+            className="text-[15px] font-bold text-[var(--color-navy-600)] lg:col-span-3 lg:pt-4"
+            style={{ fontFamily: "var(--font-display-jp)" }}
           >
-            Founder
+            代表から
           </p>
-          <h2
-            className="mt-4 text-balance text-[clamp(26px,3.2vw,40px)] font-bold leading-[1.25]"
-            style={{ fontFamily: "var(--font-display-jp)" }}
-          >
-            代表からのメッセージ
-          </h2>
-
-          <div className="relative mt-10 h-32 w-32 text-[var(--color-navy-200)]">
-            <QuoteBracket className="h-full w-full" />
-          </div>
-        </div>
-
-        <div className="lg:col-span-7" data-reveal-stagger>
-          <blockquote
-            className="text-balance text-[clamp(20px,2.2vw,28px)] font-bold leading-[1.75]"
-            style={{ fontFamily: "var(--font-display-jp)" }}
-          >
-            関わってきた業界には、まだ解かれていない当たり前の不便がある。AIによる産業革命級の変化と一緒に、その不便をひとつずつ解いていく会社にしたい。
-          </blockquote>
-
-          <div className="mt-10 flex items-center gap-4 border-t border-[var(--color-slate-200)] pt-6">
-            <div
-              className="grid h-12 w-12 place-items-center rounded-full bg-[var(--color-navy-700)] text-[var(--color-slate-0)]"
-              style={{ fontFamily: "var(--font-display-en)" }}
-            >
-              KF
-            </div>
-            <div>
-              <p
-                className="text-base font-bold text-[var(--color-slate-900)]"
-                style={{ fontFamily: "var(--font-display-jp)" }}
-              >
-                深谷 洸樹
+          <div className="lg:col-span-9">
+            <ScrubText
+              as="blockquote"
+              phrases={phrases("関わってきた業界には、まだ解かれていない当たり前の不便がある。AIによる変化と一緒に、その不便をひとつずつ解いていく会社にしたい。")}
+              className="text-[clamp(22px,3.2vw,44px)] font-bold leading-[1.6] tracking-[-0.01em]"
+            />
+            <div className="mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-[15px] font-bold text-[var(--color-slate-900)]" style={{ fontFamily: "var(--font-display-jp)" }}>
+                代表取締役　深谷 洸樹
               </p>
-              <p
-                className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-slate-400)]"
-                style={{ fontFamily: "var(--font-display-en)" }}
-              >
-                Koki Fukaya · Founder &amp; CEO
-              </p>
+              <Link href="/aboutus#message" className="group inline-flex items-center text-[15px] font-bold text-[var(--color-navy-600)]">
+                <span className="underline-grow">メッセージを読む</span>
+              </Link>
             </div>
-            <Link
-              href="/aboutus"
-              className="group ml-auto inline-flex items-center gap-2 text-sm font-bold text-[var(--color-navy-700)]"
-            >
-              <span className="underline-grow">続きを読む</span>
-              <span aria-hidden className="arrow-slide">→</span>
-            </Link>
           </div>
         </div>
       </div>
@@ -1357,52 +634,31 @@ function FounderTeaser() {
 }
 
 /* ============================================================
-   News teaser
+   News
 ============================================================ */
 function NewsTeaser({ news }: { news: NewsItem[] }) {
   return (
     <section className="relative bg-[var(--color-slate-50)] py-28 sm:py-36">
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
-        <div
-          className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end"
-          data-reveal
-        >
-          <div>
-            <p
-              className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)]"
-              style={{ fontFamily: "var(--font-display-en)" }}
-            >
-              News
-            </p>
-            <h2
-              className="mt-4 text-balance text-[clamp(28px,3.6vw,48px)] font-bold leading-[1.25]"
-              style={{ fontFamily: "var(--font-display-jp)" }}
-            >
-              最新のお知らせ
-            </h2>
-          </div>
-          <Link
-            href="/news"
-            className="group inline-flex items-center gap-2 text-sm font-bold text-[var(--color-slate-900)]"
+        <div className="flex items-end justify-between gap-6">
+          <h2
+            className="text-[clamp(32px,4.6vw,64px)] font-bold leading-[1.15] tracking-[-0.02em]"
+            style={{ fontFamily: "var(--font-display-jp)" }}
           >
-            <span className="underline-grow">一覧をみる</span>
-            <span aria-hidden className="arrow-slide">→</span>
+            お知らせ
+          </h2>
+          <Link href="/news" className="group inline-flex shrink-0 items-center pb-2 text-[15px] font-bold text-[var(--color-slate-900)]">
+            <span className="underline-grow">一覧を見る</span>
           </Link>
         </div>
 
-        {news.length > 0 ? (
-          <ul className="mt-12 border-t border-[var(--color-slate-200)]" data-reveal-stagger>
-            {news.map((n) => (
-              <li key={`${n.date}-${n.title}`} className="border-b border-[var(--color-slate-200)]">
-                <NewsRow item={n} />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="mt-12 rounded-2xl border border-dashed border-[var(--color-slate-200)] bg-[var(--color-slate-0)] p-12 text-center text-sm text-[var(--color-slate-500)]">
-            まだお知らせはありません。
-          </div>
-        )}
+        <ul className="mt-12 flex flex-col gap-2" data-reveal-stagger>
+          {news.map((n) => (
+            <li key={`${n.date}-${n.title}`}>
+              <NewsRow item={n} />
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -1410,33 +666,21 @@ function NewsTeaser({ news }: { news: NewsItem[] }) {
 
 function NewsRow({ item }: { item: NewsItem }) {
   const cls =
-    "group grid grid-cols-12 items-baseline gap-4 py-7 transition hover:bg-[var(--color-slate-0)] sm:gap-8 sm:py-8";
+    "group flex flex-col gap-2 rounded-2xl px-1 py-6 transition-colors duration-300 hover:bg-[var(--color-slate-0)] sm:px-6 lg:grid lg:grid-cols-12 lg:items-baseline lg:gap-8";
   const inner = (
     <>
-      <time
-        className="col-span-12 text-[12px] tabular tracking-[0.18em] text-[var(--color-slate-400)] sm:col-span-2"
-        style={{ fontFamily: "var(--font-display-en)" }}
-      >
-        {item.date}
-      </time>
-      <span
-        className="col-span-12 inline-flex w-fit items-center rounded-full border border-[var(--color-slate-300)] bg-[var(--color-slate-0)] px-2.5 py-0.5 text-[10px] uppercase tracking-[0.28em] text-[var(--color-slate-600)] sm:col-span-2"
-        style={{ fontFamily: "var(--font-display-en)" }}
-      >
-        {item.category}
-      </span>
+      <p className="flex items-baseline gap-4 lg:col-span-3">
+        <time className="text-[14px] tabular text-[var(--color-slate-500)]" style={{ fontFamily: "var(--font-display-en)" }}>
+          {item.date}
+        </time>
+        <span className="text-[13px] font-bold text-[var(--color-navy-600)]">{NEWS_CATEGORY_LABEL[item.category]}</span>
+      </p>
       <p
-        className="col-span-12 text-balance text-lg leading-snug text-[var(--color-slate-900)] sm:col-span-7 sm:text-xl"
+        className="text-balance text-[17px] font-bold leading-[1.6] text-[var(--color-slate-900)] transition-colors group-hover:text-[var(--color-navy-600)] sm:text-[19px] lg:col-span-9"
         style={{ fontFamily: "var(--font-display-jp)" }}
       >
         {item.title}
       </p>
-      <span
-        className="col-span-12 text-right text-[var(--color-slate-400)] transition group-hover:translate-x-0.5 group-hover:text-[var(--color-navy-700)] sm:col-span-1"
-        aria-hidden
-      >
-        {item.href ? (item.href.startsWith("http") ? "↗" : "→") : "·"}
-      </span>
     </>
   );
   if (!item.href) return <div className={cls}>{inner}</div>;
@@ -1455,63 +699,35 @@ function NewsRow({ item }: { item: NewsItem }) {
 }
 
 /* ============================================================
-   Contact CTA
+   Contact — 「相談する」の特大文字そのものがボタン
 ============================================================ */
 function ContactCTA() {
   return (
-    <section className="relative overflow-hidden bg-[var(--color-slate-0)] py-28 sm:py-36">
+    <section className="relative overflow-hidden bg-[var(--color-navy-600)] py-24 text-[var(--color-slate-0)] sm:py-32">
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
-        <div
-          className="relative overflow-hidden rounded-3xl bg-[var(--color-navy-700)] px-8 py-16 text-[var(--color-slate-0)] sm:px-14 sm:py-20 lg:px-20"
-          data-reveal
+        <p className="text-[15px] font-bold text-[var(--color-navy-100)]" style={{ fontFamily: "var(--font-display-jp)" }}>
+          お問い合わせ
+        </p>
+        <Link
+          href="/contact"
+          className="group mt-6 inline-flex items-baseline gap-4 text-[clamp(64px,15vw,200px)] font-bold leading-[1] tracking-[-0.04em] sm:gap-8"
+          style={{ fontFamily: "var(--font-display-jp)" }}
         >
-          <div aria-hidden className="absolute inset-0 bg-grid-navy opacity-50" />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-24 -top-24 h-[360px] w-[360px] rounded-full bg-[var(--color-accent)]/25 blur-[100px]"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-4 bottom-0 hidden h-44 w-44 text-white/15 lg:block float-y"
-          >
-            <BlueprintRings className="h-full w-full" />
-          </div>
-
-          <div className="relative flex flex-col lg:grid gap-10 lg:grid-cols-12">
-            <div className="lg:col-span-7">
-              <p
-                className="text-[11px] uppercase tracking-[0.32em] text-white/55"
-                style={{ fontFamily: "var(--font-display-en)" }}
-              >
-                Get in touch
-              </p>
-              <h2
-                className="mt-5 text-balance text-[clamp(30px,4.8vw,60px)] font-bold leading-[1.15] tracking-[-0.015em]"
-                style={{ fontFamily: "var(--font-display-jp)" }}
-              >
-                30分の対話から、はじめましょう。
-              </h2>
-              <p className="mt-6 max-w-[42ch] text-pretty text-[15px] leading-[2] text-white/75">
-                Stock-HRの導入相談、採用・営業支援のご依頼、業務提携や取材、カジュアル面談など、どの入り口からでも歓迎します。
-              </p>
-            </div>
-            <div className="flex flex-col justify-end gap-3 lg:col-span-5">
-              <Link
-                href="/contact"
-                className="group btn-press inline-flex items-center justify-between gap-3 rounded-full bg-[var(--color-slate-0)] px-6 py-4 text-[15px] font-bold text-[var(--color-navy-800)] transition hover:bg-[var(--color-navy-100)]"
-              >
-                お問い合わせ
-                <span aria-hidden className="text-xl arrow-slide">→</span>
-              </Link>
-              <Link
-                href="/recruitment"
-                className="group btn-press btn-press-light inline-flex items-center justify-between gap-3 rounded-full border border-white/35 bg-transparent px-6 py-4 text-[15px] font-bold text-white transition hover:border-white"
-              >
-                採用情報をみる
-                <span aria-hidden className="text-xl arrow-slide">→</span>
-              </Link>
-            </div>
-          </div>
+          <span className="relative">
+            相談する
+            <span
+              aria-hidden
+              className="absolute -bottom-1 left-0 h-[0.06em] w-full origin-left scale-x-0 bg-white transition-transform duration-500 ease-out group-hover:scale-x-100"
+            />
+          </span>
+        </Link>
+        <div className="mt-10 flex flex-col gap-8 lg:mt-14 lg:flex-row lg:items-end lg:justify-between">
+          <p className="max-w-[34em] text-[15px] leading-[2] text-white/80 sm:text-[16px]">
+            <PhrasedSafe text="Stock-HRの導入相談、採用・営業支援のご依頼、メディアへの掲載や協業、カジュアル面談まで。30分の対話から、はじめましょう。" tail />
+          </p>
+          <Link href="/recruitment" className="group inline-flex shrink-0 items-center text-[15px] font-bold text-white">
+            <span className="underline-grow">採用情報を見る</span>
+          </Link>
         </div>
       </div>
     </section>

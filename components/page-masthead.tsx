@@ -1,98 +1,63 @@
 // components/page-masthead.tsx
+// 下層ページ共通の見出し。題字はトップと同じく斜線の角度で1字ずつ塗る。
+// 題字の各行は折り返さないので、いちばん長い行の字数から文字の大きさを決めて、スマホではみ出さないようにする。
 import type { ReactNode } from "react";
+import { PaintTitle } from "@/components/motion/paint-title";
 
 type Props = {
-  index: string;              // "01" / "02"
-  eyebrowEn: string;          // "SERVICES"
-  eyebrowJp?: string;         // 任意の日本語サブラベル
-  titleJp: ReactNode;         // 大判日本語タイトル（多行可）
-  lead?: ReactNode;           // 日本語のリード文
+  index?: string; // 互換のため残す（表示しない）
+  eyebrowEn?: string; // 互換のため残す（表示しない）
+  eyebrowJp?: string; // 題字の上に出す日本語のラベル
+  titleLines: string[]; // 題字（1行ずつ）。2行目以降はネイビー
+  lead?: ReactNode;
   meta?: { k: string; v: string }[];
 };
 
-export function PageMasthead({
-  index,
-  eyebrowEn,
-  eyebrowJp,
-  titleJp,
-  lead,
-  meta,
-}: Props) {
+export function PageMasthead({ eyebrowJp, titleLines, lead, meta }: Props) {
+  const longest = Math.max(...titleLines.map((l) => Array.from(l).length));
+  const fontSize = `min(96px, calc((100vw - 48px) / ${longest}), ${Math.floor(780 / longest)}px)`;
   return (
     <section className="relative overflow-hidden bg-[var(--color-slate-0)]">
-      {/* Soft grid backdrop */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-grid-fine opacity-50"
-      />
-      {/* Right-side decorative panel */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute right-0 top-0 hidden h-full w-[36%] bg-gradient-to-l from-[var(--color-navy-50)] to-transparent lg:block"
-      />
-
-      <div className="relative mx-auto max-w-[1320px] px-5 pt-14 sm:px-8 sm:pt-20 lg:px-12 lg:pt-28">
-        {/* Top index bar (English ONLY) */}
-        <div
-          className="flex items-center justify-between border-t-2 border-[var(--color-navy-700)] pt-4"
-          data-reveal
-        >
+      <div className="relative mx-auto max-w-[1320px] px-5 pt-16 sm:px-8 sm:pt-24 lg:px-12 lg:pt-32">
+        {eyebrowJp && (
           <p
-            className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-navy-700)] tabular"
-            style={{ fontFamily: "var(--font-display-en)" }}
+            className="text-[15px] font-bold text-[var(--color-navy-600)]"
+            style={{ fontFamily: "var(--font-display-jp)" }}
           >
-            <span className="font-bold">{index}</span>
-            <span className="mx-2 text-[var(--color-slate-300)]">/</span>
-            <span>{eyebrowEn}</span>
+            {eyebrowJp}
           </p>
-          {eyebrowJp && (
-            <p className="text-[12px] tracking-[0.18em] text-[var(--color-slate-500)]">
-              {eyebrowJp}
-            </p>
-          )}
-        </div>
+        )}
 
-        <div className="flex flex-col lg:grid gap-12 py-14 sm:py-20 lg:grid-cols-12 lg:gap-10 lg:py-24">
-          <div className="lg:col-span-8" data-reveal-stagger>
-            <h1
-              className="text-[clamp(38px,6vw,80px)] font-bold leading-[1.05] tracking-[-0.018em] text-[var(--color-slate-900)]"
-              style={{ fontFamily: "var(--font-display-jp)" }}
-            >
-              {titleJp}
-            </h1>
+        <div className="flex flex-col gap-12 pb-16 pt-6 sm:pb-24 lg:grid lg:grid-cols-12 lg:gap-10 lg:pb-28">
+          <div className="min-w-0 lg:col-span-8">
+            <PaintTitle
+              lines={titleLines.map((text, i) => ({
+                text,
+                className: i === 0 ? "[--paint-to:var(--color-slate-900)]" : "[--paint-to:var(--color-navy-600)]",
+              }))}
+              className="font-bold leading-[1.18] tracking-[-0.03em]"
+              style={{ fontFamily: "var(--font-display-jp)", fontSize }}
+              delay={0.1}
+            />
 
             {lead && (
-              <div className="mt-8 max-w-xl text-[15px] leading-[2] text-[var(--color-slate-600)] sm:text-base">
+              <div
+                className="after-paint mt-10 max-w-[38em] text-[15px] leading-[2] text-[var(--color-slate-600)] sm:text-base"
+                style={{ ["--after-delay" as string]: "0.6s" }}
+              >
                 {lead}
               </div>
             )}
           </div>
 
           {meta && meta.length > 0 && (
-            <aside
-              className="lg:col-span-4 lg:border-l lg:border-[var(--color-slate-200)] lg:pl-8"
-              data-reveal-stagger
-            >
-              <p
-                className="text-[10px] uppercase tracking-[0.32em] text-[var(--color-slate-400)]"
-                style={{ fontFamily: "var(--font-display-en)" }}
-              >
-                Contents
-              </p>
-              <ul className="mt-5 space-y-3">
-                {meta.map((m, i) => (
-                  <li
-                    key={m.k}
-                    className="flex items-baseline gap-4 border-b border-dashed border-[var(--color-slate-200)] pb-3 text-sm"
-                  >
-                    <span
-                      className="w-8 shrink-0 tabular text-[12px] text-[var(--color-slate-400)]"
-                      style={{ fontFamily: "var(--font-display-en)" }}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="flex-1 text-[var(--color-slate-900)]">{m.k}</span>
-                    <span className="text-[var(--color-slate-500)]">{m.v}</span>
+            <aside className="after-paint min-w-0 lg:col-span-4 lg:pl-8" style={{ ["--after-delay" as string]: "0.75s" }}>
+              <p className="text-[14px] font-bold text-[var(--color-slate-500)]">このページの内容</p>
+              <ul className="mt-4 flex flex-col gap-1">
+                {meta.map((m) => (
+                  <li key={m.k} className="flex items-baseline gap-4 py-2 text-[15px]">
+                    <span className="min-w-0 flex-1 font-bold text-[var(--color-slate-900)]">{m.k}</span>
+                    <span className="shrink-0 text-[13px] text-[var(--color-slate-500)]">{m.v}</span>
                   </li>
                 ))}
               </ul>
